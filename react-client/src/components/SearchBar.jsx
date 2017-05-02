@@ -27,7 +27,7 @@ class SearchBar extends React.Component {
       <div>
         <div>
           <AutoComplete
-            hintText="Type anything"
+            hintText="Start typing"
             dataSource={blank}
             searchText={this.state.input}
             onUpdateInput={this.onUpdateInput} />
