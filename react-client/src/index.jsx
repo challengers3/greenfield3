@@ -1,35 +1,49 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import List from './components/List.jsx';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import FlatButton from 'material-ui/FlatButton';
+import AppBar from 'material-ui/AppBar';
+
+import SearchBar from './components/SearchBar.jsx';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      items: []
+    this.state = {
+      data: []
     }
   }
 
   componentDidMount() {
-    $.ajax({
-      url: '/items', 
-      success: (data) => {
-        this.setState({
-          items: data
-        })
-      },
-      error: (err) => {
-        console.log('err', err);
-      }
-    });
   }
 
+  search(input) {
+    console.log('SEARCH INPUT', input);
+    // $.ajax({
+    //   url: `http://127.0.0.1:3000/search?query=${input}`,
+    //   type: 'GET',
+    //   success: (data) => {
+    //     this.setState({
+    //       data: data
+    //     })
+    //   },
+    //   error: (err) => {
+    //     throw err;
+    //   }
+    // })
+  }
+
+
   render () {
-    return (<div>
-      <h1>Item List</h1>
-      <List items={this.state.items}/>
-    </div>)
+    return (
+      <MuiThemeProvider>
+        <div>
+          <AppBar title="My AppBar" />
+            <SearchBar onSearch={this.search.bind(this)} />
+        </div>
+      </MuiThemeProvider>
+    )
   }
 }
 
