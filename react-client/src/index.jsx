@@ -15,7 +15,8 @@ class App extends React.Component {
       data: [],
       leftMenu: false
     }
-    this.menuOpen = this.menuOpen.bind(this)
+    this.menuOpen = this.menuOpen.bind(this);
+    this.search = this.search.bind(this);
   }
 
   componentDidMount() {
@@ -55,10 +56,10 @@ class App extends React.Component {
             title="WHERE AM I?"
             onLeftIconButtonTouchTap={this.menuOpen}
           />
-            <SearchBar onSearch={this.search.bind(this)} />
+            <SearchBar onSearch={this.search} />
             <MenuBar
               leftMenuStatus={this.state.leftMenu}
-              onMenuOpen={this.menuOpen.bind(this)}/>
+              onMenuOpen={this.menuOpen}/>
         </div>
       </MuiThemeProvider>
     )

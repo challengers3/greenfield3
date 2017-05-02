@@ -13,6 +13,7 @@ class SearchBar extends React.Component {
     this.state = {
       input: '',
     }
+    this.onUpdateInput = this.onUpdateInput.bind(this);
   }
 
   onUpdateInput(input) {
@@ -30,7 +31,7 @@ class SearchBar extends React.Component {
             hintText="Type anything"
             dataSource={blank}
             searchText={this.state.input}
-            onUpdateInput={this.onUpdateInput.bind(this)} />
+            onUpdateInput={this.onUpdateInput} />
         </div>
 
         <div>

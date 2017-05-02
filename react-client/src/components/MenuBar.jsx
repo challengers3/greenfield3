@@ -11,13 +11,9 @@ class MenuBar extends React.Component {
     // this.state = {
     //   value: 1,
     // };
+    this.handleRequestClose = this.handleRequestClose.bind(this)
   }
 
-  // handleChange(value) {
-  //   this.setState({
-  //     value: value
-  //   })
-  // }
   handleRequestClose() {
     this.props.onMenuOpen()
   }
@@ -27,11 +23,9 @@ class MenuBar extends React.Component {
       <div>
         <Popover
           open={this.props.leftMenuStatus}
-          // anchorEl={this.state.anchorEl}
           anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          // autoCloseWhenOffScreen={true}
-          onRequestClose={this.handleRequestClose.bind(this)}
+          onRequestClose={this.handleRequestClose}
         >
           <Menu>
             <MenuItem primaryText="Refresh" />
@@ -44,31 +38,5 @@ class MenuBar extends React.Component {
     );
   }
 }
-
-// const MenuBar = (props) => {
-//   return (
-//     <div>
-//       {/* <RaisedButton
-//           onTouchTap={this.o.bind(this)}
-//           label="MENU"
-//         /> */}
-//         <Popover
-//           open={props.leftMenuStatus}
-//           // anchorEl={this.state.anchorEl}
-//           anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-//           targetOrigin={{horizontal: 'left', vertical: 'top'}}
-//           autoCloseWhenOffScreen={true}
-//           // onRequestClose={()=> props.onMenuOpen()}
-//         >
-//           <Menu>
-//             <MenuItem primaryText="Refresh" />
-//             <MenuItem primaryText="Help &amp; feedback" />
-//             <MenuItem primaryText="Settings" />
-//             <MenuItem primaryText="Sign out" />
-//           </Menu>
-//         </Popover>
-//     </div>
-//   )
-// }
 
 export default MenuBar;
