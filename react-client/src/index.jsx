@@ -6,13 +6,16 @@ import FlatButton from 'material-ui/FlatButton';
 import AppBar from 'material-ui/AppBar';
 
 import SearchBar from './components/SearchBar.jsx';
+import MenuBar from './components/MenuBar.jsx'
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      data: [],
+      leftMenu: false
     }
+    this.menuOpen = this.menuOpen.bind(this)
   }
 
   componentDidMount() {
@@ -34,13 +37,28 @@ class App extends React.Component {
     // })
   }
 
+  menuOpen() {
+    console.log('OPEN', this.state.leftMenu)
+    this.setState({
+      leftMenu: !this.state.leftMenu,
+    });
+  }
+
+
 
   render () {
     return (
       <MuiThemeProvider>
         <div>
-          <AppBar title="My AppBar" />
+          <AppBar
+            // children={<MenuBar onMenuOpen={this.onMenuOpen} />}
+            title="WHERE AM I?"
+            onLeftIconButtonTouchTap={this.menuOpen}
+          />
             <SearchBar onSearch={this.search.bind(this)} />
+            <MenuBar
+              leftMenuStatus={this.state.leftMenu}
+              onMenuOpen={this.menuOpen.bind(this)}/>
         </div>
       </MuiThemeProvider>
     )
