@@ -24,18 +24,18 @@ class App extends React.Component {
 
   search(input) {
     console.log('SEARCH INPUT', input);
-    // $.ajax({
-    //   url: `http://127.0.0.1:3000/search?query=${input}`,
-    //   type: 'GET',
-    //   success: (data) => {
-    //     this.setState({
-    //       data: data
-    //     })
-    //   },
-    //   error: (err) => {
-    //     throw err;
-    //   }
-    // })
+    $.ajax({
+      url: `/search?query=${input}`,
+      type: 'GET',
+      success: (data) => {
+        this.setState({
+          data: data
+        })
+      },
+      error: (err) => {
+        throw err;
+      }
+    })
   }
 
   menuOpen() {

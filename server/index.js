@@ -19,13 +19,19 @@ app.get('/items', function (req, res) {
   });
 });
 
-app.get('/test', function (req, res) {
-  request({ headers: {Authorization: "Bearer " + yelpToken}, uri: 'https://api.yelp.com/v3/businesses/search?term=popsons&latitude=37.7876&longitude=-122.4001'}, (err, response, data) => {
 
-  //request ({ headers: {Authorization: "Bearer " + yelpToken}, uri: 'https://api.yelp.com/v3/businesses/y97u_oCqjAjstK4YOY9ygA'}, (err, response, data) => {
-    
-    var listing = data;
+app.get('/search', function (req, res) {
+  var input = req.query.query;
+  console.log('input from frontend: ', input)
+
+  request({ headers: {Authorization: "Bearer " + yelpToken}, uri: `https://api.yelp.com/v3/businesses/search?term=${input}&latitude=37.7876&longitude=-122.4001&limit=1`}, (err, response, data) => {
+    console.log('data from search: ', data.businesses)
     res.send(data);
+    // var id = data[0].businesses[0]
+    // request({ headers: {Authorization: "Bearer " + yelpToken},uri:`https://api.yelp.com/v3/businesses/${id}`}, (err, response, data) => {
+    //   var photos = data.photos;
+    //   res.send(photos);
+    // });
   });
   //res.send('GET');
 });
@@ -33,7 +39,3 @@ app.get('/test', function (req, res) {
 app.listen(3000, function() {
   console.log('listening on port 3000!');
 });
-
-
-
-
