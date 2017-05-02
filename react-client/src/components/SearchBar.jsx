@@ -17,7 +17,6 @@ class SearchBar extends React.Component {
   }
 
   onUpdateInput(input) {
-    console.log(this.state.input)
     this.setState({
       input: input
     })

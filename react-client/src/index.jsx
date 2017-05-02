@@ -52,7 +52,6 @@ class App extends React.Component {
       <MuiThemeProvider>
         <div>
           <AppBar
-            // children={<MenuBar onMenuOpen={this.onMenuOpen} />}
             title="WHERE AM I?"
             onLeftIconButtonTouchTap={this.menuOpen}
           />
