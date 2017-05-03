@@ -5,6 +5,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import FlatButton from 'material-ui/FlatButton';
 import AppBar from 'material-ui/AppBar';
 
+import List from './components/List.jsx';
 import SearchBar from './components/SearchBar.jsx';
 import MenuBar from './components/MenuBar.jsx'
 
@@ -59,6 +60,9 @@ class App extends React.Component {
             <MenuBar
               leftMenuStatus={this.state.leftMenu}
               onMenuOpen={this.menuOpen}/>
+
+            <List/>
+
         </div>
       </MuiThemeProvider>
     )

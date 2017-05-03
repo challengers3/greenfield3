@@ -21,7 +21,6 @@ const styles = {
 };
 
 
-//const tile data/images from API
 
 var fakeData = {"id": "the-flying-falafel-san-francisco-3", 
   "name": "The Flying Falafel", 
