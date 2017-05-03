@@ -21,19 +21,43 @@ app.get('/items', function (req, res) {
 
 
 app.get('/search', function (req, res) {
-  var input = req.query.query;
-  console.log('input from frontend: ', input)
+  var input = "flying%20falafel"//req.query.query;
+  var apiURL = 'https://api.yelp.com/v3/businesses/'
+  var authHeader = {Authorization: "Bearer " + yelpToken}
+  var placeObject = {
+    name: '',
+    rating: 0,
+    reviews: []
+  };
 
-  request({ headers: {Authorization: "Bearer " + yelpToken}, uri: `https://api.yelp.com/v3/businesses/search?term=${input}&latitude=37.7876&longitude=-122.4001&limit=1`}, (err, response, data) => {
-    console.log('data from search: ', data.businesses)
-    res.send(data);
-    // var id = data[0].businesses[0]
-    // request({ headers: {Authorization: "Bearer " + yelpToken},uri:`https://api.yelp.com/v3/businesses/${id}`}, (err, response, data) => {
-    //   var photos = data.photos;
-    //   res.send(photos);
-    // });
+  request( { headers: authHeader, uri: `${apiURL}search?term=${input}&latitude=37.7876&longitude=-122.4001&limit=1` }, (err, response, data) => {
+    var businessID = JSON.parse(data).businesses[0].id;
+
+    request( { headers: authHeader,uri:`${apiURL}${businessID}` }, (err, response, placeData) => {
+      var placeData = JSON.parse(placeData);
+
+      placeObject.name = placeData.name;
+      placeObject.rating = placeData.rating;
+    });
+
+    request( { headers: authHeader,uri:`${apiURL}${businessID}/reviews` }, (err, response, reviewData) => {
+      var reviewData = JSON.parse(reviewData).reviews;
+
+      for(var i = 0; i < reviewData.length; i++) {
+        placeObject.reviews.push({
+          'text': reviewData[i].text,
+          'rating': reviewData[i].rating,
+          'reviewer_name': reviewData[i].user.name,
+          'url': reviewData[i].url
+        });
+      }
+
+      // console.log(JSON.stringify(placeObject)); 
+      // save to the DB at this point
+
+      res.send("Done");
+    });
   });
-  //res.send('GET');
 });
 
 app.listen(3000, function() {
