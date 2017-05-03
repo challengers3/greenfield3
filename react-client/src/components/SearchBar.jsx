@@ -13,10 +13,10 @@ class SearchBar extends React.Component {
     this.state = {
       input: '',
     }
+    this.onUpdateInput = this.onUpdateInput.bind(this);
   }
 
   onUpdateInput(input) {
-    console.log(this.state.input)
     this.setState({
       input: input
     })
@@ -27,10 +27,10 @@ class SearchBar extends React.Component {
       <div>
         <div>
           <AutoComplete
-            hintText="Type anything"
+            hintText="Start typing"
             dataSource={blank}
             searchText={this.state.input}
-            onUpdateInput={this.onUpdateInput.bind(this)} />
+            onUpdateInput={this.onUpdateInput} />
         </div>
 
         <div>
