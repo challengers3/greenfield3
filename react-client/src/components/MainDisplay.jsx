@@ -10,17 +10,18 @@ const MainDisplay = (props) => {
     <Card>
       <CardHeader
         title={propsData.name}
+        subtitle={propsData.categories[0].title}
       />
       {/* <CardMedia
         <img src={<List />} />
       </CardMedia> */}
       <CardTitle title="Description" />
       <CardText>
-        {propsData.description}
+        <p>{propsData.description}</p>
+        <p>Street Address: {propsData.location.address1}</p>
+        <p>City: {propsData.location.city}</p>
+        <p>State: {propsData.location.state}, {propsData.location['zip_code']}</p>
       </CardText>
-      Street Address: {propsData.location.address1}
-      City: {propsData.location.city}
-      State: {propsData.location.state}, {propsData.location['zip_code']}
       <CardActions>
         <FloatingActionButton mini={true}>
           <ContentAdd />
