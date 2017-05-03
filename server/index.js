@@ -55,7 +55,7 @@ app.get('/search', function (req, res) {
       // console.log(JSON.stringify(placeObject)); 
       // save to the DB at this point
 
-      res.send("Done");
+      res.send(placeObject);
     });
   });
 });
