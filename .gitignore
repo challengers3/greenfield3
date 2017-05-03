@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-node_modules
-data/db/*.wt
-*.DS_Store
-=======
 ## Mac OSX ##
 .DS_Store
 
@@ -11,4 +6,5 @@ node_modules/
 
 ## Compiled files ##
 compiled/
->>>>>>> Done with MenuBar
+
+database/data/db

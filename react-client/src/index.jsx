@@ -66,7 +66,7 @@ class App extends React.Component {
             leftMenuStatus={this.state.leftMenu}
             onMenuOpen={this.menuOpen}/>
           <div>
-            <MainDisplay data={this.state.data} />
+            <MainDisplay style={{'margin-top': '20px'}} data={this.state.data} />
           </div>
         </div>
       </MuiThemeProvider>
