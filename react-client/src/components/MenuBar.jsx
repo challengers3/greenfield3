@@ -6,9 +6,6 @@ import MenuItem from 'material-ui/MenuItem';
 class MenuBar extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   value: 1,
-    // };
     this.handleRequestClose = this.handleRequestClose.bind(this)
   }
 
@@ -23,6 +20,7 @@ class MenuBar extends React.Component {
           open={this.props.leftMenuStatus}
           anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
           targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          zDepth={3}
           onRequestClose={this.handleRequestClose}
         >
           <Menu>

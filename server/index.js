@@ -8,6 +8,7 @@ var app = express();
 
 // UNCOMMENT FOR REACT
 app.use(express.static(__dirname + '/../react-client/dist'));
+app.use(bodyParser.json());
 
 app.get('/items', function (req, res) {
   items.selectAll(function(err, data) {
@@ -19,11 +20,8 @@ app.get('/items', function (req, res) {
   });
 });
 
-app.get('/test', function (req, res) {
-  request({ headers: {Authorization: "Bearer " + yelpToken}, uri: 'https://api.yelp.com/v3/businesses/search?term=popsons&latitude=37.7876&longitude=-122.4001'}, (err, response, data) => {
-
-  //request ({ headers: {Authorization: "Bearer " + yelpToken}, uri: 'https://api.yelp.com/v3/businesses/y97u_oCqjAjstK4YOY9ygA'}, (err, response, data) => {
-    
+app.get('/search', function (req, res) {
+  request({ headers: {Authorization: "Bearer " + yelpToken}, uri: 'https://api.yelp.com/v3/businesses/search?term=popsons&latitude=37.7876&longitude=-122.4001&limit=1'}, (err, response, data) => {
     var listing = data;
     res.send(data);
   });
@@ -33,7 +31,3 @@ app.get('/test', function (req, res) {
 app.listen(3000, function() {
   console.log('listening on port 3000!');
 });
-
-
-
-
