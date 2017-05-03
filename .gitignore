@@ -1,14 +1,14 @@
-<<<<<<< HEAD
-node_modules
-data/db/*.wt
-*.DS_Store
-=======
 ## Mac OSX ##
 .DS_Store
 
 ## NPM ##
-node_modules/
+node_modules
 
 ## Compiled files ##
-compiled/
->>>>>>> Done with MenuBar
+compiled
+
+## Mongo ##
+database-mongo/data/db
+
+## React ##
+react-client/dist/bundle.js
