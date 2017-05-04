@@ -14,13 +14,28 @@ class App extends React.Component {
     super(props);
     this.state = {
       data: [],
-      leftMenu: false
+      leftMenu: false,
     }
     this.menuOpen = this.menuOpen.bind(this);
     this.search = this.search.bind(this);
   }
 
   componentDidMount() {
+    var getCoords = () => {
+      return new Promise ( (resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          resolve({lat: position.coords.latitude, long:position.coords.longitude})
+        });
+      })
+    };
+
+    getCoords().then( response => {
+      $.ajax({
+        type: 'POST',
+        url: '/location',
+        data: response
+      })  
+    });
   }
 
   search(input) {
