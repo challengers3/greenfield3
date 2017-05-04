@@ -34,7 +34,8 @@ class SearchBar extends React.Component {
         </div>
 
         <div>
-          <RaisedButton label="Search"
+          <RaisedButton label="Search" backgroundColor="rgb(0, 188, 212)"
+            labelColor='white'
             onTouchTap={()=>this.props.onSearch(this.state.input)} />
         </div>
       </div>

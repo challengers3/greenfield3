@@ -24,9 +24,10 @@ class MenuBar extends React.Component {
           onRequestClose={this.handleRequestClose}
         >
           <Menu>
-            <MenuItem primaryText="Refresh" />
+            <MenuItem primaryText="Favorites" />
+            <MenuItem primaryText="My day" />
             <MenuItem primaryText="Help &amp; feedback" />
-            <MenuItem primaryText="Settings" />
+            <MenuItem primaryText="About" />
             <MenuItem primaryText="Sign out" />
           </Menu>
       </Popover>
