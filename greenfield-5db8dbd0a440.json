@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "greenfield-166701",
+  "private_key_id": "5db8dbd0a4405e8d566a9b6fb48879ac176cb9cf",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCW24oGdxQrYFOc\neL6Zblf/qZJLIhFE1RNBFr1zuqVlTBWzA04aFEf3tNewZUOpvyBjwLlWsvhNGRkp\nz2WlK1y/hZOFxtW8xNjIhdJvqWZOGgPkPiTaTzbz3YL7UE9hV3uz0eV//RpBJ/ax\nRb9FYRkjWz1Ak0ozT3fe6Ag2ZDiwwJU7DyfcWY89YBMmgQqDYnlMfMGz7UrVP329\nrgONZ/P9wKjIe9IqFKf0LsIA/va6KO1i+BKQEwmbHQLRsMivmO/O3Wy67HRXG7RA\nIPoTtq9NBNa7zeg3TUSeXgZmvYplek5NRvL/mmvqpWvmCxI1ygkHebDAXRtxoIFT\n16GKOn4HAgMBAAECggEAfX7eoKg48CivBZDwxgSkUfvHxpbtlLxIyzHWosqXQuB7\ngLL0Kv/KKseXUpe7JR/pGvK9e+FgbArAAycUIMYk3vKJGZWiQuniiVXCDL/4amp7\n6EjGMZIKXe5dQyG5F3pGXv3ylHmCeMd9ElW6W0X+OopxNyIQbQTj7FxMUKso+efE\nVHv8/tEXDxxDrTl4PuHDVJB/WevwoT3ALRBwBMhCM9X+nRDV5PL7cteuetZ13t+2\nkgeQI5Mokp+CFzK0upWr/BxsldnYhIVs0DUWw6XZdl+botAJjf+965o5yIy3pngT\nbGAh4f6intmxr2x/5shsqCYZlKGsLQJOZ9DyG70lmQKBgQDLZfxmuzTxr7Wzgw5K\nD2/kfciIKb5DB9jZ454xT4eMxpHM3M8EqfF4F6ERZNmdnZ571/GPDm0fa9Zi0OqL\n+6pYMFwmfKXjDby3py2Gg/xMcZ0PFJxgDnG2ycI7keP9danPT06LIIzT5mz1hJaS\nFxPMM4pi2UOYpLJ/aDU1NY72pQKBgQC93xUy1afu+Dnnww3AbYO57yDE1noETG8n\n6q5vFCoGlr4T6Skm7yRrh4xYbbrlMHr1w2Z7VxJUv3V73fKucXpThkFCs5RSBo62\nGWss750/10EPUfqkpc+mqfn3NfF7rfW0X9VpsBqconrdgByiefb/Vg5VjGcaJDui\nJfAuzj4uOwKBgQCOvgcRbaYtSzvAPGRF02maODAIZwswbYxg9Z3qSz78q8pctEXQ\npxdgSWzvERCrzZcQoK7Uz7IDUCHHfYhtLvQQKfgxxl6A5v4fAQMxGOVyHHW1xKgt\nvVVOi291cOBI20+NvsGHYBOVDmw/LYqiAfIR58Xhs0n+EO93/IEC05B+RQKBgDZE\nSz/DNwMi6RHnesezxUFgKiJ4FlmiKubiuUZAIh7N+LeiHUPmd6dQD3m6qv8UUyBo\n36KC6VdVfVOQxOq8vjSfG4nf35VuEF3Vd/9Y4L29XPfu+08RoP7GeA4C2ej6eE48\nUbeqQIDiI3GpSwXZDBJAW0pyHYmoL28RnssR4U2/AoGBAId0m24WSK8BzTow8SzR\ndE0PtfBWMIMJldZx/MpCNADKfq6EujtlCAaQAusF6NEVb5o53J9DsniMQnkXPLXB\neKZDqCVRc7hX02+CnaUJc6CwqXawr59q1hfkjQI7phLiYdq8sLl8wdpIFUHsFV0y\n2F82NhrZntB+viIUjNKPi0s+\n-----END PRIVATE KEY-----\n",
+  "client_email": "speech@greenfield-166701.iam.gserviceaccount.com",
+  "client_id": "118400728130456916281",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/speech%40greenfield-166701.iam.gserviceaccount.com"
+}
