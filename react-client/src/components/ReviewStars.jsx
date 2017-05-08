@@ -1,12 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-const styles = {
-  imgResize: {
-    maxWidth: '30%',
-    maxHeight: '30%',
-  },
-};
+import styles from '../css/styles';
 
 const starIcons = {
   '0.0': require('../assets/starIcons/0.png'),

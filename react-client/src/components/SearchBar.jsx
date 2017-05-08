@@ -3,6 +3,7 @@ import AutoComplete from 'material-ui/AutoComplete';
 import RaisedButton from 'material-ui/RaisedButton';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import PropTypes from 'prop-types';
+import styles from '../css/styles';
 
 injectTapEventPlugin();
 
@@ -37,7 +38,7 @@ class SearchBar extends React.Component {
 
         <div>
           <RaisedButton
-            label="Search" backgroundColor="rgb(0, 188, 212)"
+            label="Search" backgroundColor={styles.mainColor}
             labelColor="rgb(255, 255, 255)"
             onTouchTap={() => this.props.onSearch(this.state.input)}
           />

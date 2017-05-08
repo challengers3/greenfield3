@@ -3,35 +3,36 @@ import { Card, CardActions, CardHeader, CardTitle, CardText } from 'material-ui/
 import IconButton from 'material-ui/IconButton';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import PropTypes from 'prop-types';
-import ReviewStars from './ReviewStars.jsx';
+import ReviewStars from './ReviewStars';
+import styles from '../css/styles';
 
-const styles = {
-  cardStyle: {
-    display: 'table',
-    margin: '0 auto',
-    marginTop: '20px',
-  },
-};
+const yelpIcon = require('../assets/yelpLogo/Yelp_icon.png');
 
 const MainDisplay = (props) => {
-  const propsData = props.data[0].businesses['0'];
+  const propsData = props.data;
   return (
     <Card style={styles.cardStyle}>
       <CardHeader
         title={propsData.name}
-        subtitle={<ReviewStars rating={propsData.rating} />}
+        subtitle={<ReviewStars
+          rating={propsData.rating}
+        />}
       />
       <CardTitle title="Description" />
       <CardText>
         <p>{propsData.description}</p>
-        <p>Type of food: {propsData.categories[0].title}</p>
+        <p>Type of food: {propsData.categories[0].title}
+          <a href={`${propsData.url}`}><img
+            src={yelpIcon}
+            alt="logo" style={styles.logo}
+          /></a></p>
         <p>Street Address: {propsData.location.address1}</p>
         <p>City: {propsData.location.city}</p>
         <p>State: {propsData.location.state},&nbsp;
           {propsData.location.zip_code}</p>
       </CardText>
       <CardActions>
-        <IconButton><StarBorder color="rgb(0, 188, 212)" />
+        <IconButton><StarBorder color={styles.mainColor} />
         </IconButton>
       </CardActions>
     </Card>
@@ -39,11 +40,11 @@ const MainDisplay = (props) => {
 };
 
 MainDisplay.propTypes = {
-  data: PropTypes.array,
+  data: PropTypes.object,
 };
 
 MainDisplay.defaultProps = {
-  data: PropTypes.array,
+  data: PropTypes.object,
 };
 
 export default MainDisplay;
