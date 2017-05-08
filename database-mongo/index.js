@@ -1,3 +1,4 @@
+
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 
@@ -12,20 +13,16 @@ db.once('open', function() {
 });
 
 var itemSchema = mongoose.Schema({
-  quantity: Number,
-  description: String
+  business: String, 
+  id: Number,
+  name: String,
+  photos: Array,
+  ratings: Array, 
+  reviews: Array
 });
 
+
 var Item = mongoose.model('Item', itemSchema);
+module.exports = Item; 
 
-var selectAll = function(callback) {
-  Item.find({}, function(err, items) {
-    if(err) {
-      callback(err, null);
-    } else {
-      callback(null, items);
-    }
-  });
-};
 
-module.exports.selectAll = selectAll;

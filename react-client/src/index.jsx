@@ -23,6 +23,21 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    var getCoords = () => {
+      return new Promise ( (resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          resolve({lat: position.coords.latitude, long:position.coords.longitude})
+        });
+      })
+    };
+
+    getCoords().then( response => {
+      $.ajax({
+        type: 'POST',
+        url: '/location',
+        data: response
+      })
+    });
   }
 
   search(input) {

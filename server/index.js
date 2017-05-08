@@ -3,7 +3,11 @@ var bodyParser = require('body-parser');
 var items = require('../database-mongo');
 var request = require ('request');
 var yelpToken = '54robtCPOWAAru28w0M7Qr71NEaFNqygTcxM1xUlg3oX5aXjk3q85eX_MFH0o6SdddycpMcrPuYaV99yy_qAOKOVJWrudk8qnx80uxuCwAyxpgdA62d-27GZIdMIWXYx';
+<<<<<<< HEAD
 // var location = require('./location.js')
+=======
+var location = require('./location.js')
+>>>>>>> 4ab8f35d92cfdcefa256723d9c8effad364cf3e9
 
 var app = express();
 
@@ -62,7 +66,11 @@ app.get('/search', function(req, res) {
         });
       }
 
+<<<<<<< HEAD
       // console.log(JSON.stringify(placeObject));
+=======
+      // console.log(JSON.stringify(placeObject)); 
+>>>>>>> 4ab8f35d92cfdcefa256723d9c8effad364cf3e9
       // save to the DB at this point
 
       res.send(placeObject);
