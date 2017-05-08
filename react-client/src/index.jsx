@@ -35,7 +35,7 @@ class App extends React.Component {
       $.ajax({
         type: 'POST',
         url: '/location',
-        data: response
+        data: response,
       })
     });
   }
