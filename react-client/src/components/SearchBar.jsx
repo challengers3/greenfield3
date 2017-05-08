@@ -2,6 +2,8 @@ import React from 'react';
 import AutoComplete from 'material-ui/AutoComplete';
 import RaisedButton from 'material-ui/RaisedButton';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import PropTypes from 'prop-types';
+import styles from '../css/styles';
 
 injectTapEventPlugin();
 
@@ -12,14 +14,14 @@ class SearchBar extends React.Component {
     super(props);
     this.state = {
       input: '',
-    }
+    };
     this.onUpdateInput = this.onUpdateInput.bind(this);
   }
 
   onUpdateInput(input) {
     this.setState({
-      input: input
-    })
+      input,
+    });
   }
 
   render() {
@@ -30,17 +32,28 @@ class SearchBar extends React.Component {
             hintText="Start typing"
             dataSource={blank}
             searchText={this.state.input}
-            onUpdateInput={this.onUpdateInput} />
+            onUpdateInput={this.onUpdateInput}
+          />
         </div>
 
         <div>
-          <RaisedButton label="Search"
-            onTouchTap={()=>this.props.onSearch(this.state.input)} />
+          <RaisedButton
+            label="Search" backgroundColor={styles.mainColor}
+            labelColor="rgb(255, 255, 255)"
+            onTouchTap={() => this.props.onSearch(this.state.input)}
+          />
         </div>
       </div>
-    )
+    );
   }
 }
 
+SearchBar.propTypes = {
+  onSearch: PropTypes.func,
+};
+
+SearchBar.defaultProps = {
+  onSearch: PropTypes.func,
+};
 
 export default SearchBar;
