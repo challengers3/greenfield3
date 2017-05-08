@@ -61,6 +61,7 @@ app.get('/search', function(req, res) {
         });
       }
       // save to the DB at this point
+      // another comment
 
       res.send(placeObject);
     });
