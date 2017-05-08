@@ -60,7 +60,7 @@ app.get('/search', function(req, res) {
           'url': reviewData[i].url
         });
       }
-      // save to the DB
+      // save to the DB at this point
 
       res.send(placeObject);
     });
