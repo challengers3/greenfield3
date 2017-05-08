@@ -2,9 +2,13 @@
 .DS_Store
 
 ## NPM ##
-node_modules/
+node_modules
 
 ## Compiled files ##
-compiled/
+compiled
 
-database/data/db
+## Mongo ##
+database-mongo/data/db
+
+## React ##
+react-client/dist/bundle.js
