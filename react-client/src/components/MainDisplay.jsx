@@ -8,10 +8,22 @@ import styles from '../css/styles';
 
 const yelpIcon = require('../assets/yelpLogo/Yelp_icon.png');
 
+let styles = {
+  divStyle: {
+    display: 'table',
+    margin: '0 auto',
+    marginTop: '20px',
+  },
+}
+
 const MainDisplay = (props) => {
   const propsData = props.data;
   return (
+<<<<<<< HEAD
     <Card style={styles.cardStyle}>
+=======
+    <Card style={styles.divStyle}>
+>>>>>>> Add styling
       <CardHeader
         title={propsData.name}
         subtitle={<ReviewStars

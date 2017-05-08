@@ -66,10 +66,14 @@ class App extends React.Component {
             onMenuOpen={this.menuOpen}
           />
           <div>
+<<<<<<< HEAD
             <MainDisplay
               style={{ 'margin-top': '20px' }}
               data={this.state.data[0].businesses['0']}
             />
+=======
+            <MainDisplay style={{'margin-top': '20px'}} data={this.state.data} />
+>>>>>>> Add styling
           </div>
         </div>
       </MuiThemeProvider>
