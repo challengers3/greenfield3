@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var items = require('../database-mongo');
 var request = require ('request');
 var yelpToken = '54robtCPOWAAru28w0M7Qr71NEaFNqygTcxM1xUlg3oX5aXjk3q85eX_MFH0o6SdddycpMcrPuYaV99yy_qAOKOVJWrudk8qnx80uxuCwAyxpgdA62d-27GZIdMIWXYx';
-var location = require('./location.js')
+var location = {};
 
 var app = express();
 
@@ -22,7 +22,7 @@ app.get('/items', function (req, res) {
 });
 
 app.post('/location', (req, res) => {
-  console.log(req.body);
+  location = req.body;
   res.end();
 })
 
@@ -35,12 +35,11 @@ app.get('/search', function(req, res) {
     rating: 0,
     reviews: []
   };
+  var userLat = location.lat;
+  var userLong = location.long;
+  console.log(location)
 
-  console.log(req.query)
-  // var coords = req.body.coords;
-  // console.log("hello from index.js: ", coords);
-
-  request( { headers: authHeader, uri: `${apiURL}search?term=${input}&latitude=37.7876&longitude=-122.4001&limit=1` }, (err, response, data) => {
+  request( { headers: authHeader, uri: `${apiURL}search?term=${input}&latitude=${userLat}&longitude=${userLong}&limit=1` }, (err, response, data) => {
     var businessID = JSON.parse(data).businesses[0].id;
 
     request( { headers: authHeader,uri:`${apiURL}${businessID}` }, (err, response, placeData) => {
@@ -61,8 +60,6 @@ app.get('/search', function(req, res) {
           'url': reviewData[i].url
         });
       }
-
-      // console.log(JSON.stringify(placeObject)); 
       // save to the DB at this point
 
       res.send(placeObject);
