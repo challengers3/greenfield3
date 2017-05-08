@@ -2,15 +2,16 @@ import React from 'react';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
+import PropTypes from 'prop-types';
 
 class MenuBar extends React.Component {
   constructor(props) {
     super(props);
-    this.handleRequestClose = this.handleRequestClose.bind(this)
+    this.handleRequestClose = this.handleRequestClose.bind(this);
   }
 
   handleRequestClose() {
-    this.props.onMenuOpen()
+    this.props.onMenuOpen();
   }
 
   render() {
@@ -18,8 +19,8 @@ class MenuBar extends React.Component {
       <div>
         <Popover
           open={this.props.leftMenuStatus}
-          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+          targetOrigin={{ horizontal: 'left', vertical: 'top' }}
           zDepth={3}
           onRequestClose={this.handleRequestClose}
         >
@@ -30,10 +31,20 @@ class MenuBar extends React.Component {
             <MenuItem primaryText="About" />
             <MenuItem primaryText="Sign out" />
           </Menu>
-      </Popover>
+        </Popover>
       </div>
     );
   }
 }
+
+MenuBar.propTypes = {
+  leftMenuStatus: PropTypes.bool,
+  onMenuOpen: PropTypes.func,
+};
+
+MenuBar.defaultProps = {
+  leftMenuStatus: false,
+  onMenuOpen: PropTypes.func,
+};
 
 export default MenuBar;
