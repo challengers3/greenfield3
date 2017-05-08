@@ -2,18 +2,16 @@ import React from 'react';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
+import PropTypes from 'prop-types';
 
 class MenuBar extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   value: 1,
-    // };
-    this.handleRequestClose = this.handleRequestClose.bind(this)
+    this.handleRequestClose = this.handleRequestClose.bind(this);
   }
 
   handleRequestClose() {
-    this.props.onMenuOpen()
+    this.props.onMenuOpen();
   }
 
   render() {
@@ -21,20 +19,32 @@ class MenuBar extends React.Component {
       <div>
         <Popover
           open={this.props.leftMenuStatus}
-          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+          targetOrigin={{ horizontal: 'left', vertical: 'top' }}
+          zDepth={3}
           onRequestClose={this.handleRequestClose}
         >
           <Menu>
-            <MenuItem primaryText="Refresh" />
+            <MenuItem primaryText="Favorites" />
+            <MenuItem primaryText="My day" />
             <MenuItem primaryText="Help &amp; feedback" />
-            <MenuItem primaryText="Settings" />
+            <MenuItem primaryText="About" />
             <MenuItem primaryText="Sign out" />
           </Menu>
-      </Popover>
+        </Popover>
       </div>
     );
   }
 }
+
+MenuBar.propTypes = {
+  leftMenuStatus: PropTypes.bool,
+  onMenuOpen: PropTypes.func,
+};
+
+MenuBar.defaultProps = {
+  leftMenuStatus: false,
+  onMenuOpen: PropTypes.func,
+};
 
 export default MenuBar;
