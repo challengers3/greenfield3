@@ -10,6 +10,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import ActionAndroid from 'material-ui/svg-icons/action/android';
 import FlatButton from 'material-ui/FlatButton';
 
+import List from './components/List'; 
 import SearchBar from './components/SearchBar';
 import MenuBar from './components/MenuBar';
 import MainDisplay from './components/MainDisplay';
@@ -22,6 +23,7 @@ class App extends React.Component {
     this.state = {
       data: {},
       leftMenu: false,
+      list: []
     };
     this.menuOpen = this.menuOpen.bind(this);
     this.search = this.search.bind(this);
@@ -98,6 +100,9 @@ class App extends React.Component {
             onLeftIconButtonTouchTap={this.menuOpen}
           />
           <SearchBar onSearch={this.search} />
+
+          <List/>
+
           <MenuBar
             leftMenuStatus={this.state.leftMenu}
             onMenuOpen={this.menuOpen}
