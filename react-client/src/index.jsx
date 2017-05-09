@@ -21,7 +21,7 @@ class App extends React.Component {
     this.search = this.search.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     var getCoords = () => {
       return new Promise ( (resolve, reject) => {
         navigator.geolocation.getCurrentPosition(function(position) {
