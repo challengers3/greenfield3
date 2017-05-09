@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 
 db.on('error', function() {
   console.log('mongoose connection error');
@@ -11,17 +11,34 @@ db.once('open', function() {
   console.log('mongoose connected successfully');
 });
 
-var itemSchema = mongoose.Schema({
-  business: String, 
-  id: Number,
-  name: String,
-  photos: Array,
-  ratings: Array, 
-  reviews: Array
+//might need to adjust server-index.js
+let userSchema = mongoose.Schema({
+  name: String, 
+  address: String, 
+  phone: String, 
+  photos: Array, 
+  rating: Number, 
+  type: String, 
+  price: String, 
+  x_street: String, 
+  url: String, 
+  yelp_id: {type: String, unique: true, dropDups: true}
 });
 
+var User = mongoose.model('User', userSchema); 
 
-var Item = mongoose.model('Item', itemSchema);
-module.exports = Item; 
+let localSchema = mongoose.Schema({
+  user_id: {type: String, unique: true, dropDups: true}, 
+  locations: Array
+});
+
+var Local = mongoose.model('Local', localSchema); 
+
+module.exports = {
+  User: User, 
+  Local: Local
+}; 
+
+
 
 
