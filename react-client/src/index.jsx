@@ -16,7 +16,7 @@ import LoadingScreen from './components/LoadingScreen';
 
 injectTapEventPlugin();
 
-// const fakeData = require('./components/fakeData');
+const fakeData = require('./components/fakeData');
 
 class App extends React.Component {
   constructor(props) {

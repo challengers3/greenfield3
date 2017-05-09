@@ -1,55 +1,82 @@
 import React from 'react';
-import { Card, CardActions, CardHeader, CardTitle, CardText } from 'material-ui/Card';
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import PropTypes from 'prop-types';
-import $ from 'jquery';
+import RaisedButton from 'material-ui/RaisedButton';
+import Dialog from 'material-ui/Dialog';
+import axios from 'axios';
 
 import ReviewStars from './ReviewStars';
 import styles from '../css/styles';
 
 const yelpIcon = require('../assets/yelpLogo/Yelp_icon.png');
 
-const MainDisplay = (props) => {
-  const propsData = props.data;
-  const saveToFavorite = () => {
-    $.ajax({
-      type: 'POST',
-      url: '/save',
-      data: JSON.stringify(propsData),
-      error: (err) => {
-        if (err) throw err;
-      },
-    });
-  };
+class MainDisplay extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      toggle: false,
+    };
+    this.onToggle = this.onToggle.bind(this);
+    this.saveToFavorite = this.saveToFavorite.bind(this);
+  }
 
-  return (
-    <Card style={styles.cardStyle}>
-      <CardHeader
-        title={propsData.name}
-        subtitle={<ReviewStars
-          rating={propsData.rating}
-        />}
-      />
-      <CardTitle title="Description" />
-      <CardText>
-        <p>Type of food: {propsData.type}
-          <a href={`${propsData.url}`}><img
-            src={yelpIcon}
-            alt="logo" style={styles.logo}
-          /></a></p>
-        <p>Price: {propsData.price}</p>
-        <p>Street Address: {propsData.address}</p>
-        <p>Contact info: {propsData.phone}</p>
-      </CardText>
-      <CardActions>
-        <IconButton onTouchTap={() => saveToFavorite}>
-          <StarBorder color={styles.mainColor} />
-        </IconButton>
-      </CardActions>
-    </Card>
-  );
-};
+  saveToFavorite() {
+    // axios.post('/saveToFav', )
+  }
+
+  onToggle() {
+    this.setState({
+      toggle: !this.state.toggle,
+    });
+  }
+
+  render() {
+    return (
+      <Card style={styles.cardStyle}>
+        <CardText>
+          <h1>{this.props.data.name}</h1>
+          <ReviewStars
+            rating={this.props.data.rating}
+          />
+          <p>Total Reviews: {this.props.data.reviewCount}</p>
+          <RaisedButton
+            label="Reviews"
+            onTouchTap={this.onToggle}
+          />
+          <Dialog
+            title="Reviews"
+            autoScrollBodyContent={true}
+            open={this.state.toggle}
+            onRequestClose={this.onToggle}
+          >
+            {this.props.data.reviews.map(oneReview =>
+              <div key={oneReview.reviewer_name}>
+                <h3>{oneReview.reviewer_name}</h3>
+                <p>Rating: {oneReview.rating}</p>
+                <p>{oneReview.text}</p>
+              </div>,
+            )}
+          </Dialog>
+          <p>Type of food: {this.props.data.type}
+            <a href={`${this.props.data.url}`}><img
+              src={yelpIcon}
+              alt="logo" style={styles.logo}
+            /></a></p>
+          <p>Price: {this.props.data.price}</p>
+          <p>Street Address: {this.props.data.address}</p>
+          <p>Contact info: {this.props.data.phone}</p>
+        </CardText>
+        <CardActions>
+          <IconButton onTouchTap={() => this.saveToFavorite}>
+            <StarBorder color={styles.mainColor} />
+          </IconButton>
+        </CardActions>
+      </Card>
+    );
+  }
+}
 
 MainDisplay.propTypes = {
   data: PropTypes.object,
