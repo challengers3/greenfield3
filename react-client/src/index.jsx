@@ -9,6 +9,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import Speaker from 'material-ui/svg-icons/hardware/keyboard-voice';
 import FlatButton from 'material-ui/FlatButton';
 
+import List from './components/List';
 import SearchBar from './components/SearchBar';
 import MenuBar from './components/MenuBar';
 import MainDisplay from './components/MainDisplay';
@@ -23,22 +24,26 @@ class App extends React.Component {
     super(props);
     this.state = {
       data: undefined,
+      favData: undefined,
+      favView: false,
+      mainView: true,
       leftMenu: false,
       coords: false,
     };
     this.menuOpen = this.menuOpen.bind(this);
     this.search = this.search.bind(this);
     this.startSpeech = this.startSpeech.bind(this);
+    this.clickFav = this.clickFav.bind(this);
   }
 
-  componentWillMount() {
+ componentWillMount() {
     const getCoords = () => new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition((position) => {
         resolve({ lat: position.coords.latitude, long: position.coords.longitude });
       });
     });
 
-    getCoords().then((response) => {
+   getCoords().then((response) => {
       this.setState({
         coords: true,
       });
@@ -46,15 +51,15 @@ class App extends React.Component {
     });
   }
 
-  componentDidMount() {
-    this.search('popsons');
+ componentDidMount() {
+    this.search('');
+    // need axios request for favData on load;
   }
 
-  startSpeech() {
+ startSpeech() {
     if (annyang) {
       const commands = {
         'show me *input': (input) => {
-          console.log('ANNYANG TAG', input);
           this.search(input);
         },
       };
@@ -64,7 +69,14 @@ class App extends React.Component {
     }
   }
 
-  search(input) {
+ clickFav() {
+    this.setState({
+      favView: !this.state.favView,
+      mainView: !this.state.mainView,
+    });
+  }
+
+ search(input) {
     console.log('CLICKY', input);
     axios.get(`/search?query=${input}`)
     .then((response) => {
@@ -77,7 +89,7 @@ class App extends React.Component {
     });
   }
 
-  menuOpen() {
+ menuOpen() {
     console.log('OPEN', this.state.leftMenu);
     this.setState({
       leftMenu: !this.state.leftMenu,
@@ -85,28 +97,34 @@ class App extends React.Component {
   }
 
 
-  render() {
-    const isEmpty = this.state.data;
-    const isCorrds = this.state.coords;
+ render() {
+    const isDataEmpty = this.state.data;
+    const isMainView = this.state.mainView;
+    const isFavVIew = this.state.favView;
+    // const isCorrds = this.state.coords;
     return (
       <MuiThemeProvider>
-        {(!isEmpty) ? (
+        {(!isDataEmpty && isMainView) ? (
           <LoadingScreen />
         ) : (
           <div>
             <AppBar
-              title="WHERE AM I?"
-              style={{ backgroundColor: '#FFA726' }}
+              title='WHERE AM I?'
+              style={{ backgroundColor: '#FFA726 ' }}
               onLeftIconButtonTouchTap={this.menuOpen}
             />
             <SearchBar onSearch={this.search} />
             <FlatButton
-              icon={<Speaker />}
+              icon={<Speaker alt='Speaker' />}
               onTouchTap={this.startSpeech}
             />
+
+            <List data={this.state.data} />
+            
             <MenuBar
               leftMenuStatus={this.state.leftMenu}
               onMenuOpen={this.menuOpen}
+              onClickFav={this.clickFav}
             />
             <div>
               <MainDisplay
@@ -114,6 +132,7 @@ class App extends React.Component {
                 data={this.state.data}
               />
             </div>
+            {/* <FavoriteView data={this.state.data} /> */}
           </div>
         )}
       </MuiThemeProvider>
