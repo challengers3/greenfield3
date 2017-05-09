@@ -7,7 +7,7 @@ var yelpToken = '54robtCPOWAAru28w0M7Qr71NEaFNqygTcxM1xUlg3oX5aXjk3q85eX_MFH0o6S
 var app = express();
 
 app.use(express.static(__dirname + '/../react-client/dist'));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
 app.get('/items', function (req, res) {
@@ -27,15 +27,22 @@ app.post('/location', (req, res) => {
 
 app.get('/search', function(req, res) {
   var input = req.query.query;
+  // console.log('input in GET ', input)
   var apiURL = 'https://api.yelp.com/v3/businesses/'
   var authHeader = {Authorization: "Bearer " + yelpToken}
-  var placeObject = {
+  var localeObject = {
     name: '',
+    address: '',
+    phone: '',
+    type: '',
+    price: '',
+    photos: [],
     rating: 0,
-    reviews: []
+    reviews: [],
+    url: '',
   };
 
-  console.log(req.query)
+  // console.log(req.query)
   // var coords = req.body.coords;
   // console.log("hello from index.js: ", coords);
 
@@ -43,17 +50,17 @@ app.get('/search', function(req, res) {
     var businessID = JSON.parse(data).businesses[0].id;
 
     request( { headers: authHeader,uri:`${apiURL}${businessID}` }, (err, response, placeData) => {
-      var placeData = JSON.parse(placeData);
+      placeData = JSON.parse(placeData);
 
-      placeObject.name = placeData.name;
-      placeObject.rating = placeData.rating;
+      localObject.name = placeData.name;
+      localObject.rating = placeData.rating;
     });
 
     request( { headers: authHeader,uri:`${apiURL}${businessID}/reviews` }, (err, response, reviewData) => {
       var reviewData = JSON.parse(reviewData).reviews;
 
       for(var i = 0; i < reviewData.length; i++) {
-        placeObject.reviews.push({
+        localObject.reviews.push({
           'text': reviewData[i].text,
           'rating': reviewData[i].rating,
           'reviewer_name': reviewData[i].user.name,
@@ -61,10 +68,11 @@ app.get('/search', function(req, res) {
         });
       }
 
-      // console.log(JSON.stringify(placeObject));
+      console.log('PLACE OBJECT IS ', JSON.stringify(localObject));
       // save to the DB at this point
 
-      res.send(placeObject);
+
+      res.send(JSON.stringify(localObject));
     });
   });
 });
