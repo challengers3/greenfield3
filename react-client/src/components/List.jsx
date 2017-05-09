@@ -21,7 +21,6 @@ const styles = {
 };
 
 
-
 var fakeData = {"id": "the-flying-falafel-san-francisco-3", 
   "name": "The Flying Falafel", 
   "image_url": "https://s3-media1.fl.yelpcdn.com/bphoto/O4zKAcpg4qFUQj5Kd5fjpQ/o.jpg", 
