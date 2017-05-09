@@ -11,4 +11,4 @@ compiled
 database-mongo/data/db
 
 ## React ##
-react-client/dist/bundle.js
+react-client/dist/
