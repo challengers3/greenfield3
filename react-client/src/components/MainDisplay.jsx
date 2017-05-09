@@ -3,6 +3,8 @@ import { Card, CardActions, CardHeader, CardTitle, CardText } from 'material-ui/
 import IconButton from 'material-ui/IconButton';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import PropTypes from 'prop-types';
+import $ from 'jquery';
+
 import ReviewStars from './ReviewStars';
 import styles from '../css/styles';
 
@@ -10,6 +12,17 @@ const yelpIcon = require('../assets/yelpLogo/Yelp_icon.png');
 
 const MainDisplay = (props) => {
   const propsData = props.data;
+  const saveToFavorite = () => {
+    $.ajax({
+      type: 'POST',
+      url: '/save',
+      data: JSON.stringify(propsData),
+      error: (err) => {
+        if (err) throw err;
+      },
+    });
+  };
+
   return (
     <Card style={styles.cardStyle}>
       <CardHeader
@@ -20,19 +33,18 @@ const MainDisplay = (props) => {
       />
       <CardTitle title="Description" />
       <CardText>
-        <p>{propsData.description}</p>
-        <p>Type of food: {propsData.categories[0].title}
+        <p>Type of food: {propsData.type}
           <a href={`${propsData.url}`}><img
             src={yelpIcon}
             alt="logo" style={styles.logo}
           /></a></p>
-        <p>Street Address: {propsData.location.address1}</p>
-        <p>City: {propsData.location.city}</p>
-        <p>State: {propsData.location.state},&nbsp;
-          {propsData.location.zip_code}</p>
+        <p>Price: {propsData.price}</p>
+        <p>Street Address: {propsData.address}</p>
+        <p>Contact info: {propsData.phone}</p>
       </CardText>
       <CardActions>
-        <IconButton><StarBorder color={styles.mainColor} />
+        <IconButton onTouchTap={() => saveToFavorite}>
+          <StarBorder color={styles.mainColor} />
         </IconButton>
       </CardActions>
     </Card>
@@ -44,7 +56,7 @@ MainDisplay.propTypes = {
 };
 
 MainDisplay.defaultProps = {
-  data: PropTypes.object,
+  data: null,
 };
 
 export default MainDisplay;

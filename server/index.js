@@ -10,7 +10,7 @@ var location = {};
 var app = express();
 
 app.use(express.static(__dirname + '/../react-client/dist'));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
 app.get('/items', function (req, res) {
@@ -41,7 +41,7 @@ app.get('/search', function(req, res) {
     photos: [],
     rating: 0,
     reviews: [],
-    url: ''
+    url: '',
   };
   let userLat = 37.7836964//location.lat;
   let userLong = -122.40916799999998;//location.long;
@@ -55,7 +55,6 @@ app.get('/search', function(req, res) {
       url: `${apiURL}${businessID}`
     }).then( yelpBizData => {
       let localeData = yelpBizData.data;
-
       localeObject.name = localeData.name;
       localeObject.address = localeData.location.address1;
       localeObject.cross = localeData.location.cross_streets;
