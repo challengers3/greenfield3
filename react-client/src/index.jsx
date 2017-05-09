@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
+import axios from 'axios';
 
 import annyang from 'annyang';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -11,7 +12,7 @@ import FlatButton from 'material-ui/FlatButton';
 
 import SearchBar from './components/SearchBar';
 import MenuBar from './components/MenuBar';
-// import MainDisplay from './components/MainDisplay';
+import MainDisplay from './components/MainDisplay';
 
 injectTapEventPlugin();
 
@@ -19,45 +20,15 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null,
+      data: {},
       leftMenu: false,
     };
     this.menuOpen = this.menuOpen.bind(this);
-    // this.search = this.search.bind(this);
+    this.search = this.search.bind(this);
+    this.startSpeech = this.startSpeech.bind(this);
   }
 
   componentWillMount() {
-
-    this.startSpeech = () => {
-      if (annyang) {
-        const commands = {
-          'show me *input': (input) => {
-            console.log('ANNYANG TAG', input);
-            this.search(input);
-          },
-        };
-        annyang.addCommands(commands);
-        annyang.debug();
-        annyang.start();
-      }
-    };
-    this.search = (input) => {
-      // console.log('CLICKY', input);
-      $.ajax({
-        url: `/search?query=${input}`,
-        type: 'GET',
-        success: (data) => {
-          const retData = JSON.parse(data);
-          console.log('RET DATA IS', retData);
-          this.setState({
-            data: retData,
-          });
-        },
-        error: (err) => {
-          throw err;
-        },
-      });
-    };
     const getCoords = () => new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition((position) => {
         resolve({ lat: position.coords.latitude, long: position.coords.longitude });
@@ -69,7 +40,38 @@ class App extends React.Component {
         type: 'POST',
         url: '/location',
         data: response,
-      })
+      });
+    });
+  }
+
+  componentDidMount() {
+    this.search('popsons');
+  }
+
+  startSpeech() {
+    if (annyang) {
+      const commands = {
+        'show me *input': (input) => {
+          console.log('ANNYANG TAG', input);
+          this.search(input);
+        },
+      };
+      annyang.addCommands(commands);
+      annyang.debug();
+      annyang.start();
+    }
+  }
+
+  search(input) {
+    console.log('CLICKY', input);
+    axios.get(`/search?query=${input}`)
+    .then((response) => {
+      this.setState({
+        data: response.data,
+      });
+    })
+    .catch((error) => {
+      console.warn(error);
     });
   }
 
@@ -100,12 +102,12 @@ class App extends React.Component {
             leftMenuStatus={this.state.leftMenu}
             onMenuOpen={this.menuOpen}
           />
-          {/* <div>
+          <div>
             <MainDisplay
               style={{ 'margin-top': '20px' }}
               data={this.state.data}
             />
-          </div> */}
+          </div>
         </div>
       </MuiThemeProvider>
     );

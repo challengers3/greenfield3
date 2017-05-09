@@ -13,7 +13,7 @@ class SearchBar extends React.Component {
       input: '',
     };
     this.onUpdateInput = this.onUpdateInput.bind(this);
-    this.onClick = this.onClick.bind(this);
+    // this.onClick = this.onClick.bind(this);
   }
 
   onUpdateInput(input) {
@@ -22,12 +22,12 @@ class SearchBar extends React.Component {
     });
   }
 
-  onClick() {
-    this.props.onSearch(this.state.input);
-    this.setState({
-      input: '',
-    });
-  }
+  // onClick() {
+  //   this.props.onSearch(this.state.input);
+  //   this.setState({
+  //     input: '',
+  //   });
+  // }
 
   render() {
     return (
@@ -45,7 +45,7 @@ class SearchBar extends React.Component {
           <RaisedButton
             label="Search" backgroundColor={styles.mainColor}
             labelColor="rgb(255, 255, 255)"
-            onTouchTap={this.onClick}
+            onTouchTap={() => this.props.onSearch(this.state.input)}
           />
         </div>
       </div>
