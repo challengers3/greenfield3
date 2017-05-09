@@ -43,12 +43,13 @@ var fakeData = {"id": "the-flying-falafel-san-francisco-3",
   "transactions": ["pickup"]}
 
 //check how the props are passed down and what needs to be imported 
+//props.photos.map, props is undefined for now
 
 const List = (props) => (
   <div style={styles.root}>
     <GridList style={styles.gridList} cols={2.2}>
 
-      {fakeData.photos.map((tile) => (
+      {props.data.photos.map((tile) => (
         <GridTile
           key={tile}
           actionIcon={<IconButton><StarBorder color="rgb(0, 188, 212)" /></IconButton>}
