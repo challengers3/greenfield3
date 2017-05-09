@@ -27,16 +27,16 @@ let userSchema = mongoose.Schema({
 
 var User = mongoose.model('User', userSchema); 
 
-let localSchema = mongoose.Schema({
+let localeSchema = mongoose.Schema({
   user_id: {type: String, unique: true, dropDups: true}, 
   locations: Array
 });
 
-var Local = mongoose.model('Local', localSchema); 
+var Locale = mongoose.model('Locale', localeSchema); 
 
 module.exports = {
   User: User, 
-  Local: Local
+  Locale: Locale
 }; 
 
 
