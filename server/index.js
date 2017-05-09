@@ -62,11 +62,6 @@ app.get('/search', function(req, res) {
         });
       }
 
-<<<<<<< HEAD
-      // console.log(JSON.stringify(placeObject)); 
-=======
-      // console.log(JSON.stringify(placeObject));
->>>>>>> 066fbf8fdd69602d940ca5314884aa543bd21721
       // save to the DB at this point
 
       res.send(placeObject);
