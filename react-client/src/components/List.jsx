@@ -21,7 +21,6 @@ const styles = {
 };
 
 
-
 var fakeData = {"id": "the-flying-falafel-san-francisco-3", 
   "name": "The Flying Falafel", 
   "image_url": "https://s3-media1.fl.yelpcdn.com/bphoto/O4zKAcpg4qFUQj5Kd5fjpQ/o.jpg", 
@@ -43,10 +42,12 @@ var fakeData = {"id": "the-flying-falafel-san-francisco-3",
   "hours": [{"open": [{"is_overnight": false, "start": "1000", "end": "2030", "day": 0}, {"is_overnight": false, "start": "1000", "end": "2030", "day": 1}, {"is_overnight": false, "start": "1000", "end": "2030", "day": 2}, {"is_overnight": false, "start": "1000", "end": "2030", "day": 3}, {"is_overnight": false, "start": "1000", "end": "2030", "day": 4}, {"is_overnight": false, "start": "1000", "end": "2030", "day": 5}, {"is_overnight": false, "start": "1000", "end": "2030", "day": 6}], "hours_type": "REGULAR", "is_open_now": true}], 
   "transactions": ["pickup"]}
 
+//check how the props are passed down and what needs to be imported 
 
 const List = (props) => (
   <div style={styles.root}>
     <GridList style={styles.gridList} cols={2.2}>
+
       {fakeData.photos.map((tile) => (
         <GridTile
           key={tile}
