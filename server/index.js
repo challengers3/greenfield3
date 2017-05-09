@@ -25,7 +25,12 @@ app.get('/items', function (req, res) {
 app.post('/location', (req, res) => {
   location = req.body;
   res.end();
-})
+});
+
+app.post('/saveToFav', (req, res) => {
+  console.log(req.body);
+  res.end()
+});
 
 app.get('/search', function(req, res) {
   let input = req.query.query;
