@@ -3,9 +3,8 @@ var bodyParser = require('body-parser');
 var items = require('../database-mongo');
 var request = require ('request');
 var axios = require('axios');
-var yelpToken = '54robtCPOWAAru28w0M7Qr71NEaFNqygTcxM1xUlg3oX5aXjk3q85eX_MFH0o6SdddycpMcrPuYaV99yy_qAOKOVJWrudk8qnx80uxuCwAyxpgdA62d-27GZIdMIWXYx';
+var yelpToken = config.YELP_TOKEN;
 var location = {};
-
 
 var app = express();
 
