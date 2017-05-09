@@ -1,6 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var db = require('../database-mongo');
+var Locale = require('../database-mongo');
 var request = require ('request');
 var axios = require('axios');
 var yelpToken = config.YELP_TOKEN;
@@ -144,6 +144,7 @@ app.get('/search', function(req, res) {
     setTimeout( () => res.send(localeObject), 2000 );
   }).catch( err => console.log('promise error: ', err));
 });
+
 
 app.listen(3000, function() {
   console.log('listening on port 3000!');
