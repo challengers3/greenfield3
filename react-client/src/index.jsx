@@ -15,8 +15,15 @@ import MenuBar from './components/MenuBar';
 import MainDisplay from './components/MainDisplay';
 import LoadingScreen from './components/LoadingScreen';
 import FavoriteView from './components/FavoriteView';
+import { FacebookAuth, statusChangeCallback, testAPI } from './components/FacebookAuth';
 
 injectTapEventPlugin();
+
+const getCoords = () => new Promise((resolve, reject) => {
+  navigator.geolocation.getCurrentPosition((position) => {
+    resolve({ lat: position.coords.latitude, long: position.coords.longitude });
+  });
+});
 
 class App extends React.Component {
   constructor(props) {
@@ -28,51 +35,72 @@ class App extends React.Component {
       mainView: true,
       leftMenu: false,
       isLoading: true,
-      coords: false,
     };
     this.menuOpen = this.menuOpen.bind(this);
     this.search = this.search.bind(this);
     this.startSpeech = this.startSpeech.bind(this);
     this.clickFav = this.clickFav.bind(this);
-    this.saveToFavorite = this.saveToFavorite.bind(this);
+    this.checkLoginState = this.checkLoginState.bind(this);
+    this.loginFB = this.loginFB.bind(this);
+    this.logoutFB = this.logoutFB.bind(this);
   }
 
- componentWillMount() {
-    const getCoords = () => new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition((position) => {
-        resolve({ lat: position.coords.latitude, long: position.coords.longitude });
-      });
-    });
-
-   getCoords().then((response) => {
-      this.setState({
-        coords: true,
-      });
+  componentWillMount() {
+    getCoords().then((response) => {
       axios.post('/location', response);
-    });
+    })
+    .then(() => this.search(''));
   }
 
   componentDidMount() {
-    this.search('');
-    // need axios request for favData on load;
+    FacebookAuth();
   }
 
-  saveToFavorite(fav) {
-  // axios.post('/saveToFav', this.props.data);
-  console.log('in saveToFavorite in MainDisplay.jsx');
-  console.log('this.props.data in saveToFavorite in index.jsx', fav); 
-
-  // axios.post('/saveToFav', fav)
-  //   .then(response => {
-  //     console.log('response for axios post', response); 
-  //   })
-
-  //   .catch(error => {
-  //     console.log('SOMETHING WRONG IN MAIN DISPLAY.JSX', error); 
-  //   }); 
+  checkLoginState() {
+    FB.getLoginStatus((response) => {
+      statusChangeCallback(response);
+    });
   }
 
- startSpeech() {
+  loginFB() {
+    FB.login((response) => {
+      if (response.authResponse) {
+        console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', (response) => {
+          console.log(`Good to see you, ${response.name}.`);
+        });
+      } else {
+        console.log('User cancelled login or did not fully authorize.');
+      }
+    });
+  }
+
+  logoutFB() {
+    FB.logout((response) => {
+      statusChangeCallback(response);
+      window.location.reload()
+    });
+  }
+
+  loginFB() {
+    FB.login((response) => {
+      if (response.authResponse) {
+        console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', (response) => {
+          console.log(`Good to see you, ${response.name}.`);
+        });
+      } else {
+        console.log('User cancelled login or did not fully authorize.');
+      }
+    });
+  }
+
+  //
+  // FB.logout((response) => {
+  //   // user is now logged out
+  // });
+
+  startSpeech() {
     if (annyang) {
       const commands = {
         'show me *input': (input) => {
@@ -118,17 +146,17 @@ class App extends React.Component {
   }
 
   render() {
-    const isDataEmpty = this.state.data;
     const isLoading = this.state.isLoading;
     const isMainView = this.state.mainView;
     const isFavVIew = this.state.favView;
-    // const isCorrds = this.state.coords;
     return (
       <MuiThemeProvider>
         {(isLoading && isMainView) ? (
           <LoadingScreen />
         ) : (
           <div>
+            <button onClick={this.loginFB}>Login</button>
+            <a href="/logout" onClick={() => FB.logout}> Logout </a>
             <AppBar
               title='WHERE AM I?'
               style={{ backgroundColor: '#FFA726 ' }}
@@ -146,6 +174,7 @@ class App extends React.Component {
               leftMenuStatus={this.state.leftMenu}
               onMenuOpen={this.menuOpen}
               onClickFav={this.clickFav}
+              onLogoutFB={this.logoutFB}
             />
             <div>
               <MainDisplay

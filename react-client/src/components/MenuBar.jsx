@@ -31,7 +31,10 @@ class MenuBar extends React.Component {
             />
             <MenuItem primaryText="Help &amp; feedback" />
             <MenuItem primaryText="About" />
-            <MenuItem primaryText="Sign out" />
+            <MenuItem
+              primaryText="Sign out"
+              onTouchTap={() => FB.logout(function(response){})}
+            />
           </Menu>
         </Popover>
       </div>
@@ -43,12 +46,14 @@ MenuBar.propTypes = {
   leftMenuStatus: PropTypes.bool,
   onMenuOpen: PropTypes.func,
   onClickFav: PropTypes.func,
+  onLogoutFB: PropTypes.func,
 };
 
 MenuBar.defaultProps = {
   leftMenuStatus: false,
   onMenuOpen: PropTypes.func,
   onClickFav: PropTypes.func,
+  onLogoutFB: PropTypes.func,
 };
 
 export default MenuBar;
