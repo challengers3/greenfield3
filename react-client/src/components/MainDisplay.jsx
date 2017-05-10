@@ -5,7 +5,6 @@ import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
-import axios from 'axios';
 
 import ReviewStars from './ReviewStars';
 import styles from '../css/styles';
@@ -19,12 +18,15 @@ class MainDisplay extends React.Component {
       toggle: false,
     };
     this.onToggle = this.onToggle.bind(this);
+<<<<<<< HEAD
     this.saveToFavorite = this.saveToFavorite.bind(this);
   }
 
   saveToFavorite() {
     console.log(JSON.stringify(this.props.data))
     axios.post('/saveToFav', this.props.data);
+=======
+>>>>>>> Fixed logic for quicker load
   }
 
   onToggle() {

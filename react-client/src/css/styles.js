@@ -33,6 +33,11 @@ const styles = {
     height: '450',
     overflowY: 'auto',
   },
+  gridList2: {
+    display: 'flex',
+    flexWrap: 'nowrap',
+    overflowX: 'auto',
+  },
 };
 
 export default styles;

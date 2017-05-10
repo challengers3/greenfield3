@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import axios from 'axios';
-
-import annyang from 'annyang';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Speaker from 'material-ui/svg-icons/hardware/keyboard-voice';
 import FlatButton from 'material-ui/FlatButton';
+import annyang from 'annyang';
 
 import List from './components/List';
 import SearchBar from './components/SearchBar';
@@ -15,9 +14,15 @@ import MenuBar from './components/MenuBar';
 import MainDisplay from './components/MainDisplay';
 import LoadingScreen from './components/LoadingScreen';
 import FavoriteView from './components/FavoriteView';
+import fakeData from './components/fakeData';
 
 injectTapEventPlugin();
 
+const getCoords = () => new Promise((resolve, reject) => {
+  navigator.geolocation.getCurrentPosition((position) => {
+    resolve({ lat: position.coords.latitude, long: position.coords.longitude });
+  });
+});
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -37,14 +42,8 @@ class App extends React.Component {
     this.saveToFavorite = this.saveToFavorite.bind(this);
   }
 
- componentWillMount() {
-    const getCoords = () => new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition((position) => {
-        resolve({ lat: position.coords.latitude, long: position.coords.longitude });
-      });
-    });
-
-   getCoords().then((response) => {
+  componentWillMount() {
+    getCoords().then((response) => {
       this.setState({
         coords: true,
       });
@@ -57,6 +56,7 @@ class App extends React.Component {
     // need axios request for favData on load;
   }
 
+<<<<<<< HEAD
   saveToFavorite(fav) {
   // axios.post('/saveToFav', this.props.data);
   console.log('in saveToFavorite in MainDisplay.jsx');
@@ -73,6 +73,9 @@ class App extends React.Component {
   }
 
  startSpeech() {
+=======
+  startSpeech() {
+>>>>>>> Fixed logic for quicker load
     if (annyang) {
       const commands = {
         'show me *input': (input) => {
@@ -86,22 +89,26 @@ class App extends React.Component {
   }
 
   clickFav() {
-    console.log('FAV CLICKY')
+    console.log('FAV CLICKY');
     this.setState({
-      favView: !this.state.favView,
-      mainView: !this.state.mainView,
+      favView: true,
+      mainView: false,
     });
   }
 
   search(input) {
     this.setState({
       isLoading: true,
-    })
+    });
     console.log('CLICKY', input);
     axios.get(`/search?query=${input}`)
     .then((response) => {
       this.setState({
         data: response.data,
+      });
+    })
+    .then(() => {
+      this.setState({
         isLoading: false,
       });
     })
@@ -110,8 +117,7 @@ class App extends React.Component {
     });
   }
 
- menuOpen() {
-    console.log('OPEN', this.state.leftMenu);
+  menuOpen() {
     this.setState({
       leftMenu: !this.state.leftMenu,
     });
@@ -125,12 +131,12 @@ class App extends React.Component {
     // const isCorrds = this.state.coords;
     return (
       <MuiThemeProvider>
-        {(isLoading && isMainView) ? (
+        {isLoading ? (
           <LoadingScreen />
         ) : (
           <div>
             <AppBar
-              title='WHERE AM I?'
+              title="WHERE AM I?"
               style={{ backgroundColor: '#FFA726 ' }}
               onLeftIconButtonTouchTap={this.menuOpen}
             />
@@ -139,7 +145,6 @@ class App extends React.Component {
               icon={<Speaker alt="Speaker" />}
               onTouchTap={this.startSpeech}
             />
-
             <List data={this.state.data} />
 
             <MenuBar
