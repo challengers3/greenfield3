@@ -126,6 +126,16 @@ app.get('/search', function(req, res) {
   }).catch( err => console.log('promise error: ', err));
 });
 
+app.post('/saveToFav', (req, res) => {
+  let locale = req.body;
+
+  let favorite = new Locale({
+    //
+  })
+  res.send(req.body);
+
+  res.end();
+})
 
 app.listen(3000, function() {
   console.log('listening on port 3000!');
