@@ -62,14 +62,14 @@ class App extends React.Component {
   console.log('in saveToFavorite in MainDisplay.jsx');
   console.log('this.props.data in saveToFavorite in index.jsx', fav); 
 
-  axios.post('/saveToFav', fav)
-    .then(response => {
-      console.log('response for axios post', response); 
-    })
+  // axios.post('/saveToFav', fav)
+  //   .then(response => {
+  //     console.log('response for axios post', response); 
+  //   })
 
-    .catch(error => {
-      console.log('SOMETHING WRONG IN MAIN DISPLAY.JSX', error); 
-    }); 
+  //   .catch(error => {
+  //     console.log('SOMETHING WRONG IN MAIN DISPLAY.JSX', error); 
+  //   }); 
   }
 
  startSpeech() {

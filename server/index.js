@@ -12,9 +12,6 @@ app.use(express.static(__dirname + '/../react-client/dist'));
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
-//getting items from the database
-//might need to adjust first parameter to fit database exports 
-
 app.get('/items', function (req, res) {
   db.selectAll(function(err, data) {
     if(err) {
@@ -29,10 +26,6 @@ app.post('/location', (req, res) => {
   location = req.body;
   res.end();
 }); 
-
-//something wrong with the path '/saveToFav'
-//need to direct the post request to this path because
-//it's not being received 
 
 app.post('/saveToFav', (req, res) => {
 
@@ -52,7 +45,6 @@ app.post('/saveToFav', (req, res) => {
     price: locale.price, 
     x_street: locale.cross, 
     url: locale.url, 
-    yelp_id: locale
   });
   favorite.save();
 
@@ -69,11 +61,12 @@ app.get('/search', function(req, res) {
     name: '',
     address: '',
     phone: '',
-    type: '',
-    price: '',
     photos: [],
     rating: 0,
     reviews: [],
+    type: '',
+    price: '',
+    x_street: '',
     url: ''
   };
   let userLat = 37.7836964//location.lat;

@@ -11,11 +11,9 @@ db.once('open', function() {
   console.log('mongoose connected successfully');
 });
 
-//db.createCollection('users');
-
-//might need to adjust server-index.js
-let userSchema = mongoose.Schema({
-  name: {type: String, unique: true, dropDups: true},
+let localeSchema = mongoose.Schema({
+  id: String,
+  name: String,
   address: String, 
   phone: String, 
   photos: Array, 
@@ -27,19 +25,16 @@ let userSchema = mongoose.Schema({
   url: String
 });
 
-var User = mongoose.model('User', userSchema); 
+//var User = mongoose.model('User', userSchema); 
 
-let localSchema = mongoose.Schema({
+let favoritesSchema = mongoose.Schema({
   user_id: {type: String, unique: true, dropDups: true}, 
   locations: Array
 });
 
-var Local = mongoose.model('Local', localSchema); 
+var Locale = mongoose.model('Locale', localeSchema); 
 
-module.exports = {
-  User: User, 
-  Local: Local
-}; 
+module.exports = Locale;
 
 
 

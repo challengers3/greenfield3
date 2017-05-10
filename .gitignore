@@ -7,9 +7,6 @@ node_modules
 ## Compiled files ##
 compiled
 
-## Mongo ##
-database-mongo/data/db
-
 ## React ##
 react-client/dist
 
