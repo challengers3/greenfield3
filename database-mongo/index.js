@@ -11,9 +11,11 @@ db.once('open', function() {
   console.log('mongoose connected successfully');
 });
 
+//db.createCollection('users');
+
 //might need to adjust server-index.js
 let userSchema = mongoose.Schema({
-  name: String, 
+  name: {type: String, unique: true, dropDups: true},
   address: String, 
   phone: String, 
   photos: Array, 
@@ -21,8 +23,7 @@ let userSchema = mongoose.Schema({
   type: String, 
   price: String, 
   x_street: String, 
-  url: String, 
-  yelp_id: {type: String, unique: true, dropDups: true}
+  url: String
 });
 
 var User = mongoose.model('User', userSchema); 

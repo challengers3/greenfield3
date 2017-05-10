@@ -34,6 +34,7 @@ class App extends React.Component {
     this.search = this.search.bind(this);
     this.startSpeech = this.startSpeech.bind(this);
     this.clickFav = this.clickFav.bind(this);
+    this.saveToFavorite = this.saveToFavorite.bind(this);
   }
 
  componentWillMount() {
@@ -54,6 +55,21 @@ class App extends React.Component {
   componentDidMount() {
     this.search('');
     // need axios request for favData on load;
+  }
+
+  saveToFavorite(fav) {
+  // axios.post('/saveToFav', this.props.data);
+  console.log('in saveToFavorite in MainDisplay.jsx');
+  console.log('this.props.data in saveToFavorite in index.jsx', fav); 
+
+  axios.post('/saveToFav', fav)
+    .then(response => {
+      console.log('response for axios post', response); 
+    })
+
+    .catch(error => {
+      console.log('SOMETHING WRONG IN MAIN DISPLAY.JSX', error); 
+    }); 
   }
 
  startSpeech() {
@@ -125,6 +141,7 @@ class App extends React.Component {
             />
 
             <List data={this.state.data} />
+
             <MenuBar
               leftMenuStatus={this.state.leftMenu}
               onMenuOpen={this.menuOpen}
@@ -134,6 +151,7 @@ class App extends React.Component {
               <MainDisplay
                 style={{ 'margin-top': '20px' }}
                 data={this.state.data}
+                onSave={this.saveToFavorite}
               />
             </div>
             {/* <FavoriteView data={this.state.data} /> */}
