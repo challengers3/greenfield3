@@ -13,7 +13,6 @@ import SearchBar from './components/SearchBar';
 import MenuBar from './components/MenuBar';
 import MainDisplay from './components/MainDisplay';
 import LoadingScreen from './components/LoadingScreen';
-import { FacebookAuth, statusChangeCallback } from './components/FacebookAuth';
 
 injectTapEventPlugin();
 

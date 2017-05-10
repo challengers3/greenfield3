@@ -35,15 +35,15 @@ class Main extends React.Component {
   loginFB() {
     FB.login((response) => {
       if (response.authResponse) {
-        console.log('Welcome!  Fetching your information.... ');
+        console.log('Fetching info');
         FB.api('/me', (response) => {
-          console.log(`Good to see you, ${response.name}.`);
+          console.log(`FB Login, username: ${response.name}.`);
           this.setState({
             isLogin: true,
           })
         });
       } else {
-        console.log('User cancelled login or did not fully authorize.');
+        console.log('User cancelled');
       }
     });
   }
