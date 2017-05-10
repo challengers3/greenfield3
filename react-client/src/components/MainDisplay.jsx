@@ -19,10 +19,11 @@ class MainDisplay extends React.Component {
       toggle: false,
     };
     this.onToggle = this.onToggle.bind(this);
+    this.saveToFavorite = this.saveToFavorite.bind(this);
   }
 
   saveToFavorite() {
-    console.log('ONTOUCHTAP')
+    console.log(JSON.stringify(this.props.data))
     axios.post('/saveToFav', this.props.data);
   }
 
