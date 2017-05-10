@@ -25,8 +25,10 @@ class MenuBar extends React.Component {
           onRequestClose={this.handleRequestClose}
         >
           <Menu>
-            <MenuItem primaryText="Favorites" />
-            <MenuItem primaryText="My day" />
+            <MenuItem
+              primaryText="Favorites"
+              onTouchTap={this.props.onClickFav}
+            />
             <MenuItem primaryText="Help &amp; feedback" />
             <MenuItem primaryText="About" />
             <MenuItem primaryText="Sign out" />
@@ -40,11 +42,13 @@ class MenuBar extends React.Component {
 MenuBar.propTypes = {
   leftMenuStatus: PropTypes.bool,
   onMenuOpen: PropTypes.func,
+  onClickFav: PropTypes.func,
 };
 
 MenuBar.defaultProps = {
   leftMenuStatus: false,
   onMenuOpen: PropTypes.func,
+  onClickFav: PropTypes.func,
 };
 
 export default MenuBar;

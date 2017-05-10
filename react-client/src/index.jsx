@@ -14,10 +14,9 @@ import SearchBar from './components/SearchBar';
 import MenuBar from './components/MenuBar';
 import MainDisplay from './components/MainDisplay';
 import LoadingScreen from './components/LoadingScreen';
+import FavoriteView from './components/FavoriteView';
 
 injectTapEventPlugin();
-
-const fakeData = require('./components/fakeData');
 
 class App extends React.Component {
   constructor(props) {
@@ -28,6 +27,7 @@ class App extends React.Component {
       favView: false,
       mainView: true,
       leftMenu: false,
+      isLoading: true,
       coords: false,
     };
     this.menuOpen = this.menuOpen.bind(this);
@@ -51,7 +51,7 @@ class App extends React.Component {
     });
   }
 
- componentDidMount() {
+  componentDidMount() {
     this.search('');
     // need axios request for favData on load;
   }
@@ -69,19 +69,24 @@ class App extends React.Component {
     }
   }
 
- clickFav() {
+  clickFav() {
+    console.log('FAV CLICKY')
     this.setState({
       favView: !this.state.favView,
       mainView: !this.state.mainView,
     });
   }
 
- search(input) {
+  search(input) {
+    this.setState({
+      isLoading: true,
+    })
     console.log('CLICKY', input);
     axios.get(`/search?query=${input}`)
     .then((response) => {
       this.setState({
         data: response.data,
+        isLoading: false,
       });
     })
     .catch((error) => {
@@ -96,15 +101,15 @@ class App extends React.Component {
     });
   }
 
-
- render() {
+  render() {
     const isDataEmpty = this.state.data;
+    const isLoading = this.state.isLoading;
     const isMainView = this.state.mainView;
     const isFavVIew = this.state.favView;
     // const isCorrds = this.state.coords;
     return (
       <MuiThemeProvider>
-        {(!isDataEmpty && isMainView) ? (
+        {(isLoading && isMainView) ? (
           <LoadingScreen />
         ) : (
           <div>
@@ -115,12 +120,11 @@ class App extends React.Component {
             />
             <SearchBar onSearch={this.search} />
             <FlatButton
-              icon={<Speaker alt='Speaker' />}
+              icon={<Speaker alt="Speaker" />}
               onTouchTap={this.startSpeech}
             />
 
             <List data={this.state.data} />
-            
             <MenuBar
               leftMenuStatus={this.state.leftMenu}
               onMenuOpen={this.menuOpen}

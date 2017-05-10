@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+import { Card, CardActions, CardText } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import PropTypes from 'prop-types';
@@ -23,7 +23,8 @@ class MainDisplay extends React.Component {
   }
 
   saveToFavorite() {
-    // axios.post('/saveToFav', )
+    console.log('ONTOUCHTAP')
+    axios.post('/saveToFav', this.props.data);
   }
 
   onToggle() {
@@ -69,7 +70,7 @@ class MainDisplay extends React.Component {
           <p>Contact info: {this.props.data.phone}</p>
         </CardText>
         <CardActions>
-          <IconButton onTouchTap={() => this.saveToFavorite}>
+          <IconButton onTouchTap={this.saveToFavorite}>
             <StarBorder color={styles.mainColor} />
           </IconButton>
         </CardActions>
