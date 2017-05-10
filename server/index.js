@@ -36,42 +36,27 @@ app.post('/location', (req, res) => {
 
 app.post('/saveToFav', (req, res) => {
 
-  var info = req.body; 
+  let locale = req.body;
 
-  // db.findOne({name: info.name}, function(error, data) {
- 
-  //   if (data) {
-  //     console.log('already in database'); 
-    
-  //   } else {
-      var DB = new db.User({
-          name: info.name, //might need to change into obj format
-          address: info.address, 
-          phone: info.phone,
-          photos: info.photos,
-          rating: info.rating,
-          type: info.type, 
-          price: info.price,
-          x_street: info.cross,
-          url: info.url
-        });
+  console.log(locale);
 
-      DB.save();
+  let favorite = new Locale({
+    id:locale.id,
+    name: locale.name, 
+    address: locale.address, 
+    phone: locale.phone, 
+    photos: locale.photos, 
+    rating: locale.rating,
+    reviews: locale.reviews,   
+    type: locale.type, 
+    price: locale.price, 
+    x_street: locale.cross, 
+    url: locale.url, 
+    yelp_id: locale
+  });
+  favorite.save();
 
-        // DB.save(error => {
-        //   if (error) {
-        //     console.log('Error Saving to Database', error); 
-        //     res.send('error saving to db'); 
-        //   } else {
-        //     console.log('Saved to Database'); 
-        //     res.send('saved to databaseeee')
-        //   }
-        // });  
-    
-
-
-
-  res.end(); 
+  res.end()
 });
 
 
@@ -148,30 +133,6 @@ app.get('/search', function(req, res) {
   }).catch( err => console.log('promise error: ', err));
 });
 
-<<<<<<< HEAD
-=======
-app.post('/saveToFav', (req, res) => {
-  let locale = req.body;
-
-  // let favorite = new Locale({
-  //   id:locale.id
-  //   name: locale.name, 
-  //   address: locale.address, 
-  //   phone: locale.phone, 
-  //   photos: locale.photos, 
-  //   rating: locale.rating,
-  //   reviews: locale.reviews,   
-  //   type: locale.type, 
-  //   price: locale.price, 
-  //   x_street: locale.cross, 
-  //   url: locale.url, 
-  //   yelp_id: locale.
-  // })
-  res.send(req.body);
-
-  res.end();
-})
->>>>>>> Incremental change
 
 app.listen(3000, function() {
   console.log('listening on port 3000!');
