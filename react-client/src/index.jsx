@@ -1,165 +1,81 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
-import axios from 'axios';
-
-import annyang from 'annyang';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import Speaker from 'material-ui/svg-icons/hardware/keyboard-voice';
-import FlatButton from 'material-ui/FlatButton';
-
-import List from './components/List';
-import SearchBar from './components/SearchBar';
-import MenuBar from './components/MenuBar';
-import MainDisplay from './components/MainDisplay';
-import LoadingScreen from './components/LoadingScreen';
 import FavoriteView from './components/FavoriteView';
+import App from './App';
+import FacebookLogin from './components/FacebookLogin';
+import { FacebookAuth, statusChangeCallback } from './components/FacebookAuth';
 
-injectTapEventPlugin();
 
-class App extends React.Component {
+class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: undefined,
-      favData: undefined,
-      favView: false,
-      mainView: true,
-      leftMenu: false,
-      isLoading: true,
-      coords: false,
+      isLogin: false,
     };
-    this.menuOpen = this.menuOpen.bind(this);
-    this.search = this.search.bind(this);
-    this.startSpeech = this.startSpeech.bind(this);
-    this.clickFav = this.clickFav.bind(this);
-    this.saveToFavorite = this.saveToFavorite.bind(this);
-  }
-
- componentWillMount() {
-    const getCoords = () => new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition((position) => {
-        resolve({ lat: position.coords.latitude, long: position.coords.longitude });
-      });
-    });
-
-   getCoords().then((response) => {
-      this.setState({
-        coords: true,
-      });
-      axios.post('/location', response);
-    });
+    this.checkLoginState = this.checkLoginState.bind(this);
+    this.loginFB = this.loginFB.bind(this);
+    this.logoutFB = this.logoutFB.bind(this);
   }
 
   componentDidMount() {
-    this.search('');
-    // need axios request for favData on load;
+    FacebookAuth();
   }
 
-  saveToFavorite(fav) {
-  // axios.post('/saveToFav', this.props.data);
-  console.log('in saveToFavorite in MainDisplay.jsx');
-  console.log('this.props.data in saveToFavorite in index.jsx', fav); 
-
-  // axios.post('/saveToFav', fav)
-  //   .then(response => {
-  //     console.log('response for axios post', response); 
-  //   })
-
-  //   .catch(error => {
-  //     console.log('SOMETHING WRONG IN MAIN DISPLAY.JSX', error); 
-  //   }); 
-  }
-
- startSpeech() {
-    if (annyang) {
-      const commands = {
-        'show me *input': (input) => {
-          this.search(input);
-        },
-      };
-      annyang.addCommands(commands);
-      annyang.debug();
-      annyang.start();
-    }
-  }
-
-  clickFav() {
-    console.log('FAV CLICKY')
-    this.setState({
-      favView: !this.state.favView,
-      mainView: !this.state.mainView,
+  checkLoginState(cb) {
+    FB.getLoginStatus((response) => {
+      statusChangeCallback(response);
+      if (response.status === 'connected') {
+        this.setState({
+          isLogin: true,
+        });
+      }
     });
   }
 
-  search(input) {
-    this.setState({
-      isLoading: true,
-    })
-    console.log('CLICKY', input);
-    axios.get(`/search?query=${input}`)
-    .then((response) => {
-      this.setState({
-        data: response.data,
-        isLoading: false,
-      });
-    })
-    .catch((error) => {
-      console.warn(error);
+  loginFB() {
+    FB.login((response) => {
+      if (response.authResponse) {
+        console.log('Fetching info');
+        FB.api('/me', (response) => {
+          console.log(`FB Login, username: ${response.name}.`);
+          this.setState({
+            isLogin: true,
+          })
+        });
+      } else {
+        console.log('User cancelled');
+      }
     });
   }
 
- menuOpen() {
-    console.log('OPEN', this.state.leftMenu);
-    this.setState({
-      leftMenu: !this.state.leftMenu,
+  logoutFB() {
+    FB.getLoginStatus((response) => {
+      if (response.status === 'connected') {
+        const access_token = window.localStorage.getItem('fb_access_token');
+        FB.logout(() => {
+          console.log('FB logout');
+            this.setState({
+              isLogin: false,
+            });
+        });
+        window.localStorage.removeItem('fb_access_token');
+      }
     });
   }
 
   render() {
-    const isDataEmpty = this.state.data;
-    const isLoading = this.state.isLoading;
-    const isMainView = this.state.mainView;
-    const isFavVIew = this.state.favView;
-    // const isCorrds = this.state.coords;
-    return (
-      <MuiThemeProvider>
-        {(isLoading && isMainView) ? (
-          <LoadingScreen />
-        ) : (
-          <div>
-            <AppBar
-              title='WHERE AM I?'
-              style={{ backgroundColor: '#FFA726 ' }}
-              onLeftIconButtonTouchTap={this.menuOpen}
-            />
-            <SearchBar onSearch={this.search} />
-            <FlatButton
-              icon={<Speaker alt="Speaker" />}
-              onTouchTap={this.startSpeech}
-            />
-
-            <List data={this.state.data} />
-
-            <MenuBar
-              leftMenuStatus={this.state.leftMenu}
-              onMenuOpen={this.menuOpen}
-              onClickFav={this.clickFav}
-            />
-            <div>
-              <MainDisplay
-                style={{ 'margin-top': '20px' }}
-                data={this.state.data}
-                onSave={this.saveToFavorite}
-              />
-            </div>
-            {/* <FavoriteView data={this.state.data} /> */}
-          </div>
-        )}
-      </MuiThemeProvider>
-    );
+    if (!this.state.isLogin) {
+      return <FacebookLogin
+        loginFB={this.loginFB}
+        checkLoginState={this.checkLoginState}
+      />;
+    }
+    return (<App
+      checkLoginState={this.checkLoginState}
+      loginFB={this.loginFB}
+      logoutFB={this.logoutFB}
+    />);
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(<Main />, document.getElementById('main'));

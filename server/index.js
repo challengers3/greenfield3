@@ -25,7 +25,7 @@ app.get('/items', function (req, res) {
 app.post('/location', (req, res) => {
   location = req.body;
   res.end();
-}); 
+});
 
 app.post('/saveToFav', (req, res) => {
 
@@ -35,16 +35,16 @@ app.post('/saveToFav', (req, res) => {
 
   let favorite = new Locale({
     id:locale.id,
-    name: locale.name, 
-    address: locale.address, 
-    phone: locale.phone, 
-    photos: locale.photos, 
+    name: locale.name,
+    address: locale.address,
+    phone: locale.phone,
+    photos: locale.photos,
     rating: locale.rating,
-    reviews: locale.reviews,   
-    type: locale.type, 
-    price: locale.price, 
-    x_street: locale.cross, 
-    url: locale.url, 
+    reviews: locale.reviews,
+    type: locale.type,
+    price: locale.price,
+    x_street: locale.cross,
+    url: locale.url,
   });
   favorite.save();
 
