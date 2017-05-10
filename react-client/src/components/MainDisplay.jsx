@@ -16,21 +16,22 @@ class MainDisplay extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      toggle: false,
+      reviewToggle: false,
     };
-    this.onToggle = this.onToggle.bind(this);
+    this.onReviewToggle = this.onReviewToggle.bind(this);
     this.saveToFavorite = this.saveToFavorite.bind(this);
   }
 
-  saveToFavorite() {
-    console.log(JSON.stringify(this.props.data))
-    axios.post('/saveToFav', this.props.data);
+
+  onReviewToggle() {
+    this.setState({
+      reviewToggle: !this.state.reviewToggle,
+    });
   }
 
-  onToggle() {
-    this.setState({
-      toggle: !this.state.toggle,
-    });
+  saveToFavorite() {
+    console.log(JSON.stringify(this.props.data));
+    axios.post('/saveToFav', this.props.data);
   }
 
   render() {
@@ -44,12 +45,12 @@ class MainDisplay extends React.Component {
           <p>Total Reviews: {this.props.data.reviewCount}</p>
           <RaisedButton
             label="Reviews"
-            onTouchTap={this.onToggle}
+            onTouchTap={this.onReviewToggle}
           />
           <Dialog
             title="Reviews"
             autoScrollBodyContent={true}
-            open={this.state.toggle}
+            open={this.state.reviewToggle}
             onRequestClose={this.onToggle}
           >
             {this.props.data.reviews.map(oneReview =>

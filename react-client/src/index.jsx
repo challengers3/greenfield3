@@ -76,9 +76,15 @@ class App extends React.Component {
   }
 
   logoutFB() {
-    FB.logout((response) => {
-      statusChangeCallback(response);
-      window.location.reload()
+    FB.getLoginStatus((response) => {
+        if(response.status === 'connected'){
+          var access_token = window.localStorage.getItem('fb_access_token');
+          // debugger;
+          FB.logout(() => {
+            console.log('FB logout');
+          });
+          window.localStorage.removeItem('fb_access_token');
+        }
     });
   }
 
@@ -155,8 +161,6 @@ class App extends React.Component {
           <LoadingScreen />
         ) : (
           <div>
-            <button onClick={this.loginFB}>Login</button>
-            <a href="/logout" onClick={() => FB.logout}> Logout </a>
             <AppBar
               title='WHERE AM I?'
               style={{ backgroundColor: '#FFA726 ' }}
@@ -174,6 +178,7 @@ class App extends React.Component {
               leftMenuStatus={this.state.leftMenu}
               onMenuOpen={this.menuOpen}
               onClickFav={this.clickFav}
+              onLoginFB={this.loginFB}
               onLogoutFB={this.logoutFB}
             />
             <div>
