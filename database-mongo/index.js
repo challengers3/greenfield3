@@ -14,32 +14,6 @@ db.once('open', function() {
 let localeSchema = mongoose.Schema({
   id: String,
   name: String,
-<<<<<<< HEAD
-  address: String, 
-  phone: String, 
-  photos: Array, 
-  rating: Number,
-  reviews: Array, 
-  type: String, 
-  price: String, 
-  x_street: String, 
-  url: String
-});
-
-//var User = mongoose.model('User', userSchema); 
-
-let favoritesSchema = mongoose.Schema({
-  user_id: {type: String, unique: true, dropDups: true}, 
-  locations: Array
-});
-
-var Locale = mongoose.model('Locale', localeSchema); 
-
-module.exports = Locale;
-
-
-
-=======
   address: String,
   phone: String,
   photos: Array,
@@ -59,6 +33,5 @@ let favoritesSchema = mongoose.Schema({
 });
 
 var Locale = mongoose.model('Locale', localeSchema);
->>>>>>> Repush
 
 module.exports = Locale;
