@@ -51,7 +51,7 @@ class MainDisplay extends React.Component {
             title="Reviews"
             autoScrollBodyContent={true}
             open={this.state.reviewToggle}
-            onRequestClose={this.onToggle}
+            onRequestClose={this.onReviewToggle}
           >
             {this.props.data.reviews.map(oneReview =>
               <div key={oneReview.reviewer_name}>
