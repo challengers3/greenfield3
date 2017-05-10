@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import axios from 'axios';
-
-import annyang from 'annyang';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Speaker from 'material-ui/svg-icons/hardware/keyboard-voice';
 import FlatButton from 'material-ui/FlatButton';
+import annyang from 'annyang';
 
 import List from './components/List';
 import SearchBar from './components/SearchBar';
@@ -15,8 +14,15 @@ import MenuBar from './components/MenuBar';
 import MainDisplay from './components/MainDisplay';
 import LoadingScreen from './components/LoadingScreen';
 import FavoriteView from './components/FavoriteView';
+import { FacebookAuth, statusChangeCallback, testAPI } from './components/FacebookAuth';
 
 injectTapEventPlugin();
+
+const getCoords = () => new Promise((resolve, reject) => {
+  navigator.geolocation.getCurrentPosition((position) => {
+    resolve({ lat: position.coords.latitude, long: position.coords.longitude });
+  });
+});
 
 class App extends React.Component {
   constructor(props) {
@@ -28,35 +34,59 @@ class App extends React.Component {
       mainView: true,
       leftMenu: false,
       isLoading: true,
-      coords: false,
     };
     this.menuOpen = this.menuOpen.bind(this);
     this.search = this.search.bind(this);
     this.startSpeech = this.startSpeech.bind(this);
     this.clickFav = this.clickFav.bind(this);
+<<<<<<< HEAD
     this.saveToFavorite = this.saveToFavorite.bind(this);
+=======
+    this.checkLoginState = this.checkLoginState.bind(this);
+    this.loginFB = this.loginFB.bind(this);
+    this.logoutFB = this.logoutFB.bind(this);
+>>>>>>> Facebook login works
   }
 
- componentWillMount() {
-    const getCoords = () => new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition((position) => {
-        resolve({ lat: position.coords.latitude, long: position.coords.longitude });
-      });
-    });
-
-   getCoords().then((response) => {
-      this.setState({
-        coords: true,
-      });
+  componentWillMount() {
+    getCoords().then((response) => {
       axios.post('/location', response);
-    });
+    })
+    .then(() => this.search(''));
   }
 
   componentDidMount() {
-    this.search('');
-    // need axios request for favData on load;
+    FacebookAuth();
   }
 
+  checkLoginState() {
+    FB.getLoginStatus((response) => {
+      statusChangeCallback(response);
+    });
+  }
+
+  loginFB() {
+    FB.login((response) => {
+      if (response.authResponse) {
+        console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', (response) => {
+          console.log(`Good to see you, ${response.name}.`);
+        });
+      } else {
+        console.log('User cancelled login or did not fully authorize.');
+      }
+    });
+  }
+
+  logoutFB() {
+    FB.logout((response) => {
+      statusChangeCallback(response);
+      window.location.reload()
+    });
+  }
+
+<<<<<<< HEAD
+<<<<<<< HEAD
   saveToFavorite(fav) {
   // axios.post('/saveToFav', this.props.data);
   console.log('in saveToFavorite in MainDisplay.jsx');
@@ -73,6 +103,29 @@ class App extends React.Component {
   }
 
  startSpeech() {
+=======
+=======
+  loginFB() {
+    FB.login((response) => {
+      if (response.authResponse) {
+        console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', (response) => {
+          console.log(`Good to see you, ${response.name}.`);
+        });
+      } else {
+        console.log('User cancelled login or did not fully authorize.');
+      }
+    });
+  }
+
+  //
+  // FB.logout((response) => {
+  //   // user is now logged out
+  // });
+
+>>>>>>> Facebook login works
+  startSpeech() {
+>>>>>>> Fixed logic for quicker load
     if (annyang) {
       const commands = {
         'show me *input': (input) => {
@@ -86,22 +139,26 @@ class App extends React.Component {
   }
 
   clickFav() {
-    console.log('FAV CLICKY')
+    console.log('FAV CLICKY');
     this.setState({
-      favView: !this.state.favView,
-      mainView: !this.state.mainView,
+      favView: true,
+      mainView: false,
     });
   }
 
   search(input) {
     this.setState({
       isLoading: true,
-    })
+    });
     console.log('CLICKY', input);
     axios.get(`/search?query=${input}`)
     .then((response) => {
       this.setState({
         data: response.data,
+      });
+    })
+    .then(() => {
+      this.setState({
         isLoading: false,
       });
     })
@@ -110,27 +167,26 @@ class App extends React.Component {
     });
   }
 
- menuOpen() {
-    console.log('OPEN', this.state.leftMenu);
+  menuOpen() {
     this.setState({
       leftMenu: !this.state.leftMenu,
     });
   }
 
   render() {
-    const isDataEmpty = this.state.data;
     const isLoading = this.state.isLoading;
     const isMainView = this.state.mainView;
     const isFavVIew = this.state.favView;
-    // const isCorrds = this.state.coords;
     return (
       <MuiThemeProvider>
-        {(isLoading && isMainView) ? (
+        {isLoading ? (
           <LoadingScreen />
         ) : (
           <div>
+            <button onClick={this.loginFB}>Login</button>
+            <a href="/logout" onClick={() => FB.logout}> Logout </a>
             <AppBar
-              title='WHERE AM I?'
+              title="WHERE AM I?"
               style={{ backgroundColor: '#FFA726 ' }}
               onLeftIconButtonTouchTap={this.menuOpen}
             />
@@ -139,13 +195,13 @@ class App extends React.Component {
               icon={<Speaker alt="Speaker" />}
               onTouchTap={this.startSpeech}
             />
-
             <List data={this.state.data} />
 
             <MenuBar
               leftMenuStatus={this.state.leftMenu}
               onMenuOpen={this.menuOpen}
               onClickFav={this.clickFav}
+              onLogoutFB={this.logoutFB}
             />
             <div>
               <MainDisplay
