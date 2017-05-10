@@ -14,7 +14,7 @@ import MenuBar from './components/MenuBar';
 import MainDisplay from './components/MainDisplay';
 import LoadingScreen from './components/LoadingScreen';
 import FavoriteView from './components/FavoriteView';
-import fakeData from './components/fakeData';
+import { FacebookAuth, statusChangeCallback, testAPI } from './components/FacebookAuth';
 
 injectTapEventPlugin();
 
@@ -23,6 +23,7 @@ const getCoords = () => new Promise((resolve, reject) => {
     resolve({ lat: position.coords.latitude, long: position.coords.longitude });
   });
 });
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -33,29 +34,58 @@ class App extends React.Component {
       mainView: true,
       leftMenu: false,
       isLoading: true,
-      coords: false,
     };
     this.menuOpen = this.menuOpen.bind(this);
     this.search = this.search.bind(this);
     this.startSpeech = this.startSpeech.bind(this);
     this.clickFav = this.clickFav.bind(this);
+<<<<<<< HEAD
     this.saveToFavorite = this.saveToFavorite.bind(this);
+=======
+    this.checkLoginState = this.checkLoginState.bind(this);
+    this.loginFB = this.loginFB.bind(this);
+    this.logoutFB = this.logoutFB.bind(this);
+>>>>>>> Facebook login works
   }
 
   componentWillMount() {
     getCoords().then((response) => {
-      this.setState({
-        coords: true,
-      });
       axios.post('/location', response);
-    });
+    })
+    .then(() => this.search(''));
   }
 
   componentDidMount() {
-    this.search('');
-    // need axios request for favData on load;
+    FacebookAuth();
   }
 
+  checkLoginState() {
+    FB.getLoginStatus((response) => {
+      statusChangeCallback(response);
+    });
+  }
+
+  loginFB() {
+    FB.login((response) => {
+      if (response.authResponse) {
+        console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', (response) => {
+          console.log(`Good to see you, ${response.name}.`);
+        });
+      } else {
+        console.log('User cancelled login or did not fully authorize.');
+      }
+    });
+  }
+
+  logoutFB() {
+    FB.logout((response) => {
+      statusChangeCallback(response);
+      window.location.reload()
+    });
+  }
+
+<<<<<<< HEAD
 <<<<<<< HEAD
   saveToFavorite(fav) {
   // axios.post('/saveToFav', this.props.data);
@@ -74,6 +104,26 @@ class App extends React.Component {
 
  startSpeech() {
 =======
+=======
+  loginFB() {
+    FB.login((response) => {
+      if (response.authResponse) {
+        console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', (response) => {
+          console.log(`Good to see you, ${response.name}.`);
+        });
+      } else {
+        console.log('User cancelled login or did not fully authorize.');
+      }
+    });
+  }
+
+  //
+  // FB.logout((response) => {
+  //   // user is now logged out
+  // });
+
+>>>>>>> Facebook login works
   startSpeech() {
 >>>>>>> Fixed logic for quicker load
     if (annyang) {
@@ -124,17 +174,17 @@ class App extends React.Component {
   }
 
   render() {
-    const isDataEmpty = this.state.data;
     const isLoading = this.state.isLoading;
     const isMainView = this.state.mainView;
     const isFavVIew = this.state.favView;
-    // const isCorrds = this.state.coords;
     return (
       <MuiThemeProvider>
         {isLoading ? (
           <LoadingScreen />
         ) : (
           <div>
+            <button onClick={this.loginFB}>Login</button>
+            <a href="/logout" onClick={() => FB.logout}> Logout </a>
             <AppBar
               title="WHERE AM I?"
               style={{ backgroundColor: '#FFA726 ' }}
@@ -151,6 +201,7 @@ class App extends React.Component {
               leftMenuStatus={this.state.leftMenu}
               onMenuOpen={this.menuOpen}
               onClickFav={this.clickFav}
+              onLogoutFB={this.logoutFB}
             />
             <div>
               <MainDisplay
