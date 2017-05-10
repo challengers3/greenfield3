@@ -78,8 +78,9 @@ app.post('/saveToFav', (req, res) => {
 app.get('/search', function(req, res) {
   let input = req.query.query;
   let apiURL = 'https://api.yelp.com/v3/businesses/'
-  let authHeader = {Authorization: "Bearer " + yelpToken}
+  let authHeader = { Authorization: "Bearer " + yelpToken }
   let localeObject = {
+    id: '',
     name: '',
     address: '',
     phone: '',
@@ -88,7 +89,7 @@ app.get('/search', function(req, res) {
     photos: [],
     rating: 0,
     reviews: [],
-    url: '',
+    url: ''
   };
   let userLat = 37.7836964//location.lat;
   let userLong = -122.40916799999998;//location.long;
@@ -102,6 +103,8 @@ app.get('/search', function(req, res) {
       url: `${apiURL}${businessID}`
     }).then( yelpBizData => {
       let localeData = yelpBizData.data;
+
+      localeObject.id = businessID;
       localeObject.name = localeData.name;
       localeObject.address = localeData.location.address1;
       localeObject.cross = localeData.location.cross_streets;
@@ -145,6 +148,30 @@ app.get('/search', function(req, res) {
   }).catch( err => console.log('promise error: ', err));
 });
 
+<<<<<<< HEAD
+=======
+app.post('/saveToFav', (req, res) => {
+  let locale = req.body;
+
+  // let favorite = new Locale({
+  //   id:locale.id
+  //   name: locale.name, 
+  //   address: locale.address, 
+  //   phone: locale.phone, 
+  //   photos: locale.photos, 
+  //   rating: locale.rating,
+  //   reviews: locale.reviews,   
+  //   type: locale.type, 
+  //   price: locale.price, 
+  //   x_street: locale.cross, 
+  //   url: locale.url, 
+  //   yelp_id: locale.
+  // })
+  res.send(req.body);
+
+  res.end();
+})
+>>>>>>> Incremental change
 
 app.listen(3000, function() {
   console.log('listening on port 3000!');
