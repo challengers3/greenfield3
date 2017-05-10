@@ -19,7 +19,6 @@ class MainDisplay extends React.Component {
       toggle: false,
     };
     this.onToggle = this.onToggle.bind(this);
-    this.saveToFavorite = this.saveToFavorite.bind(this);
   }
 
   saveToFavorite() {
@@ -70,7 +69,9 @@ class MainDisplay extends React.Component {
           <p>Contact info: {this.props.data.phone}</p>
         </CardText>
         <CardActions>
+
           <IconButton onTouchTap={this.saveToFavorite}>
+
             <StarBorder color={styles.mainColor} />
           </IconButton>
         </CardActions>
