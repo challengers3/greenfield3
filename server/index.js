@@ -28,28 +28,48 @@ app.post('/location', (req, res) => {
 });
 
 app.post('/saveToFav', (req, res) => {
-
   let locale = req.body;
 
-  console.log(locale);
+  Locale.findOne({id: locale.id}, function(error, data) {
 
-  let favorite = new Locale({
-    id:locale.id,
-    name: locale.name,
-    address: locale.address,
-    phone: locale.phone,
-    photos: locale.photos,
-    rating: locale.rating,
-    reviews: locale.reviews,
-    type: locale.type,
-    price: locale.price,
-    x_street: locale.cross,
-    url: locale.url,
+    if (error) {
+      console.log(error);
+    }
+
+    if (data === null) {
+
+      let favorite = new Locale({
+        id:locale.id,
+        name: locale.name, 
+        address: locale.address, 
+        phone: locale.phone, 
+        photos: locale.photos, 
+        rating: locale.rating,
+        reviews: locale.reviews,   
+        type: locale.type, 
+        price: locale.price, 
+        x_street: locale.cross, 
+        url: locale.url, 
+      });
+
+      favorite.save(); 
+
+    } else {
+      //remove data from database
+      // Locale.remove(data);
+      console.log('THIS IS THE ID', locale.id);
+      //console.log('DATA IN ELSE', data);
+      
+      //something is wrong with this line syntax!
+      Locale.remove({id: locale.id});
+      
+      console.log('DATA ALREADY EXISTS IN DATABASE & SHOULD BE REMOVED'); 
+    }
+
+    res.end();
   });
-  favorite.save();
-
-  res.end()
 });
+
 
 
 app.get('/search', function(req, res) {

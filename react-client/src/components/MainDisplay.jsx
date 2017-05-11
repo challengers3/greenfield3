@@ -17,6 +17,7 @@ class MainDisplay extends React.Component {
     super(props);
     this.state = {
       reviewToggle: false,
+      toggleStar: false
     };
     this.onReviewToggle = this.onReviewToggle.bind(this);
     this.saveToFavorite = this.saveToFavorite.bind(this);
@@ -30,8 +31,21 @@ class MainDisplay extends React.Component {
   }
 
   saveToFavorite() {
-    console.log(JSON.stringify(this.props.data));
-    axios.post('/saveToFav', this.props.data);
+    this.setState({
+      toggleStar: !this.state.toggleStar
+    });
+
+    if (this.state.toggleStar === false) {
+      axios.post('/saveToFav', this.props.data);
+      console.log('first click, should add to database'); 
+
+    } else {
+      axios.post('/saveToFav', this.props.data); 
+
+      console.log('second star click: toggle star is TRUE, want to remove from db');
+      //delete from database
+        //maybe send axios.get and then remove?
+    }
   }
 
   render() {
