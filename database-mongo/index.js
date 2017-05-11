@@ -12,7 +12,7 @@ db.once('open', function() {
 });
 
 let localeSchema = mongoose.Schema({
-  id: String,
+  id: { type: String, unique: true },
   name: String,
   address: String,
   phone: String,

@@ -1,11 +1,8 @@
 import React from 'react';
 import { Card, CardActions, CardText } from 'material-ui/Card';
-import IconButton from 'material-ui/IconButton';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
-import axios from 'axios';
 
 import ReviewStars from './ReviewStars';
 import styles from '../css/styles';
@@ -17,9 +14,10 @@ class MainDisplay extends React.Component {
     super(props);
     this.state = {
       reviewToggle: false,
+      snackBarToggle: false,
     };
     this.onReviewToggle = this.onReviewToggle.bind(this);
-    this.saveToFavorite = this.saveToFavorite.bind(this);
+    this.onSave = this.onSave.bind(this);
   }
 
 
@@ -29,9 +27,8 @@ class MainDisplay extends React.Component {
     });
   }
 
-  saveToFavorite() {
-    console.log(JSON.stringify(this.props.data));
-    axios.post('/saveToFav', this.props.data);
+  onSave() {
+    this.props.onSave(this.props.data);
   }
 
   render() {
@@ -72,10 +69,12 @@ class MainDisplay extends React.Component {
         </CardText>
         <CardActions>
 
-          <IconButton onTouchTap={this.saveToFavorite}>
+          <RaisedButton
+            label="Save to Favorites"
+            backgroundColor="#FFA726"
+            onTouchTap={this.onSave}
+          />
 
-            <StarBorder color={styles.mainColor} />
-          </IconButton>
         </CardActions>
       </Card>
     );
@@ -84,10 +83,12 @@ class MainDisplay extends React.Component {
 
 MainDisplay.propTypes = {
   data: PropTypes.object,
+  onSave: PropTypes.func,
 };
 
 MainDisplay.defaultProps = {
   data: null,
+  onSave: PropTypes.func,
 };
 
 export default MainDisplay;

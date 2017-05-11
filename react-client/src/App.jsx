@@ -5,6 +5,9 @@ import axios from 'axios';
 import annyang from 'annyang';
 import Speaker from 'material-ui/svg-icons/hardware/keyboard-voice';
 import FlatButton from 'material-ui/FlatButton';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import Snackbar from 'material-ui/Snackbar';
 
 import List from './components/List';
 import SearchBar from './components/SearchBar';
@@ -12,7 +15,6 @@ import MenuBar from './components/MenuBar';
 import MainDisplay from './components/MainDisplay';
 import LoadingScreen from './components/LoadingScreen';
 import FavoriteView from './components/FavoriteView';
-
 
 const getCoords = () => new Promise((resolve, reject) => {
   navigator.geolocation.getCurrentPosition((position) => {
@@ -31,12 +33,18 @@ class App extends React.Component {
       leftMenu: false,
       isLoading: true,
       isLogin: false,
+      snackBarAdd: false,
+      snackBarRemove: false,
     };
     this.menuOpen = this.menuOpen.bind(this);
     this.search = this.search.bind(this);
     this.startSpeech = this.startSpeech.bind(this);
     this.clickFav = this.clickFav.bind(this);
     this.clickMain = this.clickMain.bind(this);
+    this.saveToFavorite = this.saveToFavorite.bind(this);
+    this.handleSnackAdd = this.handleSnackAdd.bind(this);
+    this.removeFromFavorite = this.removeFromFavorite.bind(this);
+    this.handleSnackRemove = this.handleSnackRemove.bind(this);
   }
 
   componentWillMount() {
@@ -64,6 +72,18 @@ class App extends React.Component {
         'show me *input': (input) => {
           this.search(input);
         },
+        'go to favorites': () => {
+          this.clickFav();
+        },
+        'go to front': () => {
+          this.clickMain();
+        },
+        'save to (fav) favorites': () => {
+          this.saveToFavorite();
+        },
+        'remove from (fav) favorites': () => {
+          this.removeFromFavorite();
+        }
       };
       annyang.addCommands(commands);
       annyang.debug();
@@ -71,19 +91,49 @@ class App extends React.Component {
     }
   }
 
+  saveToFavorite(data) {
+    axios.post('/saveToFav', data)
+    .then(() => {
+      this.handleSnackAdd();
+    });
+  }
+
+  removeFromFavorite(data) {
+    axios.post('/removeFromFav', data)
+    .then(() => {
+      this.handleSnackRemove();
+    })
+  }
+
+  handleSnackAdd() {
+    this.setState({
+      snackBarAdd: !this.state.snackBarAdd,
+    });
+  }
+
+  handleSnackRemove() {
+    this.setState({
+      snackbarRemove: !this.state.snackbarRemove,
+    })
+  }
+
   clickFav() {
     console.log('FAV CLICKY')
-    this.setState({
-      isLoading: true,
-      favView: true,
-      mainView: false,
-    });
-    // axios.get(`user?ID=12345`) //use this to get userID once we have Schema
     axios.get('/user')
     .then((response) => {
-      this.setState({
-        favData: response.data,
-      })
+      console.log('RESPONSE DATA IS ', response.data)
+      if (response.data.length > 0) {
+        this.setState({
+          isLoading: true,
+          favView: true,
+          mainView: false,
+          favData: response.data,
+        })
+      } else {
+        this.setState({
+          favView: true,
+        })
+      }
       console.log('FAV DATA', this.state.favData)
     })
     .then(() => {
@@ -143,13 +193,23 @@ class App extends React.Component {
     const isMainView = this.state.mainView;
     const isFavVIew = this.state.favView;
     let condRender;
-    if (isFavVIew) {
+    if (isFavVIew && !isMainView) {
       condRender = (
         <div>
-          <FavoriteView favData={this.state.favData} />
+          <FavoriteView
+            onRemove={this.removeFromFavorite}
+            favData={this.state.favData}
+          />
         </div>
       )
-    } else {
+    } else if (isFavVIew && isMainView) {
+      condRender = (
+        <div>
+          <h1>:( You need some Favorites yooo!!!)</h1>
+        </div>
+      )
+    }
+    else {
       condRender = (
         <div>
           {(isLoading && isMainView) ? (
@@ -174,6 +234,7 @@ class App extends React.Component {
       )
     }
     return (
+      <MuiThemeProvider>
       <div>
         <AppBar
           title='WHERE AM I?'
@@ -190,7 +251,20 @@ class App extends React.Component {
           onLogoutFB={this.props.logoutFB}
         />
         {condRender}
+        <Snackbar
+          open={this.state.snackBarAdd}
+          message="Added to your Favorites"
+          autoHideDuration={4000}
+          onRequestClose={this.handleSnackAdd}
+        />
+        <Snackbar
+          open={this.state.snackBarRemove}
+          message="Item Removed!!"
+          autoHideDuration={4000}
+          onRequestClose={this.handleSnackRemove}
+        />
       </div>
+      </MuiThemeProvider>
     );
   }
 }

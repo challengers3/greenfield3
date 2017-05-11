@@ -69,8 +69,8 @@ app.get('/search', function(req, res) {
     x_street: '',
     url: ''
   };
-  let userLat = 37.7836964//location.lat;
-  let userLong = -122.40916799999998;//location.long;
+  let userLat = location.lat;
+  let userLong = location.long;
 
   console.log(userLat, userLong)
 

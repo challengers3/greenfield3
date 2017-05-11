@@ -3,10 +3,8 @@ import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
-import FavoriteView from './components/FavoriteView';
 import App from './App';
 import FacebookLogin from './components/FacebookLogin';
-import { FacebookAuth, statusChangeCallback } from './components/FacebookAuth';
 
 injectTapEventPlugin();
 
@@ -22,10 +20,49 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-    FacebookAuth();
+    window.fbAsyncInit = () => {
+      FB.init({
+        appId: '452843528382132',
+        cookie: true,
+        xfbml: true,
+        version: 'v2.1',
+      });
+      FB.getLoginStatus((response) => {
+        this.statusChangeCallback(response);
+      });
+    };
+
+  // Load the SDK asynchronously
+    (function (d, s, id) {
+      let js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = '//connect.facebook.net/en_US/sdk.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
   }
 
-  checkLoginState(cb) {
+  testAPI() {
+    console.log('Fetching info from Facebook API ');
+    FB.api('/me', (response) => {
+      console.log(`Successful login for: ${response.name}`);
+    });
+  }
+
+  statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    if (response.status === 'connected') {
+      this.testAPI();
+    } else if (response.status === 'not_authorized') {
+      this.loginFB();
+    } else {
+      this.loginFB();
+    }
+  }
+
+  checkLoginState() {
     FB.getLoginStatus((response) => {
       statusChangeCallback(response);
       if (response.status === 'connected') {
@@ -39,7 +76,6 @@ class Main extends React.Component {
   loginFB() {
     FB.login((response) => {
       if (response.authResponse) {
-        console.log('Fetching info');
         FB.api('/me', (response) => {
           console.log(`FB Login, username: ${response.name}.`);
           this.setState({
@@ -69,9 +105,8 @@ class Main extends React.Component {
 
   render() {
     return (
-      <MuiThemeProvider>
-        <div>
-          {!this.state.isLogin ? (
+      <div>
+        {!this.state.isLogin ? (
             <FacebookLogin
               loginFB={this.loginFB}
               checkLoginState={this.checkLoginState}
@@ -83,7 +118,6 @@ class Main extends React.Component {
               />
           )}
         </div>
-      </MuiThemeProvider>
     );
   }
 }
