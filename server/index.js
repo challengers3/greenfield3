@@ -126,6 +126,13 @@ app.get('/search', function(req, res) {
   }).catch( err => console.log('promise error: ', err));
 });
 
+// need to reconfigure later to retrieve by user
+app.get('/user', (req, res) => {
+  Locale.find({}, (err, results) => {
+    res.send(results);
+  });
+});
+
 app.post('/saveToFav', (req, res) => {
   let locale = req.body;
 

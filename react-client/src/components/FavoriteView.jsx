@@ -1,38 +1,40 @@
 import React from 'react';
 import { GridList, GridTile } from 'material-ui/GridList';
-import Subheader from 'material-ui/Subheader';
 import PropTypes from 'prop-types';
 
 import styles from '../css/styles';
 
-const FavoriteView = (props) => {
-  return (
-    <div style={styles.root}>
-      <GridList
-        cellHeight={180}
-        style={styles.gridList}
-        >
-      <Subheader>Favorites</Subheader>
-      {props.data.map(oneFav => (
+const FavoriteView = props => (
+  <div style={styles.root}>
+    <GridList
+      cellHeight={130}
+      style={styles.gridList}
+    >
+      {props.favData.map(oneFav => (
         <GridTile
+          cols={3}
+          // onClick={}
           key={oneFav.name}
           title={oneFav.name}
-          >
-            <img src={oneFav.photos[0]} />
-          </GridTile>
+        >
+          <img src={oneFav.photos[0]} />
+        </GridTile>
         ))}
-      </GridList>
-    </div>
-  )
-}
-
+    </GridList>
+    {/* <p>Price: {oneFav.price}</p>
+    <p>Name: {oneFav.name}</p>
+    <p>Phone: {oneFav.phone}</p>
+    <a href={oneFav.url}>Link</a>
+    <p>Website: {oneFav.url}</p> */}
+  </div>
+);
 
 FavoriteView.propTypes = {
-  data: PropTypes.object,
+  favData: PropTypes.array,
 };
 
 FavoriteView.defaultProps = {
-  data: PropTypes.func,
+  favData: PropTypes.array,
 };
 
 

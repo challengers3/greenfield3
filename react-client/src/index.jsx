@@ -1,10 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
 import FavoriteView from './components/FavoriteView';
 import App from './App';
 import FacebookLogin from './components/FacebookLogin';
 import { FacebookAuth, statusChangeCallback } from './components/FacebookAuth';
 
+injectTapEventPlugin();
 
 class Main extends React.Component {
   constructor(props) {
@@ -40,7 +44,7 @@ class Main extends React.Component {
           console.log(`FB Login, username: ${response.name}.`);
           this.setState({
             isLogin: true,
-          })
+          });
         });
       } else {
         console.log('User cancelled');
@@ -54,9 +58,9 @@ class Main extends React.Component {
         const access_token = window.localStorage.getItem('fb_access_token');
         FB.logout(() => {
           console.log('FB logout');
-            this.setState({
-              isLogin: false,
-            });
+          this.setState({
+            isLogin: false,
+          });
         });
         window.localStorage.removeItem('fb_access_token');
       }
@@ -64,17 +68,23 @@ class Main extends React.Component {
   }
 
   render() {
-    if (!this.state.isLogin) {
-      return <FacebookLogin
-        loginFB={this.loginFB}
-        checkLoginState={this.checkLoginState}
-      />;
-    }
-    return (<App
-      checkLoginState={this.checkLoginState}
-      loginFB={this.loginFB}
-      logoutFB={this.logoutFB}
-    />);
+    return (
+      <MuiThemeProvider>
+        <div>
+          {!this.state.isLogin ? (
+            <FacebookLogin
+              loginFB={this.loginFB}
+              checkLoginState={this.checkLoginState}
+            />) : (
+              <App
+                checkLoginState={this.checkLoginState}
+                loginFB={this.loginFB}
+                logoutFB={this.logoutFB}
+              />
+          )}
+        </div>
+      </MuiThemeProvider>
+    );
   }
 }
 

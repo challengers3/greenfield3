@@ -1,10 +1,8 @@
 import React from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import axios from 'axios';
 
 import annyang from 'annyang';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import Speaker from 'material-ui/svg-icons/hardware/keyboard-voice';
 import FlatButton from 'material-ui/FlatButton';
 
@@ -13,8 +11,8 @@ import SearchBar from './components/SearchBar';
 import MenuBar from './components/MenuBar';
 import MainDisplay from './components/MainDisplay';
 import LoadingScreen from './components/LoadingScreen';
+import FavoriteView from './components/FavoriteView';
 
-injectTapEventPlugin();
 
 const getCoords = () => new Promise((resolve, reject) => {
   navigator.geolocation.getCurrentPosition((position) => {
@@ -38,13 +36,22 @@ class App extends React.Component {
     this.search = this.search.bind(this);
     this.startSpeech = this.startSpeech.bind(this);
     this.clickFav = this.clickFav.bind(this);
+    this.clickMain = this.clickMain.bind(this);
   }
 
   componentWillMount() {
     getCoords().then((response) => {
       axios.post('/location', response);
     })
-    .then(() => this.search(''));
+    .then(() => this.search(''))
+    .then(() => {
+      axios.get('/user')
+      .then((response) => {
+        this.setState({
+          favData: response.data,
+        })
+      })
+    })
   }
 
   // componentDidMount() {
@@ -67,9 +74,34 @@ class App extends React.Component {
   clickFav() {
     console.log('FAV CLICKY')
     this.setState({
-      favView: !this.state.favView,
-      mainView: !this.state.mainView,
+      isLoading: true,
+      favView: true,
+      mainView: false,
     });
+    // axios.get(`user?ID=12345`) //use this to get userID once we have Schema
+    axios.get('/user')
+    .then((response) => {
+      this.setState({
+        favData: response.data,
+      })
+      console.log('FAV DATA', this.state.favData)
+    })
+    .then(() => {
+      this.setState({
+        isLoading: false,
+      })
+    })
+    .catch((error) => {
+      console.warn('cannot retrieve fav', error);
+    })
+  }
+
+  clickMain() {
+    console.log('MAIN CLICKKK')
+    this.setState({
+      favView: false,
+      mainView: true,
+    })
   }
 
   checkStatus() {
@@ -87,8 +119,12 @@ class App extends React.Component {
     .then((response) => {
       this.setState({
         data: response.data,
-        isLoading: false,
       });
+    })
+    .then(() => {
+      this.setState({
+        isLoading: false,
+      })
     })
     .catch((error) => {
       console.warn(error);
@@ -106,42 +142,55 @@ class App extends React.Component {
     const isLoading = this.state.isLoading;
     const isMainView = this.state.mainView;
     const isFavVIew = this.state.favView;
-    return (
-      <MuiThemeProvider>
-        {(isLoading && isMainView) ? (
-          <LoadingScreen />
-        ) : (
-          <div>
-            <AppBar
-              title='WHERE AM I?'
-              style={{ backgroundColor: '#FFA726 ' }}
-              onLeftIconButtonTouchTap={this.menuOpen}
-            />
-            <SearchBar onSearch={this.search} />
-            <FlatButton
-              icon={<Speaker alt="Speaker" />}
-              onTouchTap={this.startSpeech}
-            />
-            <List data={this.state.data} />
-            <MenuBar
-              leftMenuStatus={this.state.leftMenu}
-              onMenuOpen={this.menuOpen}
-              checkLogin={this.checkLoginState}
-              onClickFav={this.clickFav}
-              onLoginFB={this.props.loginFB}
-              onLogoutFB={this.props.logoutFB}
-            />
+    let condRender;
+    if (isFavVIew) {
+      condRender = (
+        <div>
+          <FavoriteView favData={this.state.favData} />
+        </div>
+      )
+    } else {
+      condRender = (
+        <div>
+          {(isLoading && isMainView) ? (
+            <LoadingScreen />
+          ) : (
             <div>
+              <SearchBar onSearch={this.search} />
+              <FlatButton
+                icon={<Speaker alt="Speaker" />}
+                onTouchTap={this.startSpeech}
+              />
+              <List data={this.state.data} />
               <MainDisplay
                 style={{ 'margin-top': '20px' }}
                 data={this.state.data}
                 onSave={this.saveToFavorite}
               />
             </div>
-            {/* <FavoriteView data={this.state.data} /> */}
-          </div>
-        )}
-      </MuiThemeProvider>
+          )
+        }
+      </div>
+      )
+    }
+    return (
+      <div>
+        <AppBar
+          title='WHERE AM I?'
+          style={{ backgroundColor: '#FFA726 ' }}
+          onLeftIconButtonTouchTap={this.menuOpen}
+        />
+        <MenuBar
+          leftMenuStatus={this.state.leftMenu}
+          onMenuOpen={this.menuOpen}
+          checkLogin={this.checkLoginState}
+          onClickMain={this.clickMain}
+          onClickFav={this.clickFav}
+          onLoginFB={this.props.loginFB}
+          onLogoutFB={this.props.logoutFB}
+        />
+        {condRender}
+      </div>
     );
   }
 }
