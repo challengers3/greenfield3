@@ -34,10 +34,10 @@ class MainDisplay extends React.Component {
   render() {
     return (
       <Card style={styles.cardStyle}>
-        <FlatButton
+        {/* <FlatButton
           icon={<Speaker alt="Speaker" />}
           onTouchTap={this.props.startSpeech}
-        />
+        /> */}
         <CardText>
           <h1>{this.props.data.name}</h1>
           <ReviewStars

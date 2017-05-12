@@ -28,6 +28,7 @@ const styles = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
+    marginTop: '20px',
   },
   gridList: {
     width: '500px',
@@ -41,6 +42,12 @@ const styles = {
     margin: '0 auto 0 20px',
     marginTop: '20px',
     float: 'left',
+  },
+  searchButton: {
+    display: 'table',
+    width: '50px',
+    float: 'left',
+    clear: 'left',
   },
 };
 

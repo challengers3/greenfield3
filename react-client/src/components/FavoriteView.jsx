@@ -40,6 +40,7 @@ class FavoriteView extends React.Component {
             ))}
         </GridList>
         <FavInfo
+          removeHandler={this.props.removeHandler}
           onRemove={this.props.onRemove}
           data={this.state.data}
         />
@@ -52,13 +53,13 @@ class FavoriteView extends React.Component {
 FavoriteView.propTypes = {
   favData: PropTypes.array,
   onRemove: PropTypes.func,
-  delHandler: PropTypes.func,
+  removeHandler: PropTypes.func,
 };
 
 FavoriteView.defaultProps = {
   favData: PropTypes.array,
   onRemove: PropTypes.func,
-  delHandler: PropTypes.func,
+  removeHandler: PropTypes.func,
 };
 
 

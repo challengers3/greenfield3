@@ -5,8 +5,6 @@ import styles from '../css/styles';
 
 const yelpIcon = require('../assets/yelpLogo/Yelp_icon.png');
 
-// use componentWIllMount to pass props.data back
-
 const FavInfo = props => (
   <div>
     <h3>{props.data.name}</h3>
