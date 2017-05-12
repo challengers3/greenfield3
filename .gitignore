@@ -8,9 +8,9 @@ node_modules
 compiled
 
 ## React ##
-react-client/dist
+react-client/dist/bundle
 
 ## NPM-Debugger ##
 npm-debug.log
 
-database-mongo/Data
+database-mongo/Data/db
