@@ -9,8 +9,10 @@ compiled
 
 ## React ##
 react-client/dist
+react-client/dist/bundle.js
 
 ## NPM-Debugger ##
 npm-debug.log
 
+## Database ##
 database-mongo/Data

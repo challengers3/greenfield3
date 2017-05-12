@@ -49,6 +49,35 @@ const styles = {
     marginTop: '20px',
     float: 'left',
   },
-};
+  html: {
+    height: '30%',
+    position: 'absolute',
+    width: '30%'
+  }, 
+  body: {
+    height: '30%',
+    position: 'absolute',
+    width: '30%'
+  }, 
+  html: {
+    height: '30%',
+    position: 'absolute',
+    width: '30%'
+  }, 
+  GMap: {
+    height: '30%',
+    position: 'absolute',
+    width: '30%'
+  }, 
+  canvas: {
+    top: '20px',
+    display: 'block',
+    width: '100%',
+    height: '100%'
+  },
+  UpdatedText: {
+    color: 'red'
+  }
+}
 
 export default styles;
