@@ -1,10 +1,7 @@
 import React from 'react';
-import { Card, CardActions, CardText } from 'material-ui/Card';
+import { Card, CardActions, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import Speaker from 'material-ui/svg-icons/hardware/keyboard-voice';
 
 import ReviewStars from './ReviewStars';
 import styles from '../css/styles';
@@ -34,51 +31,36 @@ class MainDisplay extends React.Component {
   render() {
     return (
       <Card style={styles.cardStyle}>
-        {/* <FlatButton
-          icon={<Speaker alt="Speaker" />}
-          onTouchTap={this.props.startSpeech}
-        /> */}
+        <CardMedia
+          overlay={<CardTitle title={this.props.data.name} subtitle={`${this.props.data.phone} ~ ${this.props.data.address}`} />}
+        >
+          <img src={this.props.data.photos} />
+        </CardMedia>
         <CardText>
-          <h1>{this.props.data.name}</h1>
-          <ReviewStars
+          <div style={styles.reviewBlock}><ReviewStars
             rating={this.props.data.rating}
-          />
-          <p>Total Reviews: {this.props.data.reviewCount}</p>
-          <RaisedButton
-            label="Reviews"
-            onTouchTap={this.onReviewToggle}
-          />
-          <Dialog
-            title="Reviews"
-            autoScrollBodyContent={true}
-            open={this.state.reviewToggle}
-            onRequestClose={this.onReviewToggle}
-          >
+          />{this.props.data.reviewCount} Reviews</div>
+          <div>
             {this.props.data.reviews.map(oneReview =>
               <div key={oneReview.reviewer_name}>
-                <h3>{oneReview.reviewer_name}</h3>
-                <p>Rating: {oneReview.rating}</p>
-                <p>{oneReview.text}</p>
+                <p>"{oneReview.text} <a
+                  href={oneReview.url}
+                >" Read More</a> - {oneReview.user.name}</p>
               </div>,
             )}
-          </Dialog>
-          <p>Type of food: {this.props.data.type}
-            <a href={`${this.props.data.url}`}><img
-              src={yelpIcon}
-              alt="logo" style={styles.logo}
-            /></a></p>
-          <p>Price: {this.props.data.price}</p>
-          <p>Street Address: {this.props.data.address}</p>
-          <p>Contact info: {this.props.data.phone}</p>
+          </div>
         </CardText>
         <CardActions>
-
-          <RaisedButton
-            label="Save to Favorites"
-            backgroundColor="#FFA726"
-            onTouchTap={this.onSave}
-          />
-
+          <div style={styles.reviewBlock}>
+            <RaisedButton
+              label="Save to Favorites"
+              backgroundColor="#FFA726"
+              onTouchTap={this.onSave}
+            /><img
+              src={yelpIcon}
+              alt="logo" style={styles.logo}
+            />
+          </div>
         </CardActions>
       </Card>
     );
@@ -88,13 +70,11 @@ class MainDisplay extends React.Component {
 MainDisplay.propTypes = {
   data: PropTypes.object,
   onSave: PropTypes.func,
-  startSpeech: PropTypes.func,
 };
 
 MainDisplay.defaultProps = {
   data: null,
   onSave: PropTypes.func,
-  startSpeech: PropTypes.func,
 };
 
 export default MainDisplay;

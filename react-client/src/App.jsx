@@ -7,7 +7,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Snackbar from 'material-ui/Snackbar';
 
-import List from './components/List';
+// import List from './components/List';
 import SearchBar from './components/SearchBar';
 import MenuBar from './components/MenuBar';
 import MainDisplay from './components/MainDisplay';
@@ -87,9 +87,9 @@ class App extends React.Component {
         'save to favorites': () => {
           this.saveToFavorite(this.state.data);
         },
-        'remove from favorites': () => {
-          this.removeFromFavorite();
-        },
+        // 'remove from favorites': () => {
+        //   this.removeFromFavorite();
+        // },
       };
       annyang.addCommands(commands);
       annyang.debug();
@@ -256,7 +256,7 @@ class App extends React.Component {
             data={this.state.data}
             onSave={this.saveToFavorite}
           />
-          <List data={this.state.data} />
+          {/* <List data={this.state.data} /> */}
         </div>
       );
     } else if (!isData) {
