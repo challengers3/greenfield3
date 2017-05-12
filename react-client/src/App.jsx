@@ -1,7 +1,7 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import axios from 'axios';
-
+import PropTypes from 'prop-types';
 import annyang from 'annyang';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -30,6 +30,7 @@ class App extends React.Component {
       favData: undefined,
       favView: false,
       mainView: true,
+      delItem: undefined,
       leftMenu: false,
       isLoading: true,
       isLogin: false,
@@ -45,13 +46,22 @@ class App extends React.Component {
     this.handleSnackAdd = this.handleSnackAdd.bind(this);
     this.removeFromFavorite = this.removeFromFavorite.bind(this);
     this.handleSnackRemove = this.handleSnackRemove.bind(this);
+    this.delHandler = this.delHandler.bind(this);
   }
 
   componentWillMount() {
+    this.setState({
+      isLoading: true,
+    });
     getCoords().then((response) => {
       axios.post('/location', response);
     })
-    .then(() => this.search(''))
+    .then(() => {
+      this.setState({
+        isLoading: false,
+      });
+    });
+    // .then(() => this.search(''));
     // .then(() => {
     //   axios.get('/storage/retrieve')
     //   .then((response) => {
@@ -102,12 +112,16 @@ class App extends React.Component {
       this.handleSnackRemove();
     })
     .then(() => {
-      console.log('FAVDATA IS ', this.state.favData);
-      let newFav = this.state.favData.filter((rem) => rem._id !== data._id);
-      console.log('NEW FAV IS ', newFav)
+      const newFav = this.state.favData.filter(rem => rem._id !== data._id);
       this.setState({
         favData: newFav,
       });
+    });
+  }
+
+  delHandler(data) {
+    this.setState({
+      delItem: data,
     });
   }
 
@@ -140,7 +154,6 @@ class App extends React.Component {
           favView: true,
         });
       }
-      console.log('FAV DATA', this.state.favData);
     })
     .then(() => {
       this.setState({
@@ -153,7 +166,6 @@ class App extends React.Component {
   }
 
   clickMain() {
-    console.log('MAIN CLICKKK');
     this.setState({
       favView: false,
       mainView: true,
@@ -188,7 +200,6 @@ class App extends React.Component {
   }
 
   menuOpen() {
-    console.log('OPEN', this.state.leftMenu);
     this.setState({
       leftMenu: !this.state.leftMenu,
     });
@@ -198,6 +209,7 @@ class App extends React.Component {
     const isLoading = this.state.isLoading;
     const isMainView = this.state.mainView;
     const isFavVIew = this.state.favView;
+    const isData = this.state.data;
     let condRender;
     if (isFavVIew && !isMainView) {
       condRender = (
@@ -214,26 +226,26 @@ class App extends React.Component {
           <h1>:( You need some Favorites yooo!!!)</h1>
         </div>
       );
-    } else {
+    } else if (isLoading) {
       condRender = (
         <div>
-          {(isLoading && isMainView) ? (
-            <LoadingScreen />
-          ) : (
-            <div>
-              <SearchBar onSearch={this.search} />
-              <MainDisplay
-                style={{ 'margin-top': '20px' }}
-                data={this.state.data}
-                startSpeech={this.startSpeech}
-                onSave={this.saveToFavorite}
-              />
-              <List data={this.state.data} />
-            </div>
-          )
-        }
+          <LoadingScreen />
         </div>
       );
+    } else if (isData) {
+      condRender = (
+        <div>
+          <MainDisplay
+            style={{ 'margin-top': '20px' }}
+            data={this.state.data}
+            startSpeech={this.startSpeech}
+            onSave={this.saveToFavorite}
+          />
+          <List data={this.state.data} />
+        </div>
+      );
+    } else if (!isData) {
+      condRender = (null);
     }
     return (
       <MuiThemeProvider>
@@ -243,6 +255,7 @@ class App extends React.Component {
             style={{ backgroundColor: '#FFA726 ' }}
             onLeftIconButtonTouchTap={this.menuOpen}
           />
+          <SearchBar onSearch={this.search} />
           <MenuBar
             leftMenuStatus={this.state.leftMenu}
             onMenuOpen={this.menuOpen}
@@ -270,5 +283,15 @@ class App extends React.Component {
     );
   }
 }
+
+App.propTypes = {
+  loginFB: PropTypes.func,
+  logoutFB: PropTypes.func,
+};
+
+App.defaultProps = {
+  loginFB: PropTypes.func,
+  logoutFB: PropTypes.func,
+};
 
 export default App;
