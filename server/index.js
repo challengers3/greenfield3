@@ -1,9 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const Locale = require('../database-mongo');
-const request = require('request');
+const request = require ('request');
 const axios = require('axios');
-
 const yelpToken = '54robtCPOWAAru28w0M7Qr71NEaFNqygTcxM1xUlg3oX5aXjk3q85eX_MFH0o6SdddycpMcrPuYaV99yy_qAOKOVJWrudk8qnx80uxuCwAyxpgdA62d-27GZIdMIWXYx';
 let location = {};
 
@@ -68,8 +67,11 @@ app.post('/storage', (req, res) => {
 
 app.get('/search', (req, res) => {
   const input = req.query.query;
-  const apiURL = 'https://api.yelp.com/v3/businesses/';
-  const authHeader = { Authorization: `Bearer ${yelpToken}` };
+  const apiURL = 'https://api.yelp.com/v3/graphql'
+  const headers = { 
+    'Authorization': "Bearer " + yelpToken,
+    'Content-Type': 'application/json' 
+  };
   const localeObject = {
     id: '',
     name: '',
@@ -83,20 +85,58 @@ app.get('/search', (req, res) => {
     x_street: '',
     url: '',
   };
-  const userLat = location.lat;
-  const userLong = location.long;
 
-  console.log(userLat, userLong);
+  let userLat = 37.882562199999995; //location.lat;
+  let userLong = -122.27564149999998; //location.long;
 
-  const getBusinessData = (businessID) => {
-    axios({
-      method: 'get',
-      headers: authHeader,
-      url: `${apiURL}${businessID}`,
-    }).then((yelpBizData) => {
-      const localeData = yelpBizData.data;
+// Use of GraphQL consolidates multiple API calls
+// https://www.yelp.com/developers/graphql/guides/intro
+  axios({
+    method: 'post',
+    headers: headers,
+    url: `${apiURL}`,
+    data: `{ 
+      search(term: "safeway",
+        latitude: ${userLat},
+        longitude: ${userLong}, 
+        limit: 1,
+        sort_by: "distance") 
 
-      localeObject.id = businessID;
+        {
+          business {
+            id
+             name
+             location{
+               address1
+             }
+             coordinates {
+               latitude
+               longitude
+             }
+             display_phone
+             rating
+             review_count
+             categories{
+              title
+             }
+             photos
+             url
+             reviews {
+               text
+               rating
+               user {
+                name
+               }
+               url
+             }
+          }
+        }
+      }` 
+  }).then( yelpBizData => {
+      let localeData = yelpBizData.data.data.search.business[0];
+
+      console.log(JSON.stringify(localeData));
+      localeObject.id = localeData.id;
       localeObject.name = localeData.name;
       localeObject.address = localeData.location.address1;
       localeObject.cross = localeData.location.cross_streets;
@@ -107,38 +147,14 @@ app.get('/search', (req, res) => {
       localeObject.price = localeData.price;
       localeObject.photos = localeData.photos;
       localeObject.url = localeData.url;
-    }).catch(err => console.log('baseLocaleError: ', err));
-  };
+      localeObject.reviews = localeData.reviews
 
-  const getBusinessReviews = (businessID) => {
-    axios({
-      method: 'get',
-      headers: authHeader,
-      url: `${apiURL}${businessID}/reviews`,
-    }).then((yelpBizData) => {
-      const localeData = yelpBizData.data.reviews;
-      for (let i = 0; i < 3; i++) {
-        localeObject.reviews.push({
-          text: localeData[i].text,
-          rating: localeData[i].rating,
-          reviewer_name: localeData[i].user.name,
-          url: localeData[i].url,
-        });
-      }
-    }).catch(err => console.log('businessReviewError: ', err));
-  };
+      res.send(localeObject);
+      res.end();
+    }).catch( err => console.log('Error: ', err));
+  }
+);
 
-  axios({
-    method: 'get',
-    headers: authHeader,
-    url: `${apiURL}search?term=${input}&latitude=${userLat}&longitude=${userLong}&limit=1`,
-  }).then(yelpData => yelpData.data.businesses[0].id)
-  .then((businessID) => {
-    getBusinessData(businessID);
-    getBusinessReviews(businessID);
-    setTimeout(() => res.send(localeObject), 2000);
-  }).catch(err => console.log('promise error: ', err));
-});
 
 app.listen(3000, () => {
   console.log('listening on port 3000!');
