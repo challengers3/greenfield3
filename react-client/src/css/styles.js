@@ -14,6 +14,7 @@ const styles = {
     display: 'table',
     margin: '0 auto',
     marginTop: '20px',
+    float: 'left',
   },
   mainColor: '#FFA726',
   centeredImage: {
@@ -29,9 +30,17 @@ const styles = {
     justifyContent: 'space-around',
   },
   gridList: {
-    width: '500',
-    height: '450',
+    width: '500px',
+    height: '450px',
     overflowY: 'auto',
+    float: 'left',
+    marginRight: '20px',
+  },
+  List: {
+    display: 'table',
+    margin: '0 auto 0 20px',
+    marginTop: '20px',
+    float: 'left',
   },
 };
 

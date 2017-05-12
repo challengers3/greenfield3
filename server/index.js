@@ -28,48 +28,26 @@ app.post('/location', (req, res) => {
 });
 
 app.post('/saveToFav', (req, res) => {
+
   let locale = req.body;
-
-  Locale.findOne({id: locale.id}, function(error, data) {
-
-    if (error) {
-      console.log(error);
-    }
-
-    if (data === null) {
-
-      let favorite = new Locale({
-        id:locale.id,
-        name: locale.name, 
-        address: locale.address, 
-        phone: locale.phone, 
-        photos: locale.photos, 
-        rating: locale.rating,
-        reviews: locale.reviews,   
-        type: locale.type, 
-        price: locale.price, 
-        x_street: locale.cross, 
-        url: locale.url, 
-      });
-
-      favorite.save(); 
-
-    } else {
-      //remove data from database
-      // Locale.remove(data);
-      console.log('THIS IS THE ID', locale.id);
-      //console.log('DATA IN ELSE', data);
-      
-      //something is wrong with this line syntax!
-      Locale.remove({id: locale.id});
-      
-      console.log('DATA ALREADY EXISTS IN DATABASE & SHOULD BE REMOVED'); 
-    }
-
-    res.end();
+  console.log(locale);
+  let favorite = new Locale({
+    id:locale.id,
+    name: locale.name,
+    address: locale.address,
+    phone: locale.phone,
+    photos: locale.photos,
+    rating: locale.rating,
+    reviews: locale.reviews,
+    type: locale.type,
+    price: locale.price,
+    x_street: locale.cross,
+    url: locale.url,
   });
-});
+  favorite.save();
 
+  res.end();
+});
 
 
 app.get('/search', function(req, res) {
@@ -89,8 +67,8 @@ app.get('/search', function(req, res) {
     x_street: '',
     url: ''
   };
-  let userLat = 37.7836964//location.lat;
-  let userLong = -122.40916799999998;//location.long;
+  let userLat = location.lat;
+  let userLong = location.long;
 
   console.log(userLat, userLong)
 
@@ -144,6 +122,13 @@ app.get('/search', function(req, res) {
     getBusinessReviews(businessID);
     setTimeout( () => res.send(localeObject), 2000 );
   }).catch( err => console.log('promise error: ', err));
+});
+
+// need to reconfigure later to retrieve by user
+app.get('/user', (req, res) => {
+  Locale.find({}, (err, results) => {
+    res.send(results);
+  });
 });
 
 app.post('/saveToFav', (req, res) => {

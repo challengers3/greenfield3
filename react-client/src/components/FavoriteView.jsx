@@ -1,38 +1,62 @@
 import React from 'react';
 import { GridList, GridTile } from 'material-ui/GridList';
-import Subheader from 'material-ui/Subheader';
 import PropTypes from 'prop-types';
 
+import FavInfo from './FavInfo';
 import styles from '../css/styles';
 
-const FavoriteView = (props) => {
-  return (
-    <div style={styles.root}>
-      <GridList
-        cellHeight={180}
-        style={styles.gridList}
+class FavoriteView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: this.props.favData[0],
+    };
+    this.clickHandler = this.clickHandler.bind(this);
+  }
+
+  clickHandler(data) {
+    this.setState({
+      data,
+    });
+  }
+
+  render() {
+    return (
+      <div style={styles.root}>
+        <GridList
+          cellHeight={130}
+          style={styles.gridList}
         >
-      <Subheader>Favorites</Subheader>
-      {props.data.map(oneFav => (
-        <GridTile
-          key={oneFav.name}
-          title={oneFav.name}
-          >
-            <img src={oneFav.photos[0]} />
-          </GridTile>
-        ))}
-      </GridList>
-    </div>
-  )
+          {this.props.favData.map(oneFav => (
+            <GridTile
+              key={oneFav._id}
+              title={oneFav.name}
+            >
+              <img
+                onTouchTap={() => this.clickHandler(oneFav)}
+                src={oneFav.photos[0]}
+              />
+            </GridTile>
+            ))}
+        </GridList>
+        <FavInfo
+          onRemove={this.props.onRemove}
+          data={this.state.data}
+        />
+      </div>
+    );
+  }
 }
 
 
 FavoriteView.propTypes = {
-  data: PropTypes.object,
+  favData: PropTypes.array,
+  onRemove: PropTypes.func,
 };
 
 FavoriteView.defaultProps = {
-  data: PropTypes.func,
+  favData: PropTypes.array,
+  onRemove: PropTypes.func,
 };
 
 

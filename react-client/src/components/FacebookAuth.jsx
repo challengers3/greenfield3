@@ -1,3 +1,7 @@
+// need to import FacebookAuth and statusChangeCallback
+// to top component index.jsx.
+// call FacebookAuth inside componentDidMount
+
 export const statusChangeCallback = (response) => {
   console.log('statusChangeCallback');
   console.log(response);

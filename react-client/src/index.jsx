@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import FavoriteView from './components/FavoriteView';
+
 import App from './App';
 import FacebookLogin from './components/FacebookLogin';
-import { FacebookAuth, statusChangeCallback } from './components/FacebookAuth';
-
 
 class Main extends React.Component {
   constructor(props) {
@@ -18,10 +16,49 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-    FacebookAuth();
+    window.fbAsyncInit = () => {
+      FB.init({
+        appId: '452843528382132',
+        cookie: true,
+        xfbml: true,
+        version: 'v2.1',
+      });
+      FB.getLoginStatus((response) => {
+        this.statusChangeCallback(response);
+      });
+    };
+
+  // Load the SDK asynchronously
+    (function (d, s, id) {
+      let js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = '//connect.facebook.net/en_US/sdk.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
   }
 
-  checkLoginState(cb) {
+  testAPI() {
+    console.log('Fetching info from Facebook API ');
+    FB.api('/me', (response) => {
+      console.log(`Successful login for: ${response.name}`);
+    });
+  }
+
+  statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    if (response.status === 'connected') {
+      this.testAPI();
+    } else if (response.status === 'not_authorized') {
+      this.loginFB();
+    } else {
+      this.loginFB();
+    }
+  }
+
+  checkLoginState() {
     FB.getLoginStatus((response) => {
       statusChangeCallback(response);
       if (response.status === 'connected') {
@@ -35,12 +72,11 @@ class Main extends React.Component {
   loginFB() {
     FB.login((response) => {
       if (response.authResponse) {
-        console.log('Fetching info');
         FB.api('/me', (response) => {
           console.log(`FB Login, username: ${response.name}.`);
           this.setState({
             isLogin: true,
-          })
+          });
         });
       } else {
         console.log('User cancelled');
@@ -54,9 +90,9 @@ class Main extends React.Component {
         const access_token = window.localStorage.getItem('fb_access_token');
         FB.logout(() => {
           console.log('FB logout');
-            this.setState({
-              isLogin: false,
-            });
+          this.setState({
+            isLogin: false,
+          });
         });
         window.localStorage.removeItem('fb_access_token');
       }
@@ -64,17 +100,21 @@ class Main extends React.Component {
   }
 
   render() {
-    if (!this.state.isLogin) {
-      return <FacebookLogin
-        loginFB={this.loginFB}
-        checkLoginState={this.checkLoginState}
-      />;
-    }
-    return (<App
-      checkLoginState={this.checkLoginState}
-      loginFB={this.loginFB}
-      logoutFB={this.logoutFB}
-    />);
+    return (
+      <div>
+        {!this.state.isLogin ? (
+            <FacebookLogin
+              loginFB={this.loginFB}
+              checkLoginState={this.checkLoginState}
+            />) : (
+              <App
+                checkLoginState={this.checkLoginState}
+                loginFB={this.loginFB}
+                logoutFB={this.logoutFB}
+              />
+          )}
+        </div>
+    );
   }
 }
 

@@ -1,11 +1,10 @@
 import React from 'react';
 import { Card, CardActions, CardText } from 'material-ui/Card';
-import IconButton from 'material-ui/IconButton';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
-import axios from 'axios';
+import FlatButton from 'material-ui/FlatButton';
+import Speaker from 'material-ui/svg-icons/hardware/keyboard-voice';
 
 import ReviewStars from './ReviewStars';
 import styles from '../css/styles';
@@ -17,12 +16,10 @@ class MainDisplay extends React.Component {
     super(props);
     this.state = {
       reviewToggle: false,
-      toggleStar: false
     };
     this.onReviewToggle = this.onReviewToggle.bind(this);
-    this.saveToFavorite = this.saveToFavorite.bind(this);
+    this.onSave = this.onSave.bind(this);
   }
-
 
   onReviewToggle() {
     this.setState({
@@ -30,27 +27,17 @@ class MainDisplay extends React.Component {
     });
   }
 
-  saveToFavorite() {
-    this.setState({
-      toggleStar: !this.state.toggleStar
-    });
-
-    if (this.state.toggleStar === false) {
-      axios.post('/saveToFav', this.props.data);
-      console.log('first click, should add to database'); 
-
-    } else {
-      axios.post('/saveToFav', this.props.data); 
-
-      console.log('second star click: toggle star is TRUE, want to remove from db');
-      //delete from database
-        //maybe send axios.get and then remove?
-    }
+  onSave() {
+    this.props.onSave(this.props.data);
   }
 
   render() {
     return (
       <Card style={styles.cardStyle}>
+        <FlatButton
+          icon={<Speaker alt="Speaker" />}
+          onTouchTap={this.props.startSpeech}
+        />
         <CardText>
           <h1>{this.props.data.name}</h1>
           <ReviewStars
@@ -86,10 +73,12 @@ class MainDisplay extends React.Component {
         </CardText>
         <CardActions>
 
-          <IconButton onTouchTap={this.saveToFavorite}>
+          <RaisedButton
+            label="Save to Favorites"
+            backgroundColor="#FFA726"
+            onTouchTap={this.onSave}
+          />
 
-            <StarBorder color={styles.mainColor} />
-          </IconButton>
         </CardActions>
       </Card>
     );
@@ -98,10 +87,14 @@ class MainDisplay extends React.Component {
 
 MainDisplay.propTypes = {
   data: PropTypes.object,
+  onSave: PropTypes.func,
+  startSpeech: PropTypes.func,
 };
 
 MainDisplay.defaultProps = {
   data: null,
+  onSave: PropTypes.func,
+  startSpeech: PropTypes.func,
 };
 
 export default MainDisplay;
