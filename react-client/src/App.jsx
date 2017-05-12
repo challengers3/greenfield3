@@ -11,6 +11,7 @@ import List from './components/List';
 import SearchBar from './components/SearchBar';
 import MenuBar from './components/MenuBar';
 import MainDisplay from './components/MainDisplay';
+import Maps from './components/Map';
 import LoadingScreen from './components/LoadingScreen';
 import FavoriteView from './components/FavoriteView';
 
@@ -249,6 +250,7 @@ class App extends React.Component {
     }
     return (
       <MuiThemeProvider>
+
         <div>
           <AppBar
             title="WHERE AM I?"
@@ -279,6 +281,8 @@ class App extends React.Component {
             onRequestClose={this.handleSnackRemove}
           />
         </div>
+
+        
       </MuiThemeProvider>
     );
   }
