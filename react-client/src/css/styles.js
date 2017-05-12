@@ -12,7 +12,7 @@ const styles = {
     fontSize: '200%',
   },
   logo: {
-    float:'right',
+    float: 'right',
     maxWidth: '9%',
     maxHeight: '9%',
   },
@@ -20,7 +20,7 @@ const styles = {
     display: 'table',
     maxWidth: '33%',
     margin: '0 auto',
-    //marginTop: '20px',
+    // marginTop: '20px',
     float: 'right',
   },
   mainColor: '#FFA726',
@@ -35,6 +35,7 @@ const styles = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
+    marginTop: '20px',
   },
   gridList: {
     width: '500px',
@@ -49,35 +50,12 @@ const styles = {
     marginTop: '20px',
     float: 'left',
   },
-  html: {
-    height: '30%',
-    position: 'absolute',
-    width: '30%'
-  }, 
-  body: {
-    height: '30%',
-    position: 'absolute',
-    width: '30%'
-  }, 
-  html: {
-    height: '30%',
-    position: 'absolute',
-    width: '30%'
-  }, 
-  GMap: {
-    height: '30%',
-    position: 'absolute',
-    width: '30%'
-  }, 
-  canvas: {
-    top: '20px',
-    display: 'block',
-    width: '100%',
-    height: '100%'
+  searchButton: {
+    display: 'table',
+    width: '50px',
+    float: 'left',
+    clear: 'left',
   },
-  UpdatedText: {
-    color: 'red'
-  }
-}
+};
 
 export default styles;

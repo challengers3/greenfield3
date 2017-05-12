@@ -7,7 +7,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Snackbar from 'material-ui/Snackbar';
 
-import List from './components/List';
+// import List from './components/List';
 import SearchBar from './components/SearchBar';
 import MenuBar from './components/MenuBar';
 import MainDisplay from './components/MainDisplay';
@@ -47,7 +47,7 @@ class App extends React.Component {
     this.handleSnackAdd = this.handleSnackAdd.bind(this);
     this.removeFromFavorite = this.removeFromFavorite.bind(this);
     this.handleSnackRemove = this.handleSnackRemove.bind(this);
-    this.delHandler = this.delHandler.bind(this);
+    this.removeHandler = this.removeHandler.bind(this);
   }
 
   componentWillMount() {
@@ -88,9 +88,9 @@ class App extends React.Component {
         'save to favorites': () => {
           this.saveToFavorite(this.state.data);
         },
-        'remove from favorites': () => {
-          this.removeFromFavorite();
-        },
+        // 'remove from favorites': () => {
+        //   this.removeFromFavorite();
+        // },
       };
       annyang.addCommands(commands);
       annyang.debug();
@@ -100,13 +100,16 @@ class App extends React.Component {
 
   saveToFavorite(data) {
     console.log('SAVE TO FAVORITES WORKS', data);
-    axios.post('/storage', data)
-    .then(() => {
-      this.handleSnackAdd();
-    });
+    if (data.address) {
+      axios.post('/storage', data)
+      .then(() => {
+        this.handleSnackAdd();
+      });
+    }
   }
 
   removeFromFavorite(data) {
+    // data = this.state.delItem;
     console.log('REMOVE FROM FAV WORKS', data._id);
     axios.post('/storage/remove', data)
     .then(() => {
@@ -120,10 +123,11 @@ class App extends React.Component {
     });
   }
 
-  delHandler(data) {
+  removeHandler(data) {
     this.setState({
       delItem: data,
     });
+    console.log('DEL ITEM IS', this.state.delItem)
   }
 
   handleSnackAdd() {
@@ -182,10 +186,13 @@ class App extends React.Component {
   search(input) {
     this.setState({
       isLoading: true,
+      mainView: true,
+      favView: false,
     });
     console.log('search: ', input);
     axios.get(`/search?query=${input}`)
     .then((response) => {
+      console.log('RES DATA API IS', response.data)
       this.setState({
         data: response.data,
       });
@@ -194,8 +201,16 @@ class App extends React.Component {
       this.setState({
         isLoading: false,
       });
+      // setTimeout(this.setState({
+      //   isLoading: false,
+      // }), 10000);
     })
     .catch((error) => {
+      if (error) {
+        this.setState({
+          isLoading: false,
+        });
+      }
       console.warn(error);
     });
   }
@@ -216,6 +231,7 @@ class App extends React.Component {
       condRender = (
         <div>
           <FavoriteView
+            removeHandler={this.removeHandler}
             onRemove={this.removeFromFavorite}
             favData={this.state.favData}
           />
@@ -239,10 +255,9 @@ class App extends React.Component {
           <MainDisplay
             style={{ 'margin-top': '20px' }}
             data={this.state.data}
-            startSpeech={this.startSpeech}
             onSave={this.saveToFavorite}
           />
-          <List data={this.state.data} />
+          {/* <List data={this.state.data} /> */}
         </div>
       );
     } else if (!isData) {
@@ -258,7 +273,10 @@ class App extends React.Component {
             style={{ backgroundColor: '#FFA726 ' }}
             onLeftIconButtonTouchTap={this.menuOpen}
           />
-          <SearchBar onSearch={this.search} />
+          <SearchBar
+            startSpeech={this.startSpeech}
+            onSearch={this.search}
+          />
           <MenuBar
             leftMenuStatus={this.state.leftMenu}
             onMenuOpen={this.menuOpen}

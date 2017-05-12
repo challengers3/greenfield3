@@ -2,9 +2,6 @@ import React from 'react';
 import { Card, CardActions, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import Speaker from 'material-ui/svg-icons/hardware/keyboard-voice';
 
 import ReviewStars from './ReviewStars';
 import styles from '../css/styles';
@@ -34,34 +31,32 @@ class MainDisplay extends React.Component {
   render() {
     return (
       <Card style={styles.cardStyle}>
-        <FlatButton
-          icon={<Speaker alt="Speaker" />}
-          onTouchTap={this.props.startSpeech}
-        />
         <CardMedia
-      overlay={<CardTitle title={this.props.data.name} subtitle={this.props.data.phone + ' ~ ' + this.props.data.address} />}
-    >
-      <img src={this.props.data.photos} />
-    </CardMedia>
-        <CardText>  
+          overlay={<CardTitle title={this.props.data.name} subtitle={`${this.props.data.phone} ~ ${this.props.data.address}`} />}
+        >
+          <img src={this.props.data.photos} />
+        </CardMedia>
+        <CardText>
           <div style={styles.reviewBlock}><ReviewStars
             rating={this.props.data.rating}
           />{this.props.data.reviewCount} Reviews</div>
           <div>
-          {this.props.data.reviews.map(oneReview =>
-              <div key={oneReview.reviewer_name}>
-                <p>"{oneReview.text} <a href={oneReview.url}>" Read More</a> - {oneReview.user.name}</p>
+            {this.props.data.reviews.map(oneReview =>
+              <div key={oneReview.url}>
+                <p>"{oneReview.text} <a
+                  href={oneReview.url}
+                >" Read More</a> - {oneReview.user.name}</p>
               </div>,
             )}
-            </div>
+          </div>
         </CardText>
         <CardActions>
-        <div style={styles.reviewBlock}>
-          <RaisedButton
-            label="Save to Favorites"
-            backgroundColor="#FFA726"
-            onTouchTap={this.onSave}
-          /><img
+          <div style={styles.reviewBlock}>
+            <RaisedButton
+              label="Save to Favorites"
+              backgroundColor="#FFA726"
+              onTouchTap={this.onSave}
+            /><img
               src={yelpIcon}
               alt="logo" style={styles.logo}
             />
@@ -75,13 +70,11 @@ class MainDisplay extends React.Component {
 MainDisplay.propTypes = {
   data: PropTypes.object,
   onSave: PropTypes.func,
-  startSpeech: PropTypes.func,
 };
 
 MainDisplay.defaultProps = {
   data: null,
   onSave: PropTypes.func,
-  startSpeech: PropTypes.func,
 };
 
 export default MainDisplay;

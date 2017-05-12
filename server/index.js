@@ -67,11 +67,11 @@ app.post('/storage', (req, res) => {
 
 
 app.get('/search', (req, res) => {
-  const input = req.query.query;
-  const apiURL = 'https://api.yelp.com/v3/graphql'
-  const headers = { 
-    'Authorization': "Bearer " + yelpToken,
-    'Content-Type': 'application/json' 
+  const input = JSON.stringify(req.query.query);
+  const apiURL = 'https://api.yelp.com/v3/graphql';
+  const headers = {
+    Authorization: `Bearer ${yelpToken}`,
+    'Content-Type': 'application/json',
   };
   const localeObject = {
     id: '',
@@ -87,8 +87,8 @@ app.get('/search', (req, res) => {
     url: '',
   };
 
-  let userLat = 37.882562199999995; //location.lat;
-  let userLong = -122.27564149999998; //location.long;
+  const userLat = location.lat;
+  const userLong = location.long;
 
 // Use of GraphQL consolidates multiple API calls
 // https://www.yelp.com/developers/graphql/guides/intro
@@ -96,12 +96,13 @@ app.get('/search', (req, res) => {
     method: 'post',
     headers: headers,
     url: `${apiURL}`,
-    data: `{ 
-      search(term: "cheeseboard",
+
+    data: `{
+      search(term: ${input},
         latitude: ${userLat},
-        longitude: ${userLong}, 
+        longitude: ${userLong},
         limit: 1
-        ) 
+        )
 
         {
           business {
@@ -132,7 +133,7 @@ app.get('/search', (req, res) => {
              }
           }
         }
-      }` 
+      }`
   }).then( yelpBizData => {
       let localeData = yelpBizData.data.data.search.business[0];
 
