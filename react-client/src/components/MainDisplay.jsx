@@ -42,7 +42,7 @@ class MainDisplay extends React.Component {
           />{this.props.data.reviewCount} Reviews</div>
           <div>
             {this.props.data.reviews.map(oneReview =>
-              <div key={oneReview.reviewer_name}>
+              <div key={oneReview.url}>
                 <p>"{oneReview.text} <a
                   href={oneReview.url}
                 >" Read More</a> - {oneReview.user.name}</p>
