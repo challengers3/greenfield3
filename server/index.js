@@ -1,20 +1,21 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var Locale = require('../database-mongo');
-var request = require ('request');
-var axios = require('axios');
-var yelpToken = '54robtCPOWAAru28w0M7Qr71NEaFNqygTcxM1xUlg3oX5aXjk3q85eX_MFH0o6SdddycpMcrPuYaV99yy_qAOKOVJWrudk8qnx80uxuCwAyxpgdA62d-27GZIdMIWXYx';
-var location = {};
+const express = require('express');
+const bodyParser = require('body-parser');
+const Locale = require('../database-mongo');
+const request = require('request');
+const axios = require('axios');
 
-var app = express();
+const yelpToken = '54robtCPOWAAru28w0M7Qr71NEaFNqygTcxM1xUlg3oX5aXjk3q85eX_MFH0o6SdddycpMcrPuYaV99yy_qAOKOVJWrudk8qnx80uxuCwAyxpgdA62d-27GZIdMIWXYx';
+let location = {};
 
-app.use(express.static(__dirname + '/../react-client/dist'));
+const app = express();
+
+app.use(express.static(`${__dirname}/../react-client/dist`));
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
-app.get('/items', function (req, res) {
-  db.selectAll(function(err, data) {
-    if(err) {
+app.get('/items', (req, res) => {
+  db.selectAll((err, data) => {
+    if (err) {
       res.sendStatus(500);
     } else {
       res.json(data);
@@ -28,13 +29,10 @@ app.post('/location', (req, res) => {
 });
 
 app.post('/saveToFav', (req, res) => {
-
-  let locale = req.body;
-
+  const locale = req.body;
   console.log(locale);
-
-  let favorite = new Locale({
-    id:locale.id,
+  const favorite = new Locale({
+    id: locale.id,
     name: locale.name,
     address: locale.address,
     phone: locale.phone,
@@ -52,11 +50,11 @@ app.post('/saveToFav', (req, res) => {
 });
 
 
-app.get('/search', function(req, res) {
-  let input = req.query.query;
-  let apiURL = 'https://api.yelp.com/v3/businesses/'
-  let authHeader = { Authorization: "Bearer " + yelpToken }
-  let localeObject = {
+app.get('/search', (req, res) => {
+  const input = req.query.query;
+  const apiURL = 'https://api.yelp.com/v3/businesses/';
+  const authHeader = { Authorization: `Bearer ${yelpToken}` };
+  const localeObject = {
     id: '',
     name: '',
     address: '',
@@ -67,20 +65,20 @@ app.get('/search', function(req, res) {
     type: '',
     price: '',
     x_street: '',
-    url: ''
+    url: '',
   };
-  let userLat = location.lat;
-  let userLong = location.long;
+  const userLat = location.lat;
+  const userLong = location.long;
 
-  console.log(userLat, userLong)
+  console.log(userLat, userLong);
 
-  let getBusinessData = (businessID) => {
+  const getBusinessData = (businessID) => {
     axios({
       method: 'get',
       headers: authHeader,
-      url: `${apiURL}${businessID}`
-    }).then( yelpBizData => {
-      let localeData = yelpBizData.data;
+      url: `${apiURL}${businessID}`,
+    }).then((yelpBizData) => {
+      const localeData = yelpBizData.data;
 
       localeObject.id = businessID;
       localeObject.name = localeData.name;
@@ -93,37 +91,37 @@ app.get('/search', function(req, res) {
       localeObject.price = localeData.price;
       localeObject.photos = localeData.photos;
       localeObject.url = localeData.url;
-    }).catch( err => console.log('baseLocaleError: ', err));
-  }
+    }).catch(err => console.log('baseLocaleError: ', err));
+  };
 
-  let getBusinessReviews = (businessID) => {
+  const getBusinessReviews = (businessID) => {
     axios({
       method: 'get',
       headers: authHeader,
-      url: `${apiURL}${businessID}/reviews`
-    }).then( yelpBizData => {
-      let localeData = yelpBizData.data.reviews;
-        for(var i = 0; i < 3; i++) {
-          localeObject.reviews.push({
-            'text': localeData[i].text,
-            'rating': localeData[i].rating,
-            'reviewer_name': localeData[i].user.name,
-            'url': localeData[i].url
-          });
-        }
-    }).catch( err => console.log('businessReviewError: ', err));
-  }
+      url: `${apiURL}${businessID}/reviews`,
+    }).then((yelpBizData) => {
+      const localeData = yelpBizData.data.reviews;
+      for (let i = 0; i < 3; i++) {
+        localeObject.reviews.push({
+          text: localeData[i].text,
+          rating: localeData[i].rating,
+          reviewer_name: localeData[i].user.name,
+          url: localeData[i].url,
+        });
+      }
+    }).catch(err => console.log('businessReviewError: ', err));
+  };
 
   axios({
     method: 'get',
     headers: authHeader,
-    url: `${apiURL}search?term=${input}&latitude=${userLat}&longitude=${userLong}&limit=1`
-  }).then( yelpData => yelpData.data.businesses[0].id)
-  .then( businessID => {
+    url: `${apiURL}search?term=${input}&latitude=${userLat}&longitude=${userLong}&limit=1`,
+  }).then(yelpData => yelpData.data.businesses[0].id)
+  .then((businessID) => {
     getBusinessData(businessID);
     getBusinessReviews(businessID);
-    setTimeout( () => res.send(localeObject), 2000 );
-  }).catch( err => console.log('promise error: ', err));
+    setTimeout(() => res.send(localeObject), 2000);
+  }).catch(err => console.log('promise error: ', err));
 });
 
 // need to reconfigure later to retrieve by user
@@ -133,17 +131,6 @@ app.get('/user', (req, res) => {
   });
 });
 
-app.post('/saveToFav', (req, res) => {
-  let locale = req.body;
-
-  let favorite = new Locale({
-    //
-  })
-  res.send(req.body);
-
-  res.end();
-})
-
-app.listen(3000, function() {
+app.listen(3000, () => {
   console.log('listening on port 3000!');
 });

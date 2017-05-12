@@ -90,7 +90,7 @@ class App extends React.Component {
   }
 
   saveToFavorite(data) {
-    console.log('SAVE TO FAVORITES WORKS', data)
+    console.log('SAVE TO FAVORITES WORKS', data);
     axios.post('/saveToFav', data)
     .then(() => {
       this.handleSnackAdd();
@@ -98,10 +98,11 @@ class App extends React.Component {
   }
 
   removeFromFavorite(data) {
+    console.log('REMOVE FROM FAV WORKS', data);
     axios.post('/removeFromFav', data)
     .then(() => {
       this.handleSnackRemove();
-    })
+    });
   }
 
   handleSnackAdd() {
@@ -200,15 +201,14 @@ class App extends React.Component {
             favData={this.state.favData}
           />
         </div>
-      )
+      );
     } else if (isFavVIew && isMainView) {
       condRender = (
         <div>
           <h1>:( You need some Favorites yooo!!!)</h1>
         </div>
-      )
-    }
-    else {
+      );
+    } else {
       condRender = (
         <div>
           {(isLoading && isMainView) ? (

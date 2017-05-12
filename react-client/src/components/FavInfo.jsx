@@ -17,17 +17,19 @@ const FavInfo = props => (
     <p>Price: {props.data.price}</p>
     <RaisedButton
       label="Remove"
-      // onTouchTap={}
+      onTouchTap={() => props.onRemove(props.data)}
     />
   </div>
 );
 
 FavInfo.propTypes = {
   data: PropTypes.object,
+  onRemove: PropTypes.func,
 };
 
 FavInfo.defaultProps = {
   data: null,
+  onRemove: PropTypes.func,
 };
 
 export default FavInfo;
