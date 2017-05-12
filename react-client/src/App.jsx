@@ -269,7 +269,7 @@ class App extends React.Component {
 
         <div>
           <AppBar
-            title="WHERE AM I?"
+            title="Yap!"
             style={{ backgroundColor: '#FFA726 ' }}
             onLeftIconButtonTouchTap={this.menuOpen}
           />
