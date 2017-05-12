@@ -7,7 +7,6 @@ import annyang from 'annyang';
 import FlatButton from 'material-ui/FlatButton';
 import Speaker from 'material-ui/svg-icons/hardware/keyboard-voice';
 
-
 import ReviewStars from './ReviewStars';
 import styles from '../css/styles';
 
@@ -18,17 +17,17 @@ class MainDisplay extends React.Component {
     super(props);
     this.state = {
       reviewToggle: false,
-      // data: this.props.data,
+      data: undefined,
     };
     this.onReviewToggle = this.onReviewToggle.bind(this);
     this.onSave = this.onSave.bind(this);
-    this.startSpeech = this.startSpeech.bind(this);
+    // this.startSpeech = this.startSpeech.bind(this);
   }
 
-  // componentWillReceiveProps(newProps) {
+  // componentWillMount() {
   //   this.setState({
-  //     data: newProps,
-  //   })
+  //     data: this.props.data,
+  //   });
   // }
 
   onReviewToggle() {
@@ -38,43 +37,42 @@ class MainDisplay extends React.Component {
   }
 
   onSave() {
-    console.log('ON SAVE')
+    console.log('ON SAVE', this.state.data)
     this.props.onSave(this.props.data);
   }
 
-  startSpeech() {
-    if (annyang) {
-      const commands = {
-        'show me *input': (input) => {
-          this.props.onSearch(input);
-        },
-        'go to favorites': () => {
-          this.props.onClickFav();
-        },
-        'go to front': () => {
-          this.props.onClickMain();
-        },
-        'save to (fav) favorites': () => {
-          console.log('this is', this)
-          console.log(this.props.data)
-          this.onSave(this.props.data);
-        }
-        // 'remove from (fav) favorites': () => {
-        //   this.removeFromFavorite();
-        // },
-      };
-      annyang.addCommands(commands);
-      annyang.debug();
-      annyang.start();
-    }
-  }
+  // startSpeech() {
+  //   if (annyang) {
+  //     const commands = {
+  //       'show me *input': (input) => {
+  //         this.props.onSearch(input);
+  //       },
+  //       'go to favorites': () => {
+  //         this.props.onClickFav();
+  //       },
+  //       'go to front': () => {
+  //         this.props.onClickMain();
+  //       },
+  //       'save to (fav) favorites': () => {
+  //         console.log('state data', this.props.data)
+  //         this.props.onSave(this.props.data);
+  //       },
+  //       'remove from (fav) favorites': () => {
+  //         this.removeFromFavorite();
+  //       },
+  //     };
+  //     annyang.addCommands(commands);
+  //     annyang.debug();
+  //     annyang.start();
+  //   }
+  // }
 
   render() {
     return (
       <Card style={styles.cardStyle}>
         <FlatButton
           icon={<Speaker alt="Speaker" />}
-          onTouchTap={this.startSpeech}
+          onTouchTap={this.props.startSpeech}
         />
         <CardText>
           <h1>{this.props.data.name}</h1>

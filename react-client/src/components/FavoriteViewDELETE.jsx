@@ -45,7 +45,6 @@ class FavoriteView extends React.Component {
       />,
     ];
     return (
-      <div>
       <div style={styles.root}>
         <GridList
           cellHeight={130}
@@ -53,7 +52,6 @@ class FavoriteView extends React.Component {
         >
           {this.props.favData.map(oneFav => (
             <GridTile
-              // onClick={}
               key={oneFav.name}
               title={oneFav.name}
             >
@@ -75,7 +73,6 @@ class FavoriteView extends React.Component {
           <p>Rating: {this.state.data.rating}</p>
         </Dialog>
       </div>
-    </div>
     );
   }
 }

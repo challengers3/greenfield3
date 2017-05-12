@@ -15,6 +15,8 @@ import MainDisplay from './components/MainDisplay';
 import LoadingScreen from './components/LoadingScreen';
 import FavoriteView from './components/FavoriteView';
 
+injectTapEventPlugin();
+
 const getCoords = () => new Promise((resolve, reject) => {
   navigator.geolocation.getCurrentPosition((position) => {
     resolve({ lat: position.coords.latitude, long: position.coords.longitude });
@@ -37,7 +39,7 @@ class App extends React.Component {
     };
     this.menuOpen = this.menuOpen.bind(this);
     this.search = this.search.bind(this);
-    // this.startSpeech = this.startSpeech.bind(this);
+    this.startSpeech = this.startSpeech.bind(this);
     this.clickFav = this.clickFav.bind(this);
     this.clickMain = this.clickMain.bind(this);
     this.saveToFavorite = this.saveToFavorite.bind(this);
@@ -61,12 +63,34 @@ class App extends React.Component {
     })
   }
 
-  // componentDidMount() {
-  //   FacebookAuth();
-  // }
+  startSpeech() {
+    if (annyang) {
+      const commands = {
+        'show me *input': (input) => {
+          this.search(input);
+        },
+        'go to favorites': () => {
+          this.clickFav();
+        },
+        'go to front': () => {
+          this.clickMain();
+        },
+        'save to (fav) favorites': () => {
+          console.log('state data', this.state.data)
+          this.saveToFavorite(this.state.data);
+        },
+        // 'remove from (fav) favorites': () => {
+        //   this.removeFromFavorite();
+        // },
+      };
+      annyang.addCommands(commands);
+      annyang.debug();
+      annyang.start();
+    }
+  }
 
   saveToFavorite(data) {
-    console.log(data)
+    console.log('SAVE TO FAVORITES WORKS', data)
     axios.post('/saveToFav', data)
     .then(() => {
       this.handleSnackAdd();
@@ -139,7 +163,7 @@ class App extends React.Component {
     this.setState({
       isLoading: true,
     });
-    console.log('CLICKY', input);
+    console.log('search: ', input);
     axios.get(`/search?query=${input}`)
     .then((response) => {
       this.setState({
@@ -195,9 +219,7 @@ class App extends React.Component {
               <MainDisplay
                 style={{ 'margin-top': '20px' }}
                 data={this.state.data}
-                onSearch={this.search}
-                onClickFav={this.clickFav}
-                onClickMain={this.clickMain}
+                startSpeech={this.startSpeech}
                 onSave={this.saveToFavorite}
               />
               <List data={this.state.data} />
