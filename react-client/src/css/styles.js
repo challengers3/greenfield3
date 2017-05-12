@@ -1,5 +1,10 @@
 const styles = {
+  reviewBlock: {
+    verticalAlign: 'middle'
+  },
   imgResize: {
+    float: 'left',
+    marginRight: '2%',
     maxWidth: '30%',
     maxHeight: '30%',
   },
@@ -7,14 +12,16 @@ const styles = {
     fontSize: '200%',
   },
   logo: {
+    float:'right',
     maxWidth: '9%',
     maxHeight: '9%',
   },
   cardStyle: {
     display: 'table',
+    maxWidth: '33%',
     margin: '0 auto',
-    marginTop: '20px',
-    float: 'left',
+    //marginTop: '20px',
+    float: 'right',
   },
   mainColor: '#FFA726',
   centeredImage: {
