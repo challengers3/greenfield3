@@ -13,7 +13,6 @@ class SearchBar extends React.Component {
       input: '',
     };
     this.onUpdateInput = this.onUpdateInput.bind(this);
-    // this.onClick = this.onClick.bind(this);
   }
 
   onUpdateInput(input) {
@@ -21,13 +20,6 @@ class SearchBar extends React.Component {
       input,
     });
   }
-
-  // onClick() {
-  //   this.props.onSearch(this.state.input);
-  //   this.setState({
-  //     input: '',
-  //   });
-  // }
 
   render() {
     return (

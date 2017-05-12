@@ -3,7 +3,6 @@ import AppBar from 'material-ui/AppBar';
 import axios from 'axios';
 
 import annyang from 'annyang';
-import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Snackbar from 'material-ui/Snackbar';
@@ -53,14 +52,14 @@ class App extends React.Component {
       axios.post('/location', response);
     })
     .then(() => this.search(''))
-    .then(() => {
-      axios.get('/user')
-      .then((response) => {
-        this.setState({
-          favData: response.data,
-        })
-      })
-    })
+    // .then(() => {
+    //   axios.get('/storage/retrieve')
+    //   .then((response) => {
+    //     this.setState({
+    //       favData: response.data,
+    //     });
+    //   });
+    // });
   }
 
   startSpeech() {
@@ -75,13 +74,12 @@ class App extends React.Component {
         'go to front': () => {
           this.clickMain();
         },
-        'save to (fav) favorites': () => {
-          console.log('state data', this.state.data)
+        'save to favorites': () => {
           this.saveToFavorite(this.state.data);
         },
-        // 'remove from (fav) favorites': () => {
-        //   this.removeFromFavorite();
-        // },
+        'remove from favorites': () => {
+          this.removeFromFavorite();
+        },
       };
       annyang.addCommands(commands);
       annyang.debug();
@@ -91,17 +89,25 @@ class App extends React.Component {
 
   saveToFavorite(data) {
     console.log('SAVE TO FAVORITES WORKS', data);
-    axios.post('/saveToFav', data)
+    axios.post('/storage', data)
     .then(() => {
       this.handleSnackAdd();
     });
   }
 
   removeFromFavorite(data) {
-    console.log('REMOVE FROM FAV WORKS', data);
-    axios.post('/removeFromFav', data)
+    console.log('REMOVE FROM FAV WORKS', data._id);
+    axios.post('/storage/remove', data)
     .then(() => {
       this.handleSnackRemove();
+    })
+    .then(() => {
+      console.log('FAVDATA IS ', this.state.favData);
+      let newFav = this.state.favData.filter((rem) => rem._id !== data._id);
+      console.log('NEW FAV IS ', newFav)
+      this.setState({
+        favData: newFav,
+      });
     });
   }
 
@@ -113,45 +119,45 @@ class App extends React.Component {
 
   handleSnackRemove() {
     this.setState({
-      snackbarRemove: !this.state.snackbarRemove,
-    })
+      snackBarRemove: !this.state.snackBarRemove,
+    });
   }
 
   clickFav() {
-    console.log('FAV CLICKY')
-    axios.get('/user')
+    console.log('FAV CLICKY');
+    axios.get('/storage/retrieve')
     .then((response) => {
-      console.log('RESPONSE DATA IS ', response.data)
+      console.log('RESPONSE DATA IS ', response.data);
       if (response.data.length > 0) {
         this.setState({
           isLoading: true,
           favView: true,
           mainView: false,
           favData: response.data,
-        })
+        });
       } else {
         this.setState({
           favView: true,
-        })
+        });
       }
-      console.log('FAV DATA', this.state.favData)
+      console.log('FAV DATA', this.state.favData);
     })
     .then(() => {
       this.setState({
         isLoading: false,
-      })
+      });
     })
     .catch((error) => {
       console.warn('cannot retrieve fav', error);
-    })
+    });
   }
 
   clickMain() {
-    console.log('MAIN CLICKKK')
+    console.log('MAIN CLICKKK');
     this.setState({
       favView: false,
       mainView: true,
-    })
+    });
   }
 
   checkStatus() {
@@ -174,7 +180,7 @@ class App extends React.Component {
     .then(() => {
       this.setState({
         isLoading: false,
-      })
+      });
     })
     .catch((error) => {
       console.warn(error);
@@ -226,40 +232,40 @@ class App extends React.Component {
             </div>
           )
         }
-      </div>
-      )
+        </div>
+      );
     }
     return (
       <MuiThemeProvider>
-      <div>
-        <AppBar
-          title='WHERE AM I?'
-          style={{ backgroundColor: '#FFA726 ' }}
-          onLeftIconButtonTouchTap={this.menuOpen}
-        />
-        <MenuBar
-          leftMenuStatus={this.state.leftMenu}
-          onMenuOpen={this.menuOpen}
-          checkLogin={this.checkLoginState}
-          onClickMain={this.clickMain}
-          onClickFav={this.clickFav}
-          onLoginFB={this.props.loginFB}
-          onLogoutFB={this.props.logoutFB}
-        />
-        {condRender}
-        <Snackbar
-          open={this.state.snackBarAdd}
-          message="Added to your Favorites"
-          autoHideDuration={4000}
-          onRequestClose={this.handleSnackAdd}
-        />
-        <Snackbar
-          open={this.state.snackBarRemove}
-          message="Item Removed!!"
-          autoHideDuration={4000}
-          onRequestClose={this.handleSnackRemove}
-        />
-      </div>
+        <div>
+          <AppBar
+            title="WHERE AM I?"
+            style={{ backgroundColor: '#FFA726 ' }}
+            onLeftIconButtonTouchTap={this.menuOpen}
+          />
+          <MenuBar
+            leftMenuStatus={this.state.leftMenu}
+            onMenuOpen={this.menuOpen}
+            checkLogin={this.checkLoginState}
+            onClickMain={this.clickMain}
+            onClickFav={this.clickFav}
+            onLoginFB={this.props.loginFB}
+            onLogoutFB={this.props.logoutFB}
+          />
+          {condRender}
+          <Snackbar
+            open={this.state.snackBarAdd}
+            message="Added to your Favorites"
+            autoHideDuration={4000}
+            onRequestClose={this.handleSnackAdd}
+          />
+          <Snackbar
+            open={this.state.snackBarRemove}
+            message="Item Removed!!"
+            autoHideDuration={4000}
+            onRequestClose={this.handleSnackRemove}
+          />
+        </div>
       </MuiThemeProvider>
     );
   }

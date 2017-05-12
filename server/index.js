@@ -13,13 +13,28 @@ app.use(express.static(`${__dirname}/../react-client/dist`));
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
-app.get('/items', (req, res) => {
-  db.selectAll((err, data) => {
-    if (err) {
-      res.sendStatus(500);
-    } else {
-      res.json(data);
-    }
+// app.get('/items', (req, res) => {
+//   db.selectAll((err, data) => {
+//     if (err) {
+//       res.sendStatus(500);
+//     } else {
+//       res.json(data);
+//     }
+//   });
+// });
+
+// need to reconfigure later to retrieve by user
+app.get('/storage/retrieve', (req, res) => {
+  Locale.find({}, (err, results) => {
+    res.send(results);
+  });
+});
+
+app.post('/storage/remove', (req, res) => {
+  Locale.find({ _id: req.body._id }, (err, data) => {
+    if (err) throw err;
+    Locale.deleteOne({ _id: req.body._id }, (err, data) => {});
+    res.end('Removed from storage/remove');
   });
 });
 
@@ -28,7 +43,7 @@ app.post('/location', (req, res) => {
   res.end();
 });
 
-app.post('/saveToFav', (req, res) => {
+app.post('/storage', (req, res) => {
   const locale = req.body;
   console.log(locale);
   const favorite = new Locale({
@@ -122,13 +137,6 @@ app.get('/search', (req, res) => {
     getBusinessReviews(businessID);
     setTimeout(() => res.send(localeObject), 2000);
   }).catch(err => console.log('promise error: ', err));
-});
-
-// need to reconfigure later to retrieve by user
-app.get('/user', (req, res) => {
-  Locale.find({}, (err, results) => {
-    res.send(results);
-  });
 });
 
 app.listen(3000, () => {

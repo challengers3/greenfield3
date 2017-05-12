@@ -60,7 +60,7 @@ class Main extends React.Component {
 
   checkLoginState() {
     FB.getLoginStatus((response) => {
-      statusChangeCallback(response);
+      this.statusChangeCallback(response);
       if (response.status === 'connected') {
         this.setState({
           isLogin: true,
@@ -103,7 +103,7 @@ class Main extends React.Component {
     return (
       <div>
         {!this.state.isLogin ? (
-            <FacebookLogin
+          <FacebookLogin
               loginFB={this.loginFB}
               checkLoginState={this.checkLoginState}
             />) : (
@@ -113,7 +113,7 @@ class Main extends React.Component {
                 logoutFB={this.logoutFB}
               />
           )}
-        </div>
+      </div>
     );
   }
 }
