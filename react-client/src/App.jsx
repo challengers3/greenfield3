@@ -251,6 +251,7 @@ class App extends React.Component {
     return (
       <MuiThemeProvider>
 
+
         <div>
           <AppBar
             title="WHERE AM I?"
@@ -282,7 +283,7 @@ class App extends React.Component {
           />
         </div>
 
-        
+     
       </MuiThemeProvider>
     );
   }
