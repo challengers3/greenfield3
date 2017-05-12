@@ -3,7 +3,6 @@ import AppBar from 'material-ui/AppBar';
 import axios from 'axios';
 
 import annyang from 'annyang';
-import Speaker from 'material-ui/svg-icons/hardware/keyboard-voice';
 import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -38,7 +37,7 @@ class App extends React.Component {
     };
     this.menuOpen = this.menuOpen.bind(this);
     this.search = this.search.bind(this);
-    this.startSpeech = this.startSpeech.bind(this);
+    // this.startSpeech = this.startSpeech.bind(this);
     this.clickFav = this.clickFav.bind(this);
     this.clickMain = this.clickMain.bind(this);
     this.saveToFavorite = this.saveToFavorite.bind(this);
@@ -66,32 +65,8 @@ class App extends React.Component {
   //   FacebookAuth();
   // }
 
-  startSpeech() {
-    if (annyang) {
-      const commands = {
-        'show me *input': (input) => {
-          this.search(input);
-        },
-        'go to favorites': () => {
-          this.clickFav();
-        },
-        'go to front': () => {
-          this.clickMain();
-        },
-        'save to (fav) favorites': () => {
-          this.saveToFavorite();
-        },
-        'remove from (fav) favorites': () => {
-          this.removeFromFavorite();
-        }
-      };
-      annyang.addCommands(commands);
-      annyang.debug();
-      annyang.start();
-    }
-  }
-
   saveToFavorite(data) {
+    console.log(data)
     axios.post('/saveToFav', data)
     .then(() => {
       this.handleSnackAdd();
@@ -217,16 +192,15 @@ class App extends React.Component {
           ) : (
             <div>
               <SearchBar onSearch={this.search} />
-              <FlatButton
-                icon={<Speaker alt="Speaker" />}
-                onTouchTap={this.startSpeech}
-              />
-              <List data={this.state.data} />
               <MainDisplay
                 style={{ 'margin-top': '20px' }}
                 data={this.state.data}
+                onSearch={this.search}
+                onClickFav={this.clickFav}
+                onClickMain={this.clickMain}
                 onSave={this.saveToFavorite}
               />
+              <List data={this.state.data} />
             </div>
           )
         }

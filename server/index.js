@@ -48,7 +48,7 @@ app.post('/saveToFav', (req, res) => {
   });
   favorite.save();
 
-  res.end()
+  res.end();
 });
 
 

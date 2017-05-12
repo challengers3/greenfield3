@@ -3,6 +3,10 @@ import { Card, CardActions, CardText } from 'material-ui/Card';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
+import annyang from 'annyang';
+import FlatButton from 'material-ui/FlatButton';
+import Speaker from 'material-ui/svg-icons/hardware/keyboard-voice';
+
 
 import ReviewStars from './ReviewStars';
 import styles from '../css/styles';
@@ -14,12 +18,18 @@ class MainDisplay extends React.Component {
     super(props);
     this.state = {
       reviewToggle: false,
-      snackBarToggle: false,
+      // data: this.props.data,
     };
     this.onReviewToggle = this.onReviewToggle.bind(this);
     this.onSave = this.onSave.bind(this);
+    this.startSpeech = this.startSpeech.bind(this);
   }
 
+  // componentWillReceiveProps(newProps) {
+  //   this.setState({
+  //     data: newProps,
+  //   })
+  // }
 
   onReviewToggle() {
     this.setState({
@@ -28,12 +38,44 @@ class MainDisplay extends React.Component {
   }
 
   onSave() {
+    console.log('ON SAVE')
     this.props.onSave(this.props.data);
+  }
+
+  startSpeech() {
+    if (annyang) {
+      const commands = {
+        'show me *input': (input) => {
+          this.props.onSearch(input);
+        },
+        'go to favorites': () => {
+          this.props.onClickFav();
+        },
+        'go to front': () => {
+          this.props.onClickMain();
+        },
+        'save to (fav) favorites': () => {
+          console.log('this is', this)
+          console.log(this.props.data)
+          this.onSave(this.props.data);
+        }
+        // 'remove from (fav) favorites': () => {
+        //   this.removeFromFavorite();
+        // },
+      };
+      annyang.addCommands(commands);
+      annyang.debug();
+      annyang.start();
+    }
   }
 
   render() {
     return (
       <Card style={styles.cardStyle}>
+        <FlatButton
+          icon={<Speaker alt="Speaker" />}
+          onTouchTap={this.startSpeech}
+        />
         <CardText>
           <h1>{this.props.data.name}</h1>
           <ReviewStars
@@ -84,11 +126,17 @@ class MainDisplay extends React.Component {
 MainDisplay.propTypes = {
   data: PropTypes.object,
   onSave: PropTypes.func,
+  onSearch: PropTypes.func,
+  onClickFav: PropTypes.func,
+  onClickMain: PropTypes.func,
 };
 
 MainDisplay.defaultProps = {
   data: null,
   onSave: PropTypes.func,
+  onSearch: PropTypes.func,
+  onClickFav: PropTypes.func,
+  onClickMain: PropTypes.func,
 };
 
 export default MainDisplay;

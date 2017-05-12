@@ -14,6 +14,7 @@ const styles = {
     display: 'table',
     margin: '0 auto',
     marginTop: '20px',
+    float: 'left',
   },
   mainColor: '#FFA726',
   centeredImage: {
@@ -34,6 +35,12 @@ const styles = {
     overflowY: 'auto',
     float: 'left',
     marginRight: '20px',
+  },
+  List: {
+    display: 'table',
+    margin: '0 auto 0 20px',
+    marginTop: '20px',
+    float: 'left',
   },
 };
 
