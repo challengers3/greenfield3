@@ -1,9 +1,8 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import axios from 'axios';
-
+import PropTypes from 'prop-types';
 import annyang from 'annyang';
-import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Snackbar from 'material-ui/Snackbar';
@@ -31,6 +30,7 @@ class App extends React.Component {
       favData: undefined,
       favView: false,
       mainView: true,
+      delItem: undefined,
       leftMenu: false,
       isLoading: true,
       isLogin: false,
@@ -46,21 +46,30 @@ class App extends React.Component {
     this.handleSnackAdd = this.handleSnackAdd.bind(this);
     this.removeFromFavorite = this.removeFromFavorite.bind(this);
     this.handleSnackRemove = this.handleSnackRemove.bind(this);
+    this.delHandler = this.delHandler.bind(this);
   }
 
   componentWillMount() {
+    this.setState({
+      isLoading: true,
+    });
     getCoords().then((response) => {
       axios.post('/location', response);
     })
-    .then(() => this.search(''))
     .then(() => {
-      axios.get('/user')
-      .then((response) => {
-        this.setState({
-          favData: response.data,
-        })
-      })
-    })
+      this.setState({
+        isLoading: false,
+      });
+    });
+    // .then(() => this.search(''));
+    // .then(() => {
+    //   axios.get('/storage/retrieve')
+    //   .then((response) => {
+    //     this.setState({
+    //       favData: response.data,
+    //     });
+    //   });
+    // });
   }
 
   startSpeech() {
@@ -75,13 +84,12 @@ class App extends React.Component {
         'go to front': () => {
           this.clickMain();
         },
-        'save to (fav) favorites': () => {
-          console.log('state data', this.state.data)
+        'save to favorites': () => {
           this.saveToFavorite(this.state.data);
         },
-        // 'remove from (fav) favorites': () => {
-        //   this.removeFromFavorite();
-        // },
+        'remove from favorites': () => {
+          this.removeFromFavorite();
+        },
       };
       annyang.addCommands(commands);
       annyang.debug();
@@ -90,18 +98,31 @@ class App extends React.Component {
   }
 
   saveToFavorite(data) {
-    console.log('SAVE TO FAVORITES WORKS', data)
-    axios.post('/saveToFav', data)
+    console.log('SAVE TO FAVORITES WORKS', data);
+    axios.post('/storage', data)
     .then(() => {
       this.handleSnackAdd();
     });
   }
 
   removeFromFavorite(data) {
-    axios.post('/removeFromFav', data)
+    console.log('REMOVE FROM FAV WORKS', data._id);
+    axios.post('/storage/remove', data)
     .then(() => {
       this.handleSnackRemove();
     })
+    .then(() => {
+      const newFav = this.state.favData.filter(rem => rem._id !== data._id);
+      this.setState({
+        favData: newFav,
+      });
+    });
+  }
+
+  delHandler(data) {
+    this.setState({
+      delItem: data,
+    });
   }
 
   handleSnackAdd() {
@@ -112,45 +133,43 @@ class App extends React.Component {
 
   handleSnackRemove() {
     this.setState({
-      snackbarRemove: !this.state.snackbarRemove,
-    })
+      snackBarRemove: !this.state.snackBarRemove,
+    });
   }
 
   clickFav() {
-    console.log('FAV CLICKY')
-    axios.get('/user')
+    console.log('FAV CLICKY');
+    axios.get('/storage/retrieve')
     .then((response) => {
-      console.log('RESPONSE DATA IS ', response.data)
+      console.log('RESPONSE DATA IS ', response.data);
       if (response.data.length > 0) {
         this.setState({
           isLoading: true,
           favView: true,
           mainView: false,
           favData: response.data,
-        })
+        });
       } else {
         this.setState({
           favView: true,
-        })
+        });
       }
-      console.log('FAV DATA', this.state.favData)
     })
     .then(() => {
       this.setState({
         isLoading: false,
-      })
+      });
     })
     .catch((error) => {
       console.warn('cannot retrieve fav', error);
-    })
+    });
   }
 
   clickMain() {
-    console.log('MAIN CLICKKK')
     this.setState({
       favView: false,
       mainView: true,
-    })
+    });
   }
 
   checkStatus() {
@@ -173,7 +192,7 @@ class App extends React.Component {
     .then(() => {
       this.setState({
         isLoading: false,
-      })
+      });
     })
     .catch((error) => {
       console.warn(error);
@@ -181,7 +200,6 @@ class App extends React.Component {
   }
 
   menuOpen() {
-    console.log('OPEN', this.state.leftMenu);
     this.setState({
       leftMenu: !this.state.leftMenu,
     });
@@ -191,6 +209,7 @@ class App extends React.Component {
     const isLoading = this.state.isLoading;
     const isMainView = this.state.mainView;
     const isFavVIew = this.state.favView;
+    const isData = this.state.data;
     let condRender;
     if (isFavVIew && !isMainView) {
       condRender = (
@@ -200,69 +219,79 @@ class App extends React.Component {
             favData={this.state.favData}
           />
         </div>
-      )
+      );
     } else if (isFavVIew && isMainView) {
       condRender = (
         <div>
           <h1>:( You need some Favorites yooo!!!)</h1>
         </div>
-      )
-    }
-    else {
+      );
+    } else if (isLoading) {
       condRender = (
         <div>
-          {(isLoading && isMainView) ? (
-            <LoadingScreen />
-          ) : (
-            <div>
-              <SearchBar onSearch={this.search} />
-              <MainDisplay
-                style={{ 'margin-top': '20px' }}
-                data={this.state.data}
-                startSpeech={this.startSpeech}
-                onSave={this.saveToFavorite}
-              />
-              <List data={this.state.data} />
-            </div>
-          )
-        }
-      </div>
-      )
+          <LoadingScreen />
+        </div>
+      );
+    } else if (isData) {
+      condRender = (
+        <div>
+          <MainDisplay
+            style={{ 'margin-top': '20px' }}
+            data={this.state.data}
+            startSpeech={this.startSpeech}
+            onSave={this.saveToFavorite}
+          />
+          <List data={this.state.data} />
+        </div>
+      );
+    } else if (!isData) {
+      condRender = (null);
     }
     return (
       <MuiThemeProvider>
-      <div>
-        <AppBar
-          title='WHERE AM I?'
-          style={{ backgroundColor: '#FFA726 ' }}
-          onLeftIconButtonTouchTap={this.menuOpen}
-        />
-        <MenuBar
-          leftMenuStatus={this.state.leftMenu}
-          onMenuOpen={this.menuOpen}
-          checkLogin={this.checkLoginState}
-          onClickMain={this.clickMain}
-          onClickFav={this.clickFav}
-          onLoginFB={this.props.loginFB}
-          onLogoutFB={this.props.logoutFB}
-        />
-        {condRender}
-        <Snackbar
-          open={this.state.snackBarAdd}
-          message="Added to your Favorites"
-          autoHideDuration={4000}
-          onRequestClose={this.handleSnackAdd}
-        />
-        <Snackbar
-          open={this.state.snackBarRemove}
-          message="Item Removed!!"
-          autoHideDuration={4000}
-          onRequestClose={this.handleSnackRemove}
-        />
-      </div>
+        <div>
+          <AppBar
+            title="WHERE AM I?"
+            style={{ backgroundColor: '#FFA726 ' }}
+            onLeftIconButtonTouchTap={this.menuOpen}
+          />
+          <SearchBar onSearch={this.search} />
+          <MenuBar
+            leftMenuStatus={this.state.leftMenu}
+            onMenuOpen={this.menuOpen}
+            checkLogin={this.checkLoginState}
+            onClickMain={this.clickMain}
+            onClickFav={this.clickFav}
+            onLoginFB={this.props.loginFB}
+            onLogoutFB={this.props.logoutFB}
+          />
+          {condRender}
+          <Snackbar
+            open={this.state.snackBarAdd}
+            message="Added to your Favorites"
+            autoHideDuration={4000}
+            onRequestClose={this.handleSnackAdd}
+          />
+          <Snackbar
+            open={this.state.snackBarRemove}
+            message="Item Removed!!"
+            autoHideDuration={4000}
+            onRequestClose={this.handleSnackRemove}
+          />
+        </div>
       </MuiThemeProvider>
     );
   }
 }
+
+App.propTypes = {
+  loginFB: PropTypes.func,
+  logoutFB: PropTypes.func,
+};
+
+App.defaultProps = {
+  loginFB: PropTypes.func,
+  logoutFB: PropTypes.func,
+};
 
 export default App;

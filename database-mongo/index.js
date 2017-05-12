@@ -3,15 +3,15 @@ mongoose.connect('mongodb://localhost/locale');
 
 const db = mongoose.connection;
 
-db.on('error', function() {
+db.on('error', () => {
   console.log('mongoose connection error');
 });
 
-db.once('open', function() {
+db.once('open', () => {
   console.log('mongoose connected successfully');
 });
 
-let localeSchema = mongoose.Schema({
+const localeSchema = mongoose.Schema({
   id: { type: String, unique: true },
   name: String,
   address: String,
@@ -22,16 +22,16 @@ let localeSchema = mongoose.Schema({
   type: String,
   price: String,
   x_street: String,
-  url: String
+  url: String,
 });
 
-//var User = mongoose.model('User', userSchema);
+// var User = mongoose.model('User', userSchema);
 
-let favoritesSchema = mongoose.Schema({
-  user_id: {type: String, unique: true, dropDups: true},
-  locations: Array
+const favoritesSchema = mongoose.Schema({
+  user_id: { type: String, unique: true, dropDups: true },
+  locations: Array,
 });
 
-var Locale = mongoose.model('Locale', localeSchema);
+const Locale = mongoose.model('Locale', localeSchema);
 
 module.exports = Locale;

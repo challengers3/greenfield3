@@ -13,4 +13,4 @@ react-client/dist
 ## NPM-Debugger ##
 npm-debug.log
 
-database-mongo/Data/db
+database-mongo/Data
