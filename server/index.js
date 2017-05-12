@@ -96,11 +96,11 @@ app.get('/search', (req, res) => {
     headers: headers,
     url: `${apiURL}`,
     data: `{ 
-      search(term: "safeway",
+      search(term: "cheeseboard",
         latitude: ${userLat},
         longitude: ${userLong}, 
-        limit: 1,
-        sort_by: "distance") 
+        limit: 1
+        ) 
 
         {
           business {
@@ -143,8 +143,7 @@ app.get('/search', (req, res) => {
       localeObject.phone = localeData.display_phone;
       localeObject.rating = localeData.rating;
       localeObject.reviewCount = localeData.review_count;
-      localeObject.type = localeData.categories[0].title;
-      localeObject.price = localeData.price;
+      localeObject.type = localeData.categories[0].title
       localeObject.photos = localeData.photos;
       localeObject.url = localeData.url;
       localeObject.reviews = localeData.reviews
