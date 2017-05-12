@@ -48,6 +48,7 @@ app.post('/storage', (req, res) => {
   console.log(locale);
   const favorite = new Locale({
     id: locale.id,
+
     name: locale.name,
     address: locale.address,
     phone: locale.phone,
