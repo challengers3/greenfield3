@@ -30,9 +30,7 @@ app.post('/location', (req, res) => {
 app.post('/saveToFav', (req, res) => {
 
   let locale = req.body;
-
   console.log(locale);
-
   let favorite = new Locale({
     id:locale.id,
     name: locale.name,
