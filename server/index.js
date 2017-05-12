@@ -61,6 +61,7 @@ app.post('/storage', (req, res) => {
   });
   favorite.save();
 
+
   res.end();
 });
 
@@ -95,6 +96,7 @@ app.get('/search', (req, res) => {
     method: 'post',
     headers: headers,
     url: `${apiURL}`,
+
     data: `{
       search(term: ${input},
         latitude: ${userLat},

@@ -13,6 +13,7 @@ class MenuBar extends React.Component {
     this.handleRequestClose = this.handleRequestClose.bind(this);
     this.favoriteHandler = this.favoriteHandler.bind(this);
     this.mainHandler = this.mainHandler.bind(this);
+    this.helpHandler = this.helpHandler.bind(this);
   }
 
   handleRequestClose() {
@@ -27,6 +28,11 @@ class MenuBar extends React.Component {
   mainHandler() {
     this.handleRequestClose();
     this.props.onClickMain();
+  }
+
+  helpHandler() {
+    this.handleRequestClose();
+    this.props.onClickHelp();
   }
 
   checkStatus() {
@@ -64,7 +70,10 @@ class MenuBar extends React.Component {
               primaryText="Favorites"
               onTouchTap={this.favoriteHandler}
             />
-            <MenuItem primaryText="Help &amp; feedback" />
+            <MenuItem
+              primaryText="Help &amp; feedback"
+              onTouchTap={this.helpHandler}
+            />
             <MenuItem primaryText="About" />
             <MenuItem
               primaryText="Sign out"
@@ -85,6 +94,7 @@ MenuBar.propTypes = {
   onLoginFB: PropTypes.func,
   checkLogin: PropTypes.func,
   onClickMain: PropTypes.func,
+  onClickHelp: PropTypes.func,
 };
 
 MenuBar.defaultProps = {
@@ -95,6 +105,7 @@ MenuBar.defaultProps = {
   onLoginFB: PropTypes.func,
   checkLogin: PropTypes.func,
   onClickMain: PropTypes.func,
+  onClickHelp: PropTypes.func,
 };
 
 export default MenuBar;

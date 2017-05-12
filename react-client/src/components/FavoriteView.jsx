@@ -40,7 +40,6 @@ class FavoriteView extends React.Component {
             ))}
         </GridList>
         <FavInfo
-          removeHandler={this.props.removeHandler}
           onRemove={this.props.onRemove}
           data={this.state.data}
         />
