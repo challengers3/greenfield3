@@ -23,6 +23,8 @@ const getCoords = () => new Promise((resolve, reject) => {
   });
 });
 
+let location = {};
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -39,7 +41,7 @@ class App extends React.Component {
       snackBarAdd: false,
       snackBarRemove: false,
       lat: undefined,
-      long: undefined,
+      lng: undefined,
     };
     this.menuOpen = this.menuOpen.bind(this);
     this.search = this.search.bind(this);
@@ -59,10 +61,10 @@ class App extends React.Component {
       isLoading: true,
     });
     getCoords().then((response) => {
-      // this.setState({
-      //   lat
-      // })
-      axios.post('/location', response);
+      this.setState({
+        lat: response.lat,
+        lng: response.long,
+      }, axios.post('/location', response));
     })
     .then(this.setState({
       isLoading: false,
@@ -261,7 +263,11 @@ class App extends React.Component {
             onSave={this.saveToFavorite}
           />
           <div style={styles.gmap}>
-            <Gmap />
+            <Gmap
+              name={this.state.data.name}
+              lat={this.state.lat}
+              lng={this.state.lng}
+            />
           </div>
         </div>
       );
