@@ -1,7 +1,6 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import axios from 'axios';
-import PropTypes from 'prop-types';
 import annyang from 'annyang';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -13,6 +12,8 @@ import MainDisplay from './components/MainDisplay';
 import LoadingScreen from './components/LoadingScreen';
 import FavoriteView from './components/FavoriteView';
 import HelpSection from './components/HelpSection';
+import Gmap from './components/Gmap';
+import styles from './css/styles';
 
 injectTapEventPlugin();
 
@@ -37,6 +38,8 @@ class App extends React.Component {
       isLogin: false,
       snackBarAdd: false,
       snackBarRemove: false,
+      lat: undefined,
+      long: undefined,
     };
     this.menuOpen = this.menuOpen.bind(this);
     this.search = this.search.bind(this);
@@ -56,6 +59,9 @@ class App extends React.Component {
       isLoading: true,
     });
     getCoords().then((response) => {
+      // this.setState({
+      //   lat
+      // })
       axios.post('/location', response);
     })
     .then(this.setState({
@@ -254,6 +260,9 @@ class App extends React.Component {
             data={this.state.data}
             onSave={this.saveToFavorite}
           />
+          <div style={styles.gmap}>
+            <Gmap />
+          </div>
         </div>
       );
     } else if (!isData && isMainView) {
