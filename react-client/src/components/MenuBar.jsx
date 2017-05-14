@@ -13,6 +13,7 @@ class MenuBar extends React.Component {
     this.handleRequestClose = this.handleRequestClose.bind(this);
     this.favoriteHandler = this.favoriteHandler.bind(this);
     this.mainHandler = this.mainHandler.bind(this);
+    this.helpHandler = this.helpHandler.bind(this);
   }
 
   handleRequestClose() {
@@ -29,10 +30,15 @@ class MenuBar extends React.Component {
     this.props.onClickMain();
   }
 
+  helpHandler() {
+    this.handleRequestClose();
+    this.props.onClickHelp();
+  }
+
   checkStatus() {
     this.props.checkLogin((response) => {
       if (response.status !== 'connected') {
-        this.props.onLoginFB();
+        this.props.loginFB();
       } else {
         this.setState({
           isLogin: true,
@@ -54,7 +60,7 @@ class MenuBar extends React.Component {
           <Menu>
             <MenuItem
               primaryText="Log in with Facebook"
-              onTouchTap={this.props.onLoginFB}
+              onTouchTap={this.props.loginFB}
             />
             <MenuItem
               primaryText="Main"
@@ -64,11 +70,14 @@ class MenuBar extends React.Component {
               primaryText="Favorites"
               onTouchTap={this.favoriteHandler}
             />
-            <MenuItem primaryText="Help &amp; feedback" />
+            <MenuItem
+              primaryText="Help &amp; feedback"
+              onTouchTap={this.helpHandler}
+            />
             <MenuItem primaryText="About" />
             <MenuItem
               primaryText="Sign out"
-              onTouchTap={this.props.onLogoutFB}
+              onTouchTap={this.props.logoutFB}
             />
           </Menu>
         </Popover>
@@ -81,20 +90,22 @@ MenuBar.propTypes = {
   leftMenuStatus: PropTypes.bool,
   onMenuOpen: PropTypes.func,
   onClickFav: PropTypes.func,
-  onLogoutFB: PropTypes.func,
-  onLoginFB: PropTypes.func,
+  logoutFB: PropTypes.func,
+  loginFB: PropTypes.func,
   checkLogin: PropTypes.func,
   onClickMain: PropTypes.func,
+  onClickHelp: PropTypes.func,
 };
 
 MenuBar.defaultProps = {
   leftMenuStatus: false,
   onMenuOpen: PropTypes.func,
   onClickFav: PropTypes.func,
-  onLogoutFB: PropTypes.func,
-  onLoginFB: PropTypes.func,
+  logoutFB: PropTypes.func,
+  loginFB: PropTypes.func,
   checkLogin: PropTypes.func,
   onClickMain: PropTypes.func,
+  onClickHelp: PropTypes.func,
 };
 
 export default MenuBar;

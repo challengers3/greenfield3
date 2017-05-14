@@ -7,12 +7,12 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Snackbar from 'material-ui/Snackbar';
 
-// import List from './components/List';
 import SearchBar from './components/SearchBar';
 import MenuBar from './components/MenuBar';
 import MainDisplay from './components/MainDisplay';
 import LoadingScreen from './components/LoadingScreen';
 import FavoriteView from './components/FavoriteView';
+import HelpSection from './components/HelpSection';
 
 injectTapEventPlugin();
 
@@ -28,9 +28,10 @@ class App extends React.Component {
     this.state = {
       data: undefined,
       favData: undefined,
+      delItem: undefined,
       favView: false,
       mainView: true,
-      delItem: undefined,
+      helpView: false,
       leftMenu: false,
       isLoading: true,
       isLogin: false,
@@ -39,14 +40,15 @@ class App extends React.Component {
     };
     this.menuOpen = this.menuOpen.bind(this);
     this.search = this.search.bind(this);
-    this.startSpeech = this.startSpeech.bind(this);
     this.clickFav = this.clickFav.bind(this);
     this.clickMain = this.clickMain.bind(this);
+    this.clickHelp = this.clickHelp.bind(this);
     this.saveToFavorite = this.saveToFavorite.bind(this);
     this.handleSnackAdd = this.handleSnackAdd.bind(this);
     this.removeFromFavorite = this.removeFromFavorite.bind(this);
     this.handleSnackRemove = this.handleSnackRemove.bind(this);
-    this.removeHandler = this.removeHandler.bind(this);
+    this.speechRemoveHandler = this.speechRemoveHandler.bind(this);
+    this.speechRemove = this.speechRemove.bind(this);
   }
 
   componentWillMount() {
@@ -56,40 +58,22 @@ class App extends React.Component {
     getCoords().then((response) => {
       axios.post('/location', response);
     })
-    .then(() => {
-      this.setState({
-        isLoading: false,
-      });
-    });
-    // .then(() => this.search(''));
-    // .then(() => {
-    //   axios.get('/storage/retrieve')
-    //   .then((response) => {
-    //     this.setState({
-    //       favData: response.data,
-    //     });
-    //   });
-    // });
+    .then(this.setState({
+      isLoading: false,
+    }));
   }
 
-  startSpeech() {
+  componentDidMount() {
     if (annyang) {
       const commands = {
-        'show me *input': (input) => {
-          this.search(input);
-        },
-        'go to favorites': () => {
-          this.clickFav();
-        },
-        'go to front': () => {
-          this.clickMain();
-        },
+        'show me *input': this.search,
+        'go to favorites': this.clickFav,
+        'go to front': this.clickMain,
+        'help me': this.clickHelp,
         'save to favorites': () => {
           this.saveToFavorite(this.state.data);
         },
-        // 'remove from favorites': () => {
-        //   this.removeFromFavorite();
-        // },
+        'remove from favorites': this.speechRemove,
       };
       annyang.addCommands(commands);
       annyang.debug();
@@ -97,6 +81,7 @@ class App extends React.Component {
     }
   }
 
+  // function to handle add to DB
   saveToFavorite(data) {
     console.log('SAVE TO FAVORITES WORKS', data);
     if (data.address) {
@@ -107,13 +92,11 @@ class App extends React.Component {
     }
   }
 
+  // function to handle remove from DB
   removeFromFavorite(data) {
-    // data = this.state.delItem;
     console.log('REMOVE FROM FAV WORKS', data._id);
     axios.post('/storage/remove', data)
-    .then(() => {
-      this.handleSnackRemove();
-    })
+    .then(this.handleSnackRemove)
     .then(() => {
       const newFav = this.state.favData.filter(rem => rem._id !== data._id);
       this.setState({
@@ -122,13 +105,18 @@ class App extends React.Component {
     });
   }
 
-  removeHandler(data) {
-    this.setState({
-      delItem: data,
-    });
-    console.log('DEL ITEM IS', this.state.delItem)
+  // this is to feed item onto state.delItem from child
+  speechRemoveHandler(data) {
+    this.setState({ delItem: data });
   }
 
+  // this is to be called by speech to handle the actual removal
+  // this is absolutely needed to deal with async nature of setState
+  speechRemove() {
+    this.setState(() => this.removeFromFavorite(this.state.delItem));
+  }
+
+  // snack is the popup bars on add and remove
   handleSnackAdd() {
     this.setState({
       snackBarAdd: !this.state.snackBarAdd,
@@ -141,6 +129,7 @@ class App extends React.Component {
     });
   }
 
+  // handler for menu click/speech control on Favorites
   clickFav() {
     console.log('FAV CLICKY');
     axios.get('/storage/retrieve')
@@ -148,7 +137,6 @@ class App extends React.Component {
       console.log('RESPONSE DATA IS ', response.data);
       if (response.data.length > 0) {
         this.setState({
-          isLoading: true,
           favView: true,
           mainView: false,
           favData: response.data,
@@ -159,23 +147,30 @@ class App extends React.Component {
         });
       }
     })
-    .then(() => {
-      this.setState({
-        isLoading: false,
-      });
-    })
     .catch((error) => {
       console.warn('cannot retrieve fav', error);
     });
   }
 
+  // handler for menu click/speech control on Main
   clickMain() {
+    console.log('MAIN CLICKY');
     this.setState({
-      favView: false,
       mainView: true,
+      favView: false,
     });
   }
 
+  // handler for menu click/speech control on Help section
+  clickHelp() {
+    this.setState({
+      helpView: true,
+      mainView: false,
+      favView: false,
+    });
+  }
+
+  // function to check login status if needed
   checkStatus() {
     if (!this.state.isLogin) {
       this.loginFB();
@@ -185,25 +180,22 @@ class App extends React.Component {
   search(input) {
     this.setState({
       isLoading: true,
-      mainView: true,
-      favView: false,
     });
     console.log('search: ', input);
     axios.get(`/search?query=${input}`)
     .then((response) => {
-      console.log('RES DATA API IS', response.data)
+      console.log('RES DATA API IS', response.data);
       this.setState({
         data: response.data,
       });
     })
-    .then(() => {
+    .then(
       this.setState({
-        isLoading: false,
-      });
-      // setTimeout(this.setState({
-      //   isLoading: false,
-      // }), 10000);
-    })
+        favView: false,
+        mainView: true,
+      }),
+    )
+    .then(this.setState({ isLoading: false }))
     .catch((error) => {
       if (error) {
         this.setState({
@@ -221,22 +213,28 @@ class App extends React.Component {
   }
 
   render() {
+    // condRender is conditional render value
+    // this will determine what will be rendered to accomodate
+    // for different views based on menu clicks
+    // WARNING: be careful when edit condRender
+    // failed to properly handle logics will break the render
     const isLoading = this.state.isLoading;
     const isMainView = this.state.mainView;
-    const isFavVIew = this.state.favView;
+    const isFavView = this.state.favView;
+    const isHelpView = this.state.helpView;
     const isData = this.state.data;
     let condRender;
-    if (isFavVIew && !isMainView) {
+    if (isFavView && !isMainView) {
       condRender = (
         <div>
           <FavoriteView
-            removeHandler={this.removeHandler}
+            speechRemoveHandler={this.speechRemoveHandler}
             onRemove={this.removeFromFavorite}
             favData={this.state.favData}
           />
         </div>
       );
-    } else if (isFavVIew && isMainView) {
+    } else if (isFavView && isMainView) {
       condRender = (
         <div>
           <h1>:( You need some Favorites yooo!!!)</h1>
@@ -248,7 +246,7 @@ class App extends React.Component {
           <LoadingScreen />
         </div>
       );
-    } else if (isData) {
+    } else if (isData && isMainView) {
       condRender = (
         <div>
           <MainDisplay
@@ -256,18 +254,25 @@ class App extends React.Component {
             data={this.state.data}
             onSave={this.saveToFavorite}
           />
-          {/* <List data={this.state.data} /> */}
         </div>
       );
-    } else if (!isData) {
+    } else if (!isData && isMainView) {
       condRender = (null);
+    } else if (isHelpView) {
+      if (!isMainView || !isFavView) {
+        condRender = (
+          <div>
+            <HelpSection />
+          </div>
+        );
+      }
     }
     return (
       <MuiThemeProvider>
         <div>
           <AppBar
             title="WHERE AM I?"
-            style={{ backgroundColor: '#FFA726 ' }}
+            style={{ backgroundColor: '#FFA726' }}
             onLeftIconButtonTouchTap={this.menuOpen}
           />
           <SearchBar
@@ -278,10 +283,10 @@ class App extends React.Component {
             leftMenuStatus={this.state.leftMenu}
             onMenuOpen={this.menuOpen}
             checkLogin={this.checkLoginState}
+            onClickHelp={this.clickHelp}
             onClickMain={this.clickMain}
             onClickFav={this.clickFav}
-            onLoginFB={this.props.loginFB}
-            onLogoutFB={this.props.logoutFB}
+            {...this.props}
           />
           {condRender}
           <Snackbar
@@ -301,15 +306,5 @@ class App extends React.Component {
     );
   }
 }
-
-App.propTypes = {
-  loginFB: PropTypes.func,
-  logoutFB: PropTypes.func,
-};
-
-App.defaultProps = {
-  loginFB: PropTypes.func,
-  logoutFB: PropTypes.func,
-};
 
 export default App;

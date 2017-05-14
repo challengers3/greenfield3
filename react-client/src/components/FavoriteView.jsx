@@ -17,8 +17,14 @@ class FavoriteView extends React.Component {
   clickHandler(data) {
     this.setState({
       data,
-    });
+    }, () => this.props.speechRemoveHandler(this.state.data));
   }
+
+  // clickHandler(data) {
+  //   this.setState(() => ({
+  //     data,
+  //   }));
+  // }
 
   render() {
     return (
@@ -35,12 +41,12 @@ class FavoriteView extends React.Component {
               <img
                 onTouchTap={() => this.clickHandler(oneFav)}
                 src={oneFav.photos[0]}
+                alt="one favorite"
               />
             </GridTile>
             ))}
         </GridList>
         <FavInfo
-          removeHandler={this.props.removeHandler}
           onRemove={this.props.onRemove}
           data={this.state.data}
         />
@@ -53,13 +59,13 @@ class FavoriteView extends React.Component {
 FavoriteView.propTypes = {
   favData: PropTypes.array,
   onRemove: PropTypes.func,
-  removeHandler: PropTypes.func,
+  speechRemoveHandler: PropTypes.func,
 };
 
 FavoriteView.defaultProps = {
   favData: PropTypes.array,
   onRemove: PropTypes.func,
-  removeHandler: PropTypes.func,
+  speechRemoveHandler: PropTypes.func,
 };
 
 
