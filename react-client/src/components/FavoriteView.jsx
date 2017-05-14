@@ -41,6 +41,7 @@ class FavoriteView extends React.Component {
               <img
                 onTouchTap={() => this.clickHandler(oneFav)}
                 src={oneFav.photos[0]}
+                alt="one favorite"
               />
             </GridTile>
             ))}

@@ -262,8 +262,7 @@ class App extends React.Component {
             checkLogin={this.checkLoginState}
             onClickMain={this.clickMain}
             onClickFav={this.clickFav}
-            onLoginFB={this.props.loginFB}
-            onLogoutFB={this.props.logoutFB}
+            {...this.props}
           />
           {condRender}
           <Snackbar

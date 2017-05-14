@@ -38,7 +38,7 @@ class MenuBar extends React.Component {
   checkStatus() {
     this.props.checkLogin((response) => {
       if (response.status !== 'connected') {
-        this.props.onLoginFB();
+        this.props.loginFB();
       } else {
         this.setState({
           isLogin: true,
@@ -60,7 +60,7 @@ class MenuBar extends React.Component {
           <Menu>
             <MenuItem
               primaryText="Log in with Facebook"
-              onTouchTap={this.props.onLoginFB}
+              onTouchTap={this.props.loginFB}
             />
             <MenuItem
               primaryText="Main"
@@ -77,7 +77,7 @@ class MenuBar extends React.Component {
             <MenuItem primaryText="About" />
             <MenuItem
               primaryText="Sign out"
-              onTouchTap={this.props.onLogoutFB}
+              onTouchTap={this.props.logoutFB}
             />
           </Menu>
         </Popover>
@@ -90,8 +90,8 @@ MenuBar.propTypes = {
   leftMenuStatus: PropTypes.bool,
   onMenuOpen: PropTypes.func,
   onClickFav: PropTypes.func,
-  onLogoutFB: PropTypes.func,
-  onLoginFB: PropTypes.func,
+  logoutFB: PropTypes.func,
+  loginFB: PropTypes.func,
   checkLogin: PropTypes.func,
   onClickMain: PropTypes.func,
   onClickHelp: PropTypes.func,
@@ -101,8 +101,8 @@ MenuBar.defaultProps = {
   leftMenuStatus: false,
   onMenuOpen: PropTypes.func,
   onClickFav: PropTypes.func,
-  onLogoutFB: PropTypes.func,
-  onLoginFB: PropTypes.func,
+  logoutFB: PropTypes.func,
+  loginFB: PropTypes.func,
   checkLogin: PropTypes.func,
   onClickMain: PropTypes.func,
   onClickHelp: PropTypes.func,
