@@ -2,12 +2,16 @@ import React from 'react';
 import GoogleMapReact from 'google-map-react';
 import PropTypes from 'prop-types';
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+const Popup = ({ text }) => <div>{text}</div>;
 
 class Gmap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      defaultCenter: {
+        lat: null,
+        lng: null,
+      },
       zoom: 11,
     };
   }
@@ -26,10 +30,11 @@ class Gmap extends React.Component {
         bootstrapURLKeys={{
           key: 'AIzaSyDnmvUixK2wGOc7EAhKtMosh1Td7GqKEl8',
         }}
-        defaultCenter={center}
+        defaultCenter={this.state.defaultCenter}
+        center={center}
         defaultZoom={this.state.zoom}
       >
-        <AnyReactComponent
+        <Popup
           lat={center.lat}
           lng={center.lng}
           text={this.props.name}

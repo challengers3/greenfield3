@@ -60,15 +60,19 @@ class App extends React.Component {
     this.setState({
       isLoading: true,
     });
+    // this setTimeout is absolutely needed to correctly pool the coordinates
+    // before user's interaction
+    setTimeout(() => {
+      this.setState({
+        isLoading: false,
+      });
+    }, 2000);
     getCoords().then((response) => {
       this.setState({
         lat: response.lat,
         lng: response.long,
-      }, axios.post('/location', response));
-    })
-    .then(this.setState({
-      isLoading: false,
-    }));
+      }, () => axios.post('/location', response));
+    });
   }
 
   componentDidMount() {
