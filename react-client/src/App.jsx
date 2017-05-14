@@ -27,6 +27,7 @@ class App extends React.Component {
     this.state = {
       data: undefined,
       favData: undefined,
+      delItem: undefined,
       favView: false,
       mainView: true,
       helpView: false,
@@ -38,13 +39,15 @@ class App extends React.Component {
     };
     this.menuOpen = this.menuOpen.bind(this);
     this.search = this.search.bind(this);
-    this.startSpeech = this.startSpeech.bind(this);
+    // this.startSpeech = this.startSpeech.bind(this);
     this.clickFav = this.clickFav.bind(this);
     this.clickMain = this.clickMain.bind(this);
     this.saveToFavorite = this.saveToFavorite.bind(this);
     this.handleSnackAdd = this.handleSnackAdd.bind(this);
     this.removeFromFavorite = this.removeFromFavorite.bind(this);
     this.handleSnackRemove = this.handleSnackRemove.bind(this);
+    this.speechRemoveHandler = this.speechRemoveHandler.bind(this);
+    this.speechRemove = this.speechRemove.bind(this);
   }
 
   componentWillMount() {
@@ -57,33 +60,18 @@ class App extends React.Component {
     .then(this.setState({
       isLoading: false,
     }));
-    // .then(() => this.search(''));
-    // .then(() => {
-    //   axios.get('/storage/retrieve')
-    //   .then((response) => {
-    //     this.setState({
-    //       favData: response.data,
-    //     });
-    //   });
-    // });
   }
 
-  startSpeech() {
+  componentDidMount() {
     if (annyang) {
       const commands = {
         'show me *input': this.search,
-        'go to favorites': () => {
-          this.clickFav();
-        },
-        'go to front': () => {
-          this.clickMain();
-        },
+        'go to favorites': this.clickFav,
+        'go to front': this.clickMain,
         'save to favorites': () => {
           this.saveToFavorite(this.state.data);
         },
-        // 'remove from favorites': () => {
-        //   this.removeFromFavorite();
-        // },
+        'remove from favorites': this.speechRemove,
       };
       annyang.addCommands(commands);
       annyang.debug();
@@ -105,9 +93,7 @@ class App extends React.Component {
     // data = this.state.delItem;
     console.log('REMOVE FROM FAV WORKS', data._id);
     axios.post('/storage/remove', data)
-    .then(() => {
-      this.handleSnackRemove();
-    })
+    .then(this.handleSnackRemove)
     .then(() => {
       const newFav = this.state.favData.filter(rem => rem._id !== data._id);
       this.setState({
@@ -116,6 +102,13 @@ class App extends React.Component {
     });
   }
 
+  speechRemoveHandler(data) {
+    this.setState({ delItem: data });
+  }
+
+  speechRemove() {
+    this.setState(() => this.removeFromFavorite(this.state.delItem));
+  }
 
   handleSnackAdd() {
     this.setState({
@@ -212,6 +205,7 @@ class App extends React.Component {
       condRender = (
         <div>
           <FavoriteView
+            speechRemoveHandler={this.speechRemoveHandler}
             onRemove={this.removeFromFavorite}
             favData={this.state.favData}
           />
@@ -229,7 +223,7 @@ class App extends React.Component {
           <LoadingScreen />
         </div>
       );
-    } else if (isData) {
+    } else if (isData && isMainView) {
       condRender = (
         <div>
           <MainDisplay

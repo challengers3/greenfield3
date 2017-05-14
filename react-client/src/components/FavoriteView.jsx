@@ -17,8 +17,14 @@ class FavoriteView extends React.Component {
   clickHandler(data) {
     this.setState({
       data,
-    });
+    }, () => this.props.speechRemoveHandler(this.state.data));
   }
+
+  // clickHandler(data) {
+  //   this.setState(() => ({
+  //     data,
+  //   }));
+  // }
 
   render() {
     return (
@@ -52,11 +58,13 @@ class FavoriteView extends React.Component {
 FavoriteView.propTypes = {
   favData: PropTypes.array,
   onRemove: PropTypes.func,
+  speechRemoveHandler: PropTypes.func,
 };
 
 FavoriteView.defaultProps = {
   favData: PropTypes.array,
   onRemove: PropTypes.func,
+  speechRemoveHandler: PropTypes.func,
 };
 
 
