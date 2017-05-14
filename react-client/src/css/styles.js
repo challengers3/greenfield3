@@ -1,10 +1,6 @@
 const styles = {
   reviewBlock: {
-<<<<<<< HEAD
-    verticalAlign: 'middle'
-=======
     verticalAlign: 'middle',
->>>>>>> e44cb10a7f9d893bfebd735d5efad2cb5c1f3578
   },
   imgResize: {
     float: 'left',
@@ -16,11 +12,7 @@ const styles = {
     fontSize: '200%',
   },
   logo: {
-<<<<<<< HEAD
-    float:'right',
-=======
     float: 'right',
->>>>>>> e44cb10a7f9d893bfebd735d5efad2cb5c1f3578
     maxWidth: '9%',
     maxHeight: '9%',
   },
@@ -28,11 +20,7 @@ const styles = {
     display: 'table',
     maxWidth: '33%',
     margin: '0 auto',
-<<<<<<< HEAD
     //marginTop: '20px',
-=======
-    // marginTop: '20px',
->>>>>>> e44cb10a7f9d893bfebd735d5efad2cb5c1f3578
     float: 'right',
   },
   mainColor: '#FFA726',
