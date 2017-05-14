@@ -143,6 +143,14 @@ class App extends React.Component {
 
   // handler for menu click/speech control on Favorites
   clickFav() {
+    this.setState({
+      isLoading: true,
+    });
+    setTimeout(() => {
+      this.setState({
+        isLoading: false,
+      });
+    }, 200);
     console.log('FAV CLICKY');
     axios.get('/storage/retrieve')
     .then((response) => {
@@ -167,6 +175,14 @@ class App extends React.Component {
   // handler for menu click/speech control on Main
   clickMain() {
     console.log('MAIN CLICKY');
+    this.setState({
+      isLoading: true,
+    });
+    setTimeout(() => {
+      this.setState({
+        isLoading: false,
+      });
+    }, 200);
     this.setState({
       mainView: true,
       favView: false,
