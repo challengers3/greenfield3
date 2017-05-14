@@ -56,6 +56,24 @@ const styles = {
     float: 'left',
     clear: 'left',
   },
+  helpCommands: {
+    borderStyle: 'solid',
+    borderColor: '#FFA726',
+    position: 'fixed',
+    top: '20%',
+    left: '50%',
+    padding: '0 20px',
+    marginTop: '-50px',
+    marginLeft: '-150px',
+  },
+  contributors: {
+    borderStyle: 'solid',
+    display: 'inlineBlock',
+    position: 'fixed',
+    borderColor: '#FFA726',
+    padding: '0 20px',
+    float: 'left',
+  },
 };
 
 export default styles;

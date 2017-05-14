@@ -12,6 +12,7 @@ import MenuBar from './components/MenuBar';
 import MainDisplay from './components/MainDisplay';
 import LoadingScreen from './components/LoadingScreen';
 import FavoriteView from './components/FavoriteView';
+import HelpSection from './components/HelpSection';
 
 injectTapEventPlugin();
 
@@ -41,6 +42,7 @@ class App extends React.Component {
     this.search = this.search.bind(this);
     this.clickFav = this.clickFav.bind(this);
     this.clickMain = this.clickMain.bind(this);
+    this.clickHelp = this.clickHelp.bind(this);
     this.saveToFavorite = this.saveToFavorite.bind(this);
     this.handleSnackAdd = this.handleSnackAdd.bind(this);
     this.removeFromFavorite = this.removeFromFavorite.bind(this);
@@ -67,6 +69,7 @@ class App extends React.Component {
         'show me *input': this.search,
         'go to favorites': this.clickFav,
         'go to front': this.clickMain,
+        'help me': this.clickHelp,
         'save to favorites': () => {
           this.saveToFavorite(this.state.data);
         },
@@ -126,6 +129,7 @@ class App extends React.Component {
     });
   }
 
+  // handler for menu click/speech control on Favorites
   clickFav() {
     console.log('FAV CLICKY');
     axios.get('/storage/retrieve')
@@ -148,10 +152,20 @@ class App extends React.Component {
     });
   }
 
+  // handler for menu click/speech control on Main
   clickMain() {
     console.log('MAIN CLICKY');
     this.setState({
       mainView: true,
+      favView: false,
+    });
+  }
+
+  // handler for menu click/speech control on Help section
+  clickHelp() {
+    this.setState({
+      helpView: true,
+      mainView: false,
       favView: false,
     });
   }
@@ -170,7 +184,7 @@ class App extends React.Component {
     console.log('search: ', input);
     axios.get(`/search?query=${input}`)
     .then((response) => {
-      console.log('RES DATA API IS', response.data)
+      console.log('RES DATA API IS', response.data);
       this.setState({
         data: response.data,
       });
@@ -206,10 +220,11 @@ class App extends React.Component {
     // failed to properly handle logics will break the render
     const isLoading = this.state.isLoading;
     const isMainView = this.state.mainView;
-    const isFavVIew = this.state.favView;
+    const isFavView = this.state.favView;
+    const isHelpView = this.state.helpView;
     const isData = this.state.data;
     let condRender;
-    if (isFavVIew && !isMainView) {
+    if (isFavView && !isMainView) {
       condRender = (
         <div>
           <FavoriteView
@@ -219,7 +234,7 @@ class App extends React.Component {
           />
         </div>
       );
-    } else if (isFavVIew && isMainView) {
+    } else if (isFavView && isMainView) {
       condRender = (
         <div>
           <h1>:( You need some Favorites yooo!!!)</h1>
@@ -243,6 +258,14 @@ class App extends React.Component {
       );
     } else if (!isData && isMainView) {
       condRender = (null);
+    } else if (isHelpView) {
+      if (!isMainView || !isFavView) {
+        condRender = (
+          <div>
+            <HelpSection />
+          </div>
+        );
+      }
     }
     return (
       <MuiThemeProvider>
@@ -260,6 +283,7 @@ class App extends React.Component {
             leftMenuStatus={this.state.leftMenu}
             onMenuOpen={this.menuOpen}
             checkLogin={this.checkLoginState}
+            onClickHelp={this.clickHelp}
             onClickMain={this.clickMain}
             onClickFav={this.clickFav}
             {...this.props}
@@ -282,15 +306,5 @@ class App extends React.Component {
     );
   }
 }
-
-App.propTypes = {
-  loginFB: PropTypes.func,
-  logoutFB: PropTypes.func,
-};
-
-App.defaultProps = {
-  loginFB: PropTypes.func,
-  logoutFB: PropTypes.func,
-};
 
 export default App;
