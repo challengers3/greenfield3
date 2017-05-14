@@ -52,13 +52,11 @@ class FavoriteView extends React.Component {
 FavoriteView.propTypes = {
   favData: PropTypes.array,
   onRemove: PropTypes.func,
-  removeHandler: PropTypes.func,
 };
 
 FavoriteView.defaultProps = {
   favData: PropTypes.array,
   onRemove: PropTypes.func,
-  removeHandler: PropTypes.func,
 };
 
 

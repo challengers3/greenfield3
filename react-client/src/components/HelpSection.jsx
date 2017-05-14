@@ -1,7 +1,8 @@
 import React from 'react';
+import styles from '../css/styles';
 
 const HelpSection = () => (
-  <div>
+  <div style={styles.centeredImage}>
     <h1>Possible Commands</h1>
     <p>Say &quot;Show me *&quot;: To start your search</p>
     <p>Say &quot;Save to Favorites&quot;: To Save </p>

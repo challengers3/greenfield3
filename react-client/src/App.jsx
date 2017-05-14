@@ -7,13 +7,11 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Snackbar from 'material-ui/Snackbar';
 
-// import List from './components/List';
 import SearchBar from './components/SearchBar';
 import MenuBar from './components/MenuBar';
 import MainDisplay from './components/MainDisplay';
 import LoadingScreen from './components/LoadingScreen';
 import FavoriteView from './components/FavoriteView';
-import HelpSection from './components/HelpSection';
 
 injectTapEventPlugin();
 
@@ -30,9 +28,8 @@ class App extends React.Component {
       data: undefined,
       favData: undefined,
       favView: false,
-      helpView: false,
       mainView: true,
-      delItem: undefined,
+      helpView: false,
       leftMenu: false,
       isLoading: true,
       isLogin: false,
@@ -44,7 +41,6 @@ class App extends React.Component {
     this.startSpeech = this.startSpeech.bind(this);
     this.clickFav = this.clickFav.bind(this);
     this.clickMain = this.clickMain.bind(this);
-    this.clickHelp = this.clickHelp.bind(this);
     this.saveToFavorite = this.saveToFavorite.bind(this);
     this.handleSnackAdd = this.handleSnackAdd.bind(this);
     this.removeFromFavorite = this.removeFromFavorite.bind(this);
@@ -58,11 +54,9 @@ class App extends React.Component {
     getCoords().then((response) => {
       axios.post('/location', response);
     })
-    .then(() => {
-      this.setState({
-        isLoading: false,
-      });
-    });
+    .then(this.setState({
+      isLoading: false,
+    }));
     // .then(() => this.search(''));
     // .then(() => {
     //   axios.get('/storage/retrieve')
@@ -77,13 +71,11 @@ class App extends React.Component {
   startSpeech() {
     if (annyang) {
       const commands = {
-        'show me *input': (input) => {
-          this.search(input);
-        },
+        'show me *input': this.search,
         'go to favorites': () => {
           this.clickFav();
         },
-        'go to front (page)': () => {
+        'go to front': () => {
           this.clickMain();
         },
         'save to favorites': () => {
@@ -124,6 +116,7 @@ class App extends React.Component {
     });
   }
 
+
   handleSnackAdd() {
     this.setState({
       snackBarAdd: !this.state.snackBarAdd,
@@ -137,12 +130,12 @@ class App extends React.Component {
   }
 
   clickFav() {
+    console.log('FAV CLICKY');
     axios.get('/storage/retrieve')
     .then((response) => {
       console.log('RESPONSE DATA IS ', response.data);
       if (response.data.length > 0) {
         this.setState({
-          isLoading: true,
           favView: true,
           mainView: false,
           favData: response.data,
@@ -153,29 +146,16 @@ class App extends React.Component {
         });
       }
     })
-    .then(() => {
-      this.setState({
-        isLoading: false,
-      });
-    })
     .catch((error) => {
       console.warn('cannot retrieve fav', error);
     });
   }
 
   clickMain() {
+    console.log('MAIN CLICKY');
     this.setState({
-      favView: false,
       mainView: true,
-      helpView: false,
-    });
-  }
-
-  clickHelp() {
-    this.setState({
-      helpView: true,
       favView: false,
-      mainView: false,
     });
   }
 
@@ -188,9 +168,8 @@ class App extends React.Component {
   search(input) {
     this.setState({
       isLoading: true,
-      mainView: true,
-      favView: false,
-      helpView: false,
+      // favView: false,
+      // mainView: true,
     });
     console.log('search: ', input);
     axios.get(`/search?query=${input}`)
@@ -200,14 +179,13 @@ class App extends React.Component {
         data: response.data,
       });
     })
-    .then(() => {
+    .then(
       this.setState({
         isLoading: false,
-      });
-      // setTimeout(this.setState({
-      //   isLoading: false,
-      // }), 10000);
-    })
+        favView: false,
+        mainView: true,
+      }),
+    )
     .catch((error) => {
       if (error) {
         this.setState({
@@ -229,7 +207,6 @@ class App extends React.Component {
     const isMainView = this.state.mainView;
     const isFavVIew = this.state.favView;
     const isData = this.state.data;
-    const isHelpView = this.state.helpView;
     let condRender;
     if (isFavVIew && !isMainView) {
       condRender = (
@@ -252,7 +229,7 @@ class App extends React.Component {
           <LoadingScreen />
         </div>
       );
-    } else if (isData && isMainView) {
+    } else if (isData) {
       condRender = (
         <div>
           <MainDisplay
@@ -265,10 +242,6 @@ class App extends React.Component {
       );
     } else if (!isData) {
       condRender = (null);
-    } else if (isHelpView) {
-      condRender = (
-        <HelpSection />
-      );
     }
     return (
       <MuiThemeProvider>
@@ -288,7 +261,6 @@ class App extends React.Component {
             checkLogin={this.checkLoginState}
             onClickMain={this.clickMain}
             onClickFav={this.clickFav}
-            onClickHelp={this.clickHelp}
             onLoginFB={this.props.loginFB}
             onLogoutFB={this.props.logoutFB}
           />
