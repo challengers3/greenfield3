@@ -136,7 +136,8 @@ app.get('/search', (req, res) => {
   }).then( yelpBizData => {
       let localeData = yelpBizData.data.data.search.business[0];
 
-      console.log(JSON.stringify(localeData));
+      console.log(JSON.stringify(localeData.coordinates.latitude));
+      console.log(JSON.stringify(localeData.coordinates.longitude));
       localeObject.id = localeData.id;
       localeObject.name = localeData.name;
       localeObject.address = localeData.location.address1;
@@ -147,7 +148,9 @@ app.get('/search', (req, res) => {
       localeObject.type = localeData.categories[0].title
       localeObject.photos = localeData.photos;
       localeObject.url = localeData.url;
-      localeObject.reviews = localeData.reviews
+      localeObject.reviews = localeData.reviews;
+      localeObject.lat = localeData.coordinates.latitude;
+      localeObject.lng = localeData.coordinates.longitude;
 
       res.send(localeObject);
       res.end();

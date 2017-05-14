@@ -193,13 +193,21 @@ class App extends React.Component {
     this.setState({
       isLoading: true,
     });
+    setTimeout(() => {
+      this.setState({
+        isLoading: false,
+      });
+    }, 500);
     console.log('search: ', input);
     axios.get(`/search?query=${input}`)
     .then((response) => {
       console.log('RES DATA API IS', response.data);
       this.setState({
         data: response.data,
-      });
+      }, () => this.setState({
+        lat: response.data.lat,
+        lng: response.data.lng,
+      }));
     })
     .then(
       this.setState({
@@ -207,7 +215,7 @@ class App extends React.Component {
         mainView: true,
       }),
     )
-    .then(this.setState({ isLoading: false }))
+    // .then(this.setState({ isLoading: false }))
     .catch((error) => {
       if (error) {
         this.setState({
@@ -268,7 +276,7 @@ class App extends React.Component {
           />
           <div style={styles.gmap}>
             <Gmap
-              name={this.state.data.name}
+              data={this.state.data}
               lat={this.state.lat}
               lng={this.state.lng}
             />

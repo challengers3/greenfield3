@@ -37,7 +37,7 @@ class Gmap extends React.Component {
         <Popup
           lat={center.lat}
           lng={center.lng}
-          text={this.props.name}
+          text={this.props.data.name}
         />
       </GoogleMapReact>
     );
@@ -47,13 +47,11 @@ class Gmap extends React.Component {
 Gmap.propTypes = {
   lat: PropTypes.number,
   lng: PropTypes.number,
-  name: PropTypes.string,
 };
 
 Gmap.defaultProps = {
   lat: PropTypes.number,
   lng: PropTypes.number,
-  name: PropTypes.string,
 };
 
 export default Gmap;
