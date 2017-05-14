@@ -2,8 +2,8 @@ import React from 'react';
 import SearchInput from 'material-ui/AutoComplete';
 import RaisedButton from 'material-ui/RaisedButton';
 import PropTypes from 'prop-types';
-import FlatButton from 'material-ui/FlatButton';
-import Speaker from 'material-ui/svg-icons/hardware/keyboard-voice';
+// import FlatButton from 'material-ui/FlatButton';
+// import Speaker from 'material-ui/svg-icons/hardware/keyboard-voice';
 import styles from '../css/styles';
 
 const blank = [];
@@ -35,11 +35,11 @@ class SearchBar extends React.Component {
             onUpdateInput={this.onUpdateInput}
           />
         </div>
-        <FlatButton
+        {/* <FlatButton
           style={{ float: 'left' }}
           icon={<Speaker alt="Speaker" />}
           onTouchTap={this.props.startSpeech}
-        />
+        /> */}
         <div>
           <RaisedButton
             style={styles.searchButton}

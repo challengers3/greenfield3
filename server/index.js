@@ -61,6 +61,7 @@ app.post('/storage', (req, res) => {
   });
   favorite.save();
 
+
   res.end();
 });
 

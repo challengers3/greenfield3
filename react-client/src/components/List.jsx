@@ -19,3 +19,5 @@ const List = props => (
 
 
 export default List;
+
+// unused component in current state

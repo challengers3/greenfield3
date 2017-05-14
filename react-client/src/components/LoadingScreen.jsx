@@ -13,3 +13,6 @@ const LoadingScreen = () => (
 );
 
 export default LoadingScreen;
+
+// this component is here in case a loading screen needed
+// due to improve in performane, this loading screen might not be seen at all

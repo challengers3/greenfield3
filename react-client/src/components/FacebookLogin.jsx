@@ -7,6 +7,7 @@ const FacebookLogin = props => (
   <img
     onClick={props.loginFB}
     src={facebookIcon}
+    alt="Facebook Logo"
   />
 );
 
