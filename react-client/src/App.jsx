@@ -34,6 +34,7 @@ class App extends React.Component {
       delItem: undefined,
       favView: false,
       mainView: true,
+      mapView: false,
       // helpView: false,
       helpToggle: false,
       leftMenu: false,
@@ -66,7 +67,7 @@ class App extends React.Component {
     setTimeout(() => {
       this.setState({
         isLoading: false,
-      });
+      }, this.setState({ mapView: true }));
     }, 2000);
     getCoords().then((response) => {
       this.setState({
@@ -144,6 +145,7 @@ class App extends React.Component {
   clickFav() {
     this.setState({
       isLoading: true,
+      mapView: false,
     });
     setTimeout(() => {
       this.setState({
@@ -176,6 +178,7 @@ class App extends React.Component {
     console.log('MAIN CLICKY');
     this.setState({
       isLoading: true,
+      mapView: true,
     });
     setTimeout(() => {
       this.setState({
@@ -230,7 +233,7 @@ class App extends React.Component {
       console.log('RES DATA API IS', response.data);
       this.setState({
         data: response.data,
-      }, () => this.setState({
+      }, this.setState({
         lat: response.data.lat,
         lng: response.data.lng,
       }));
@@ -267,7 +270,7 @@ class App extends React.Component {
     const isLoading = this.state.isLoading;
     const isMainView = this.state.mainView;
     const isFavView = this.state.favView;
-    const isHelpView = this.state.helpView;
+    const isMapView = this.state.mapView;
     const isData = this.state.data;
     let condRender;
     if (isFavView && !isMainView) {
@@ -311,6 +314,7 @@ class App extends React.Component {
     //     condRender = <HelpSection />;
     //   }
     // }
+
     return (
       <MuiThemeProvider>
         <div>
@@ -323,6 +327,15 @@ class App extends React.Component {
             startSpeech={this.startSpeech}
             onSearch={this.search}
           />
+          {isMapView ? (
+            <div style={styles.gmap}>
+              <Gmap
+                data={this.state.data}
+                lat={this.state.lat}
+                lng={this.state.lng}
+              />
+            </div>
+          ) : (null)}
           <MenuBar
             leftMenuStatus={this.state.leftMenu}
             onMenuOpen={this.menuOpen}

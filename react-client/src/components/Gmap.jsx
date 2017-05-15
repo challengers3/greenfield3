@@ -11,7 +11,7 @@ const Popup = ({ text }) => (
       style={styles.marker}
       src={pin} alt="pin"
     />
-    {text}
+    {/* {text} */}
   </div>
 );
 
@@ -45,7 +45,7 @@ class Gmap extends React.Component {
         <Popup
           lat={center.lat}
           lng={center.lng}
-          text={this.props.data.address}
+          // text={this.props.data.address}
         />
       </GoogleMapReact>
     );
