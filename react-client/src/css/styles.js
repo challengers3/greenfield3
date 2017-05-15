@@ -1,6 +1,6 @@
 const styles = {
   reviewBlock: {
-    verticalAlign: 'middle'
+    verticalAlign: 'middle',
   },
   imgResize: {
     float: 'left',
@@ -20,7 +20,7 @@ const styles = {
     display: 'table',
     maxWidth: '33%',
     margin: '0 auto',
-    // marginTop: '20px',
+    //marginTop: '20px',
     float: 'right',
   },
   mainColor: '#FFA726',
@@ -55,6 +55,30 @@ const styles = {
     width: '50px',
     float: 'left',
     clear: 'left',
+  },
+  helpCommands: {
+    borderStyle: 'solid',
+    borderColor: '#FFA726',
+    position: 'fixed',
+    top: '20%',
+    left: '50%',
+    padding: '0 20px',
+    marginTop: '-50px',
+    marginLeft: '-150px',
+  },
+  gmap: {
+    position: 'absolute',
+    top: '120px',
+    left: '290px',
+    width: '40%',
+    height: '40%',
+  },
+  marker: {
+    position: 'absolute',
+    width: '40px',
+    height: '40px',
+    left: '-20px',
+    top: '-20px',
   },
 };
 
