@@ -199,7 +199,7 @@ class App extends React.Component {
     });
   }
 
-  // function to check login status if needed
+  // check login status if needed
   checkStatus() {
     if (!this.state.isLogin) {
       this.loginFB();
