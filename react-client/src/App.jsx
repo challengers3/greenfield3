@@ -34,7 +34,8 @@ class App extends React.Component {
       delItem: undefined,
       favView: false,
       mainView: true,
-      helpView: false,
+      // helpView: false,
+      helpToggle: false,
       leftMenu: false,
       isLoading: true,
       isLogin: false,
@@ -189,18 +190,21 @@ class App extends React.Component {
 
   // handler for menu click/speech control on Help section
   clickHelp() {
+    // this.setState({
+    //   isLoading: true,
+    // });
+    // setTimeout(() => {
+    //   this.setState({
+    //     isLoading: false,
+    //   });
+    // }, 400);
+    // this.setState({
+    //   helpView: true,
+    //   mainView: false,
+    //   favView: false,
+    // });
     this.setState({
-      isLoading: true,
-    });
-    setTimeout(() => {
-      this.setState({
-        isLoading: false,
-      });
-    }, 400);
-    this.setState({
-      helpView: true,
-      mainView: false,
-      favView: false,
+      helpToggle: !this.state.helpToggle,
     });
   }
 
@@ -301,11 +305,12 @@ class App extends React.Component {
       );
     } else if (!isData && isMainView) {
       condRender = (null);
-    } else if (isHelpView) {
-      if (!isMainView || !isFavView) {
-        condRender = <HelpSection />;
-      }
     }
+    // else if (isHelpView) {
+    //   if (!isMainView || !isFavView) {
+    //     condRender = <HelpSection />;
+    //   }
+    // }
     return (
       <MuiThemeProvider>
         <div>
@@ -326,6 +331,10 @@ class App extends React.Component {
             onClickMain={this.clickMain}
             onClickFav={this.clickFav}
             {...this.props}
+          />
+          <HelpSection
+            helpToggle={this.state.helpToggle}
+            clickHelp={this.clickHelp}
           />
           {condRender}
           <Snackbar
