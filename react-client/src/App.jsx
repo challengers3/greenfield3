@@ -117,7 +117,7 @@ class App extends React.Component {
     });
   }
 
-  // this is to feed item onto state.delItem from child
+  // feed item onto state.delItem from child
   speechRemoveHandler(data) {
     this.setState({ delItem: data });
   }
