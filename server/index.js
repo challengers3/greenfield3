@@ -58,10 +58,10 @@ app.post('/storage', (req, res) => {
 
 app.get('/search', (req, res) => {
   const input = JSON.stringify(req.query.query);
-  const apiURL = 'https://api.yelp.com/v3/graphql';
-  const headers = {
-    Authorization: `Bearer ${yelpToken}`,
-    'Content-Type': 'application/json',
+  const apiURL = 'https://api.yelp.com/v3/graphql'
+  const headers = { 
+    'Authorization': "Bearer " + yelpToken,
+    'Content-Type': 'application/json' 
   };
   const localeObject = {
     id: '',
@@ -87,7 +87,7 @@ app.get('/search', (req, res) => {
     headers: headers,
     url: `${apiURL}`,
 
-    data: `{
+    data: `{ 
       search(term: ${input},
         latitude: ${userLat},
         longitude: ${userLong},
@@ -125,6 +125,7 @@ app.get('/search', (req, res) => {
         }
       }`
   }).then( yelpBizData => {
+      console.log(yelpBizData)
       let localeData = yelpBizData.data.data.search.business[0];
 
       console.log(JSON.stringify(localeData.coordinates.latitude));
