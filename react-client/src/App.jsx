@@ -181,7 +181,7 @@ class App extends React.Component {
       this.setState({
         isLoading: false,
       });
-    }, 200);
+    }, 400);
     this.setState({
       mainView: true,
       favView: false,
@@ -197,7 +197,7 @@ class App extends React.Component {
       this.setState({
         isLoading: false,
       });
-    }, 200);
+    }, 400);
     this.setState({
       helpView: true,
       mainView: false,
@@ -305,7 +305,6 @@ class App extends React.Component {
     } else if (isHelpView) {
       if (!isMainView || !isFavView) {
         condRender = <HelpSection />;
->>>>>>> recmmit
       }
     }
     return (
