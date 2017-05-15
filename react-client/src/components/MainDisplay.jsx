@@ -32,9 +32,15 @@ class MainDisplay extends React.Component {
     return (
       <Card style={styles.cardStyle}>
         <CardMedia
-          overlay={<CardTitle title={this.props.data.name} subtitle={`${this.props.data.phone} ~ ${this.props.data.address}`} />}
+          overlay={<CardTitle
+            title={this.props.data.name}
+            subtitle={`${this.props.data.phone} ~ ${this.props.data.address}`}
+          />}
         >
-          <img src={this.props.data.photos} />
+          <img
+            src={this.props.data.photos}
+            alt="location data"
+          />
         </CardMedia>
         <CardText>
           <div style={styles.reviewBlock}><ReviewStars
