@@ -40,7 +40,7 @@ class MainDisplay extends React.Component {
           <img
             src={this.props.data.photos}
             alt="location data"
-            style={{borderRadius: '12px'}}
+            style={{borderRadius: '12px', maxHeight: '440px', width: 'auto'}}
           />
         </CardMedia>
         <CardText>

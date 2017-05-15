@@ -91,6 +91,7 @@ app.get('/search', (req, res) => {
       search(term: ${input},
         latitude: ${userLat},
         longitude: ${userLong},
+        radius: 1200,
         limit: 1
         )
 
