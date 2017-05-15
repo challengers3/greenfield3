@@ -26,28 +26,19 @@ class SearchBar extends React.Component {
   render() {
     return (
       <div>
-        <div>
-          <SearchInput
-            style={{ float: 'left', backgroundColor: 'white' }}
-            hintText="Start typing"
-            dataSource={blank}
-            searchText={this.state.input}
-            onUpdateInput={this.onUpdateInput}
-          />
-        </div>
-        {/* <FlatButton
-          style={{ float: 'left' }}
-          icon={<Speaker alt="Speaker" />}
-          onTouchTap={this.props.startSpeech}
-        /> */}
-        <div>
-          <RaisedButton
-            style={styles.searchButton}
-            label="Search" backgroundColor={styles.mainColor}
-            labelColor="rgb(255, 255, 255)"
-            onTouchTap={() => this.props.onSearch(this.state.input)}
-          />
-        </div>
+        <SearchInput
+          style={{ float: 'left', backgroundColor: 'white' }}
+          hintText="Start typing"
+          dataSource={blank}
+          searchText={this.state.input}
+          onUpdateInput={this.onUpdateInput}
+        />
+        <RaisedButton
+          style={styles.searchButton}
+          label="Search" backgroundColor={styles.mainColor}
+          labelColor="rgb(255, 255, 255)"
+          onTouchTap={() => this.props.onSearch(this.state.input)}
+        />
       </div>
     );
   }

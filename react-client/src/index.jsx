@@ -1,3 +1,5 @@
+// reusable component for Facebook login
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -100,18 +102,19 @@ class Main extends React.Component {
   }
 
   render() {
+    const isLogin = this.state.isLogin;
     return (
       <div>
-        {!this.state.isLogin ? (
+        {!isLogin ? (
           <FacebookLogin
-              loginFB={this.loginFB}
+            loginFB={this.loginFB}
+            checkLoginState={this.checkLoginState}
+          />) : (
+            <App
               checkLoginState={this.checkLoginState}
-            />) : (
-              <App
-                checkLoginState={this.checkLoginState}
-                loginFB={this.loginFB}
-                logoutFB={this.logoutFB}
-              />
+              loginFB={this.loginFB}
+              logoutFB={this.logoutFB}
+            />
           )}
       </div>
     );

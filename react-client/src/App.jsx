@@ -99,9 +99,7 @@ class App extends React.Component {
     console.log('SAVE TO FAVORITES WORKS', data);
     if (data.address) {
       axios.post('/storage', data)
-      .then(() => {
-        this.handleSnackAdd();
-      });
+      .then(this.handleSnackAdd);
     }
   }
 
@@ -193,6 +191,14 @@ class App extends React.Component {
   // handler for menu click/speech control on Help section
   clickHelp() {
     this.setState({
+      isLoading: true,
+    });
+    setTimeout(() => {
+      this.setState({
+        isLoading: false,
+      });
+    }, 200);
+    this.setState({
       helpView: true,
       mainView: false,
       favView: false,
@@ -214,7 +220,7 @@ class App extends React.Component {
       this.setState({
         isLoading: false,
       });
-    }, 500);
+    }, 700);
     console.log('search: ', input);
     axios.get(`/search?query=${input}`)
     .then((response) => {
@@ -263,13 +269,11 @@ class App extends React.Component {
     let condRender;
     if (isFavView && !isMainView) {
       condRender = (
-        <div>
-          <FavoriteView
-            speechRemoveHandler={this.speechRemoveHandler}
-            onRemove={this.removeFromFavorite}
-            favData={this.state.favData}
-          />
-        </div>
+        <FavoriteView
+          speechRemoveHandler={this.speechRemoveHandler}
+          onRemove={this.removeFromFavorite}
+          favData={this.state.favData}
+        />
       );
     } else if (isFavView && isMainView) {
       condRender = (
@@ -278,11 +282,7 @@ class App extends React.Component {
         </div>
       );
     } else if (isLoading) {
-      condRender = (
-        <div>
-          <LoadingScreen />
-        </div>
-      );
+      condRender = <LoadingScreen />;
     } else if (isData && isMainView) {
       condRender = (
         <div>
@@ -304,13 +304,12 @@ class App extends React.Component {
       condRender = (null);
     } else if (isHelpView) {
       if (!isMainView || !isFavView) {
-        condRender = <HelpSection /> ;
+        condRender = <HelpSection />;
+>>>>>>> recmmit
       }
     }
     return (
       <MuiThemeProvider>
-
-
         <div>
           <AppBar
             title="Yap!"
@@ -344,8 +343,6 @@ class App extends React.Component {
             onRequestClose={this.handleSnackRemove}
           />
         </div>
-
-     
       </MuiThemeProvider>
     );
   }

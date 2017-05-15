@@ -49,39 +49,37 @@ class MenuBar extends React.Component {
 
   render() {
     return (
-      <div>
-        <Popover
-          open={this.props.leftMenuStatus}
-          anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
-          targetOrigin={{ horizontal: 'left', vertical: 'top' }}
-          zDepth={3}
-          onRequestClose={this.handleRequestClose}
-        >
-          <Menu>
-            <MenuItem
-              primaryText="Log in with Facebook"
-              onTouchTap={this.props.loginFB}
-            />
-            <MenuItem
-              primaryText="Main"
-              onTouchTap={this.mainHandler}
-            />
-            <MenuItem
-              primaryText="Favorites"
-              onTouchTap={this.favoriteHandler}
-            />
-            <MenuItem
-              primaryText="Help &amp; feedback"
-              onTouchTap={this.helpHandler}
-            />
-            <MenuItem primaryText="About" />
-            <MenuItem
-              primaryText="Sign out"
-              onTouchTap={this.props.logoutFB}
-            />
-          </Menu>
-        </Popover>
-      </div>
+      <Popover
+        open={this.props.leftMenuStatus}
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+        targetOrigin={{ horizontal: 'left', vertical: 'top' }}
+        zDepth={3}
+        onRequestClose={this.handleRequestClose}
+      >
+        <Menu>
+          <MenuItem
+            primaryText="Log in with Facebook"
+            onTouchTap={this.props.loginFB}
+          />
+          <MenuItem
+            primaryText="Main"
+            onTouchTap={this.mainHandler}
+          />
+          <MenuItem
+            primaryText="Favorites"
+            onTouchTap={this.favoriteHandler}
+          />
+          <MenuItem
+            primaryText="Help &amp; feedback"
+            onTouchTap={this.helpHandler}
+          />
+          <MenuItem primaryText="About" />
+          <MenuItem
+            primaryText="Sign out"
+            onTouchTap={this.props.logoutFB}
+          />
+        </Menu>
+      </Popover>
     );
   }
 }
