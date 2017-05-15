@@ -19,8 +19,7 @@ const styles = {
   cardStyle: {
     display: 'table',
     maxWidth: '33%',
-    margin: '0 auto',
-    //marginTop: '20px',
+    margin: '0 100px 0 0',
     float: 'right',
   },
   mainColor: '#FFA726',
@@ -68,10 +67,11 @@ const styles = {
   },
   gmap: {
     position: 'absolute',
-    top: '120px',
-    left: '290px',
-    width: '40%',
-    height: '40%',
+    top: '0px',
+    left: '0px',
+    width: '100%',
+    height: '100%',
+    zIndex: '-1',
   },
   marker: {
     position: 'absolute',

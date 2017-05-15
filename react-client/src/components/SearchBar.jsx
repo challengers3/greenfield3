@@ -28,7 +28,7 @@ class SearchBar extends React.Component {
       <div>
         <div>
           <SearchInput
-            style={{ float: 'left' }}
+            style={{ float: 'left', backgroundColor: 'white' }}
             hintText="Start typing"
             dataSource={blank}
             searchText={this.state.input}
