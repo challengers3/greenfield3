@@ -12,16 +12,6 @@ app.use(express.static(`${__dirname}/../react-client/dist`));
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
-// app.get('/items', (req, res) => {
-//   db.selectAll((err, data) => {
-//     if (err) {
-//       res.sendStatus(500);
-//     } else {
-//       res.json(data);
-//     }
-//   });
-// });
-
 // need to reconfigure later to retrieve by user
 app.get('/storage/retrieve', (req, res) => {
   Locale.find({}, (err, results) => {

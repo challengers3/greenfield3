@@ -68,8 +68,17 @@ const styles = {
   },
   gmap: {
     position: 'absolute',
+    top: '120px',
+    left: '290px',
     width: '40%',
     height: '40%',
+  },
+  marker: {
+    position: 'absolute',
+    width: '40px',
+    height: '40px',
+    left: '-20px',
+    top: '-20px',
   },
 };
 

@@ -1,24 +1,32 @@
 import React from 'react';
 import GoogleMapReact from 'google-map-react';
 import PropTypes from 'prop-types';
+import styles from '../css/styles';
 
-const Popup = ({ text }) => <div>{text}</div>;
+const pin = require('../assets/pin/pin.png');
+
+const Popup = ({ text }) => (
+  <div>
+    <img
+      style={styles.marker}
+      src={pin} alt="pin"
+    />
+    {text}
+  </div>
+);
+
 
 class Gmap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       defaultCenter: {
-        lat: null,
-        lng: null,
+        lat: 0,
+        lng: 0,
       },
       zoom: 11,
     };
   }
-
-  // This is working, we need to give it the right lat and lng.
-  // right now it is using the default location of the search
-  // we need to update it dynamically on every searches
 
   render() {
     const center = {
@@ -47,11 +55,13 @@ class Gmap extends React.Component {
 Gmap.propTypes = {
   lat: PropTypes.number,
   lng: PropTypes.number,
+  data: PropTypes.obj,
 };
 
 Gmap.defaultProps = {
-  lat: PropTypes.number,
-  lng: PropTypes.number,
+  lat: 0,
+  lng: 0,
+  data: PropTypes.obj,
 };
 
 export default Gmap;
