@@ -304,11 +304,7 @@ class App extends React.Component {
       condRender = (null);
     } else if (isHelpView) {
       if (!isMainView || !isFavView) {
-        condRender = (
-          <div>
-            <HelpSection />
-          </div>
-        );
+        condRender = <HelpSection /> ;
       }
     }
     return (

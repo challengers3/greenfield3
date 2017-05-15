@@ -24,7 +24,7 @@ class Gmap extends React.Component {
         lat: 0,
         lng: 0,
       },
-      zoom: 11,
+      zoom: 17,
     };
   }
 
@@ -45,7 +45,7 @@ class Gmap extends React.Component {
         <Popup
           lat={center.lat}
           lng={center.lng}
-          text={this.props.data.name}
+          text={this.props.data.address}
         />
       </GoogleMapReact>
     );
