@@ -19,7 +19,7 @@ const styles = {
   cardStyle: {
     display: 'table',
     maxWidth: '33%',
-    margin: '0 100px 0 0',
+    margin: '-1% 2% 0 0',
     float: 'right',
   },
   mainColor: '#FFA726',
