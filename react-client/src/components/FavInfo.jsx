@@ -14,7 +14,6 @@ const FavInfo = props => (
     /></a>
     <p>Rating: {props.data.rating}</p>
     <p>Phone: {props.data.phone}</p>
-    <p>Price: {props.data.price}</p>
     <RaisedButton
       label="Remove"
       onTouchTap={() => props.onRemove(props.data)}

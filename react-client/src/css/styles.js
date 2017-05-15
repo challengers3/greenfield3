@@ -66,13 +66,19 @@ const styles = {
     marginTop: '-50px',
     marginLeft: '-150px',
   },
-  contributors: {
-    borderStyle: 'solid',
-    display: 'inlineBlock',
-    position: 'fixed',
-    borderColor: '#FFA726',
-    padding: '0 20px',
-    float: 'left',
+  gmap: {
+    position: 'absolute',
+    top: '120px',
+    left: '290px',
+    width: '40%',
+    height: '40%',
+  },
+  marker: {
+    position: 'absolute',
+    width: '40px',
+    height: '40px',
+    left: '-20px',
+    top: '-20px',
   },
 };
 
