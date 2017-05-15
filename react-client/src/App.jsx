@@ -178,7 +178,6 @@ class App extends React.Component {
     console.log('MAIN CLICKY');
     this.setState({
       isLoading: true,
-      mapView: true,
     });
     setTimeout(() => {
       this.setState({
@@ -233,7 +232,7 @@ class App extends React.Component {
       console.log('RES DATA API IS', response.data);
       this.setState({
         data: response.data,
-      }, this.setState({
+      }, () => this.setState({
         lat: response.data.lat,
         lng: response.data.lng,
       }));
@@ -242,7 +241,7 @@ class App extends React.Component {
       this.setState({
         favView: false,
         mainView: true,
-      }),
+      }, this.setState({ mapView: true })),
     )
     // .then(this.setState({ isLoading: false }))
     .catch((error) => {
@@ -270,9 +269,10 @@ class App extends React.Component {
     const isLoading = this.state.isLoading;
     const isMainView = this.state.mainView;
     const isFavView = this.state.favView;
-    const isMapView = this.state.mapView;
     const isData = this.state.data;
+    const isMapView = this.state.mapView;
     let condRender;
+    let condMap;
     if (isFavView && !isMainView) {
       condRender = (
         <FavoriteView
@@ -297,24 +297,22 @@ class App extends React.Component {
             data={this.state.data}
             onSave={this.saveToFavorite}
           />
-          <div style={styles.gmap}>
-            <Gmap
-              data={this.state.data}
-              lat={this.state.lat}
-              lng={this.state.lng}
-            />
-          </div>
         </div>
       );
     } else if (!isData && isMainView) {
       condRender = (null);
     }
-    // else if (isHelpView) {
-    //   if (!isMainView || !isFavView) {
-    //     condRender = <HelpSection />;
-    //   }
-    // }
-
+    if (isMapView) {
+      condMap = (
+        <div style={styles.gmap}>
+          <Gmap
+            data={this.state.data}
+            lat={this.state.lat}
+            lng={this.state.lng}
+          />
+        </div>
+      );
+    }
     return (
       <MuiThemeProvider>
         <div>
@@ -327,15 +325,7 @@ class App extends React.Component {
             startSpeech={this.startSpeech}
             onSearch={this.search}
           />
-          {isMapView ? (
-            <div style={styles.gmap}>
-              <Gmap
-                data={this.state.data}
-                lat={this.state.lat}
-                lng={this.state.lng}
-              />
-            </div>
-          ) : (null)}
+          {condMap}
           <MenuBar
             leftMenuStatus={this.state.leftMenu}
             onMenuOpen={this.menuOpen}
