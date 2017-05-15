@@ -5,13 +5,12 @@ import styles from '../css/styles';
 
 const pin = require('../assets/pin/pin.png');
 
-const Popup = ({ text }) => (
+const Popup = () => (
   <div>
     <img
       style={styles.marker}
       src={pin} alt="pin"
     />
-    {/* {text} */}
   </div>
 );
 
@@ -45,7 +44,6 @@ class Gmap extends React.Component {
         <Popup
           lat={center.lat}
           lng={center.lng}
-          // text={this.props.data.address}
         />
       </GoogleMapReact>
     );
