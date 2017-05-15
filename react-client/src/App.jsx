@@ -178,6 +178,7 @@ class App extends React.Component {
     console.log('MAIN CLICKY');
     this.setState({
       isLoading: true,
+      mapView: true,
     });
     setTimeout(() => {
       this.setState({
@@ -192,19 +193,6 @@ class App extends React.Component {
 
   // handler for menu click/speech control on Help section
   clickHelp() {
-    // this.setState({
-    //   isLoading: true,
-    // });
-    // setTimeout(() => {
-    //   this.setState({
-    //     isLoading: false,
-    //   });
-    // }, 400);
-    // this.setState({
-    //   helpView: true,
-    //   mainView: false,
-    //   favView: false,
-    // });
     this.setState({
       helpToggle: !this.state.helpToggle,
     });
