@@ -20,12 +20,6 @@ class FavoriteView extends React.Component {
     }, () => this.props.speechRemoveHandler(this.state.data));
   }
 
-  // clickHandler(data) {
-  //   this.setState(() => ({
-  //     data,
-  //   }));
-  // }
-
   render() {
     return (
       <div style={styles.root}>

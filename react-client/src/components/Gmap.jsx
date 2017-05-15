@@ -55,13 +55,11 @@ class Gmap extends React.Component {
 Gmap.propTypes = {
   lat: PropTypes.number,
   lng: PropTypes.number,
-  data: PropTypes.obj,
 };
 
 Gmap.defaultProps = {
   lat: 0,
   lng: 0,
-  data: PropTypes.obj,
 };
 
 export default Gmap;
