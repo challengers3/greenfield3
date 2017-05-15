@@ -58,10 +58,6 @@ class MenuBar extends React.Component {
       >
         <Menu>
           <MenuItem
-            primaryText="Log in with Facebook"
-            onTouchTap={this.props.loginFB}
-          />
-          <MenuItem
             primaryText="Main"
             onTouchTap={this.mainHandler}
           />
@@ -73,7 +69,6 @@ class MenuBar extends React.Component {
             primaryText="Help &amp; feedback"
             onTouchTap={this.helpHandler}
           />
-          <MenuItem primaryText="About" />
           <MenuItem
             primaryText="Sign out"
             onTouchTap={this.props.logoutFB}

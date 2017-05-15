@@ -1,10 +1,16 @@
 const styles = {
+  ratingBlock: {
+    height: '30px',
+    verticalAlign: 'middle',
+    margin: '0 0 10px 0',
+  },
   reviewBlock: {
     verticalAlign: 'middle',
+    margin: '0 0 10px 0',
   },
   imgResize: {
     float: 'left',
-    marginRight: '2%',
+    margin: '0 2% 0 0',
     maxWidth: '30%',
     maxHeight: '30%',
   },
@@ -21,6 +27,7 @@ const styles = {
     maxWidth: '33%',
     margin: '-1% 2% 0 0',
     float: 'right',
+    borderRadius: '12px'
   },
   mainColor: '#FFA726',
   centeredImage: {

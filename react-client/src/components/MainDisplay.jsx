@@ -40,18 +40,19 @@ class MainDisplay extends React.Component {
           <img
             src={this.props.data.photos}
             alt="location data"
+            style={{borderRadius: '12px', maxHeight: '440px', width: 'auto'}}
           />
         </CardMedia>
         <CardText>
-          <div style={styles.reviewBlock}><ReviewStars
-            rating={this.props.data.rating}
-          />{this.props.data.reviewCount} Reviews</div>
+          <div style={styles.ratingBlock}>
+            <ReviewStars rating={this.props.data.rating} /> {this.props.data.reviewCount} Reviews
+          </div>
           <div>
-            {this.props.data.reviews.map(oneReview =>
-              <div key={oneReview.url}>
-                <p>"{oneReview.text} <a
-                  href={oneReview.url}
-                >" Read More</a> - {oneReview.user.name}</p>
+            {this.props.data.reviews.map(review =>
+              <div key={review.url}>
+                <p>"{review.text}"<br />
+                <a href={review.url}>Read More</a>
+                </p>
               </div>,
             )}
           </div>
@@ -60,12 +61,14 @@ class MainDisplay extends React.Component {
           <div style={styles.reviewBlock}>
             <RaisedButton
               label="Save to Favorites"
+              labelColor="#fff"
               backgroundColor="#FFA726"
               onTouchTap={this.onSave}
-            /><img
+            /><a href={this.props.data.url}>
+            <img
               src={yelpIcon}
               alt="logo" style={styles.logo}
-            />
+            /></a>
           </div>
         </CardActions>
       </Card>
