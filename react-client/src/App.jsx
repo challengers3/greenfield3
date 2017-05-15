@@ -1,7 +1,6 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import axios from 'axios';
-import PropTypes from 'prop-types';
 import annyang from 'annyang';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -14,6 +13,8 @@ import Maps from './components/Map';
 import LoadingScreen from './components/LoadingScreen';
 import FavoriteView from './components/FavoriteView';
 import HelpSection from './components/HelpSection';
+import Gmap from './components/Gmap';
+import styles from './css/styles';
 
 injectTapEventPlugin();
 
@@ -22,6 +23,8 @@ const getCoords = () => new Promise((resolve, reject) => {
     resolve({ lat: position.coords.latitude, long: position.coords.longitude });
   });
 });
+
+let location = {};
 
 class App extends React.Component {
   constructor(props) {
@@ -38,6 +41,8 @@ class App extends React.Component {
       isLogin: false,
       snackBarAdd: false,
       snackBarRemove: false,
+      lat: undefined,
+      lng: undefined,
     };
     this.menuOpen = this.menuOpen.bind(this);
     this.search = this.search.bind(this);
@@ -56,12 +61,19 @@ class App extends React.Component {
     this.setState({
       isLoading: true,
     });
+    // this setTimeout is absolutely needed to correctly pool the coordinates
+    // before user's interaction
+    setTimeout(() => {
+      this.setState({
+        isLoading: false,
+      });
+    }, 2000);
     getCoords().then((response) => {
-      axios.post('/location', response);
-    })
-    .then(this.setState({
-      isLoading: false,
-    }));
+      this.setState({
+        lat: response.lat,
+        lng: response.long,
+      }, () => axios.post('/location', response));
+    });
   }
 
   componentDidMount() {
@@ -132,6 +144,14 @@ class App extends React.Component {
 
   // handler for menu click/speech control on Favorites
   clickFav() {
+    this.setState({
+      isLoading: true,
+    });
+    setTimeout(() => {
+      this.setState({
+        isLoading: false,
+      });
+    }, 200);
     console.log('FAV CLICKY');
     axios.get('/storage/retrieve')
     .then((response) => {
@@ -156,6 +176,14 @@ class App extends React.Component {
   // handler for menu click/speech control on Main
   clickMain() {
     console.log('MAIN CLICKY');
+    this.setState({
+      isLoading: true,
+    });
+    setTimeout(() => {
+      this.setState({
+        isLoading: false,
+      });
+    }, 200);
     this.setState({
       mainView: true,
       favView: false,
@@ -182,13 +210,21 @@ class App extends React.Component {
     this.setState({
       isLoading: true,
     });
+    setTimeout(() => {
+      this.setState({
+        isLoading: false,
+      });
+    }, 500);
     console.log('search: ', input);
     axios.get(`/search?query=${input}`)
     .then((response) => {
       console.log('RES DATA API IS', response.data);
       this.setState({
         data: response.data,
-      });
+      }, () => this.setState({
+        lat: response.data.lat,
+        lng: response.data.lng,
+      }));
     })
     .then(
       this.setState({
@@ -196,7 +232,7 @@ class App extends React.Component {
         mainView: true,
       }),
     )
-    .then(this.setState({ isLoading: false }))
+    // .then(this.setState({ isLoading: false }))
     .catch((error) => {
       if (error) {
         this.setState({
@@ -255,6 +291,13 @@ class App extends React.Component {
             data={this.state.data}
             onSave={this.saveToFavorite}
           />
+          <div style={styles.gmap}>
+            <Gmap
+              data={this.state.data}
+              lat={this.state.lat}
+              lng={this.state.lng}
+            />
+          </div>
         </div>
       );
     } else if (!isData && isMainView) {
