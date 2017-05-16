@@ -12,6 +12,11 @@ app.use(express.static(`${__dirname}/../react-client/dist`));
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
+app.get('/', (req, res) => {
+  res.send('hello');
+  res.end
+})
+
 // need to reconfigure later to retrieve by user
 app.get('/storage/retrieve', (req, res) => {
   Locale.find({}, (err, results) => {
@@ -152,6 +157,6 @@ app.get('/search', (req, res) => {
 );
 
 
-app.listen(3000, () => {
-  console.log('listening on port 3000!');
+app.listen(process.env.PORT || 1337, () => {
+  console.log('listening on port 1337!');
 });
