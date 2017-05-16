@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const Locale = require('../database-mongo');
 const request = require ('request');
 const axios = require('axios');
-const yelpToken = '54robtCPOWAAru28w0M7Qr71NEaFNqygTcxM1xUlg3oX5aXjk3q85eX_MFH0o6SdddycpMcrPuYaV99yy_qAOKOVJWrudk8qnx80uxuCwAyxpgdA62d-27GZIdMIWXYx';
+const yelpToken = //your yelp token here;
 let location = {};
 
 const app = express();
