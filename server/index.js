@@ -1,9 +1,11 @@
 const express = require('express');
+const url = require('url');
+const translate = require('google-translate-api');
 const bodyParser = require('body-parser');
 const Locale = require('../database-mongo');
 const request = require ('request');
 const axios = require('axios');
-const yelpToken = //your yelp token here;
+const yelpToken = 'KMCOc9XRiT-z_lrN_Z-D2RzvIlmBMDm1QduGfk8h6ua9ny5SRai6OBNhSn06JqbEm987rlgMF4c7IeaWc5nz3jenmwB4b7kXYsB7RV02ubrKYK38qsQJITDVtnsbWXYx';
 let location = {};
 
 const app = express();
@@ -24,6 +26,25 @@ app.get('/storage/retrieve', (req, res) => {
   });
 });
 
+app.get('/translate', (req, res) => {
+  var fromLaunguage = req.query.from || '';
+  var toLanguage = req.query.to || '';
+  var words = req.query.query || '';
+  var translated = '';
+
+  translate(words, {from: fromLaunguage, to: toLanguage}).then(res => {
+    console.log(res.text);
+    translated = res.text;
+    return translated;
+  })
+  .then(translated => {
+    res.send(translated);
+  })
+  .catch(err => {
+    console.error(err);
+});
+});
+
 app.post('/storage/remove', (req, res) => {
   Locale.find({ _id: req.body._id }, (err, data) => {
     if (err) throw err;
@@ -42,7 +63,6 @@ app.post('/storage', (req, res) => {
   console.log(locale);
   const favorite = new Locale({
     id: locale.id,
-
     name: locale.name,
     address: locale.address,
     phone: locale.phone,
@@ -55,8 +75,6 @@ app.post('/storage', (req, res) => {
     url: locale.url,
   });
   favorite.save();
-
-
   res.end();
 });
 
@@ -64,9 +82,9 @@ app.post('/storage', (req, res) => {
 app.get('/search', (req, res) => {
   const input = JSON.stringify(req.query.query);
   const apiURL = 'https://api.yelp.com/v3/graphql'
-  const headers = { 
+  const headers = {
     'Authorization': "Bearer " + yelpToken,
-    'Content-Type': 'application/json' 
+    'Content-Type': 'application/json'
   };
   const localeObject = {
     id: '',
@@ -92,7 +110,7 @@ app.get('/search', (req, res) => {
     headers: headers,
     url: `${apiURL}`,
 
-    data: `{ 
+    data: `{
       search(term: ${input},
         latitude: ${userLat},
         longitude: ${userLong},
@@ -157,6 +175,6 @@ app.get('/search', (req, res) => {
 );
 
 
-app.listen(process.env.PORT || 1337, () => {
-  console.log('listening on port 1337!');
+app.listen(process.env.PORT || 3000, () => {
+  console.log('listening on port 3000!');
 });
